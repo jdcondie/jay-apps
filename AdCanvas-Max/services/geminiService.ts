@@ -4,12 +4,20 @@ import { AdTemplate, AspectRatio } from "../types";
 function getApiKey(): string {
   let apiKey = '';
   try {
-    if (typeof window !== 'undefined' && (window as any).process?.env) {
+    // 1. User-provided key from localStorage (primary source for public deploy)
+    if (typeof window !== 'undefined') {
+      try {
+        apiKey = localStorage.getItem('ad_canvas_gemini_api_key') || '';
+      } catch {}
+    }
+    // 2. AI Studio platform injection
+    if (!apiKey && typeof window !== 'undefined' && (window as any).process?.env) {
       apiKey = (window as any).process.env.API_KEY || (window as any).process.env.GEMINI_API_KEY || '';
     }
     if (!apiKey && typeof process !== 'undefined' && process.env) {
       apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY || '';
     }
+    // 3. Build-time Vite env (for self-hosted deploys)
     if (!apiKey) {
       // @ts-ignore
       apiKey = import.meta.env.VITE_GEMINI_API_KEY || import.meta.env.VITE_API_KEY || '';
