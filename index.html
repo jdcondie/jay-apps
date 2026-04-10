@@ -26,26 +26,21 @@
 </head>
 <body>
 <h1>jay-apps</h1>
-<p class="sub">Static apps deployed from this repo.</p>
+<p class="sub">Static apps deployed from this repo via GitHub Actions.</p>
 
-<h2>Working</h2>
+<h2>Live apps</h2>
 <ul>
-  <li><a href="./workflow-reference/">workflow-reference<small>plain HTML, fully static</small></a></li>
-  <li><a href="./company-os/">company-os<small>README rendered by Jekyll</small></a></li>
+  <li><a href="./AdCanvas-Max/">AdCanvas Max<small>Vite + React, built from source</small></a></li>
+  <li><a href="./conative-app/">Conative App<small>Vite + React, built from source</small></a></li>
+  <li><a href="./sticky-focus/">Sticky Focus<small>Vite + React + PWA, built from source</small></a></li>
+  <li><a href="./workflow-reference/">workflow-reference<small>Plain HTML</small></a></li>
+  <li><a href="./company-os/">company-os<small>README rendered to HTML</small></a></li>
 </ul>
 
-<h2>Vite dev entries (not built)</h2>
-<p class="sub"><small>These load the index.html but reference unbuilt TSX modules. They need a build step to actually run.</small></p>
+<h2>Not yet deployed</h2>
 <ul>
-  <li><a href="./AdCanvas-Max/">AdCanvas-Max</a></li>
-  <li><a href="./conative-app/">conative-app</a></li>
-  <li><a href="./sticky-focus/">sticky-focus</a></li>
-</ul>
-
-<h2>Not servable as static</h2>
-<ul>
-  <li class="muted">ad-sprint-app <small>client lives in ./client subdir, needs build</small></li>
-  <li class="muted">autopilot <small>turbo monorepo, no root entry</small></li>
+  <li class="muted">ad-sprint-app <small>Client lives in a ./client subdir, needs a custom build step</small></li>
+  <li class="muted">autopilot <small>Turbo monorepo, no single root entry</small></li>
 </ul>
 </body>
 </html>
