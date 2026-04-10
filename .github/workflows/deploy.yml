@@ -78,6 +78,8 @@ jobs:
 
       - name: Build sticky-focus
         working-directory: ./sticky-focus
+        env:
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
         run: |
           npm install --legacy-peer-deps
           npx vite build --base=/jay-apps/sticky-focus/
