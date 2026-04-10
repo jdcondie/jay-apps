@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    # Daily rebuild at 10:00 UTC so external repos stay fresh
+    - cron: '0 10 * * *'
 
 permissions:
   contents: read
@@ -18,100 +21,155 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout jay-apps
+        uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      - name: Prepare public dir with static content
+      - name: Install markdown renderer
+        run: pip install --quiet markdown
+
+      # =====================================================================
+      # ROOT + static in-tree apps
+      # =====================================================================
+      - name: Stage root and in-tree static apps
         run: |
           set -euo pipefail
           mkdir -p public
           cp index.html public/index.html
           cp -r workflow-reference public/workflow-reference
 
-      - name: Render company-os README to HTML
+      - name: Render company-os README
         run: |
-          set -euo pipefail
-          pip install --quiet markdown
           mkdir -p public/company-os
           python - <<'PY'
-          import markdown, html, os
-          src = 'company-os/README.md'
-          body = markdown.markdown(open(src).read(), extensions=['extra', 'toc', 'fenced_code', 'tables'])
-          page = f"""<!doctype html>
-          <html lang="en">
-          <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width,initial-scale=1">
-          <title>company-os</title>
-          <style>
-            :root {{ color-scheme: light dark; }}
-            body {{ font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 760px; margin: 3rem auto; padding: 0 1.25rem; }}
-            pre {{ background: rgba(128,128,128,.1); padding: 1rem; border-radius: 6px; overflow-x: auto; }}
-            code {{ background: rgba(128,128,128,.12); padding: .1em .35em; border-radius: 4px; font-size: .9em; }}
-            pre code {{ background: transparent; padding: 0; }}
-            h1, h2, h3 {{ line-height: 1.25; }}
-            table {{ border-collapse: collapse; }}
-            th, td {{ border: 1px solid rgba(128,128,128,.3); padding: .4em .7em; }}
-            a {{ color: #2563eb; }}
-          </style>
-          </head>
-          <body>
-          {body}
-          </body>
-          </html>
-          """
-          open('public/company-os/index.html', 'w').write(page)
+          import markdown
+          body = markdown.markdown(open('company-os/README.md').read(), extensions=['extra','toc','fenced_code','tables'])
+          open('public/company-os/index.html','w').write(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>company-os</title><style>:root{{color-scheme:light dark}}body{{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:760px;margin:3rem auto;padding:0 1.25rem}}pre{{background:rgba(128,128,128,.1);padding:1rem;border-radius:6px;overflow-x:auto}}code{{background:rgba(128,128,128,.12);padding:.1em .35em;border-radius:4px;font-size:.9em}}pre code{{background:transparent;padding:0}}h1,h2,h3{{line-height:1.25}}table{{border-collapse:collapse}}th,td{{border:1px solid rgba(128,128,128,.3);padding:.4em .7em}}a{{color:#2563eb}}</style></head><body>{body}</body></html>""")
           PY
 
+      # =====================================================================
+      # In-tree Vite apps
+      # =====================================================================
       - name: Build AdCanvas-Max
         working-directory: ./AdCanvas-Max
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npm install --legacy-peer-deps
           npx vite build --base=/jay-apps/AdCanvas-Max/
-
-      - name: Stage AdCanvas-Max
-        run: |
-          mkdir -p public/AdCanvas-Max
-          cp -r AdCanvas-Max/dist/. public/AdCanvas-Max/
+      - run: mkdir -p public/AdCanvas-Max && cp -r AdCanvas-Max/dist/. public/AdCanvas-Max/
 
       - name: Build conative-app
         working-directory: ./conative-app
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npm install --legacy-peer-deps
           npx vite build --base=/jay-apps/conative-app/
-
-      - name: Stage conative-app
-        run: |
-          mkdir -p public/conative-app
-          cp -r conative-app/dist/. public/conative-app/
+      - run: mkdir -p public/conative-app && cp -r conative-app/dist/. public/conative-app/
 
       - name: Build sticky-focus
         working-directory: ./sticky-focus
         run: |
-          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npm install --legacy-peer-deps
           npx vite build --base=/jay-apps/sticky-focus/
+      - run: mkdir -p public/sticky-focus && cp -r sticky-focus/dist/. public/sticky-focus/
 
-      - name: Stage sticky-focus
+      - name: Build ad-sprint-app (pnpm + vite client only)
+        working-directory: ./ad-sprint-app
         run: |
-          mkdir -p public/sticky-focus
-          cp -r sticky-focus/dist/. public/sticky-focus/
+          pnpm install --no-frozen-lockfile
+          pnpm exec vite build --base=/jay-apps/ad-sprint-app/
+      - run: mkdir -p public/ad-sprint-app && cp -r ad-sprint-app/dist/public/. public/ad-sprint-app/ 2>/dev/null || cp -r ad-sprint-app/dist/. public/ad-sprint-app/
 
+      # =====================================================================
+      # External repo: jay-os (plain HTML)
+      # =====================================================================
+      - name: Checkout jay-os
+        uses: actions/checkout@v4
+        with:
+          repository: jdcondie/jay-os
+          path: _external/jay-os
+      - name: Stage jay-os
+        run: |
+          mkdir -p public/jay-os
+          rsync -a --exclude '.git' _external/jay-os/ public/jay-os/
+
+      # =====================================================================
+      # External repo: claude-system (README render)
+      # =====================================================================
+      - name: Checkout claude-system
+        uses: actions/checkout@v4
+        with:
+          repository: jdcondie/claude-system
+          path: _external/claude-system
+      - name: Stage claude-system
+        run: |
+          mkdir -p public/claude-system
+          python - <<'PY'
+          import markdown
+          body = markdown.markdown(open('_external/claude-system/README.md').read(), extensions=['extra','toc','fenced_code','tables'])
+          open('public/claude-system/index.html','w').write(f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>claude-system</title><style>:root{{color-scheme:light dark}}body{{font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;max-width:760px;margin:3rem auto;padding:0 1.25rem}}pre{{background:rgba(128,128,128,.1);padding:1rem;border-radius:6px;overflow-x:auto}}code{{background:rgba(128,128,128,.12);padding:.1em .35em;border-radius:4px;font-size:.9em}}pre code{{background:transparent;padding:0}}h1,h2,h3{{line-height:1.25}}table{{border-collapse:collapse}}th,td{{border:1px solid rgba(128,128,128,.3);padding:.4em .7em}}a{{color:#2563eb}}</style></head><body>{body}</body></html>""")
+          PY
+
+      # =====================================================================
+      # External repo: skills-reference (single HTML file)
+      # =====================================================================
+      - name: Checkout skills-reference
+        uses: actions/checkout@v4
+        with:
+          repository: jdcondie/skills-reference
+          path: _external/skills-reference
+      - name: Stage skills-reference
+        run: |
+          mkdir -p public/skills-reference
+          cp _external/skills-reference/skills-reference.html public/skills-reference/index.html
+
+      # =====================================================================
+      # External repo: competitor-ad-analysis (pnpm + vite, dist/public)
+      # =====================================================================
+      - name: Checkout competitor-ad-analysis
+        uses: actions/checkout@v4
+        with:
+          repository: jdcondie/competitor-ad-analysis
+          path: _external/competitor-ad-analysis
+      - name: Build competitor-ad-analysis (client only)
+        working-directory: _external/competitor-ad-analysis
+        run: |
+          pnpm install --no-frozen-lockfile
+          pnpm exec vite build --base=/jay-apps/competitor-ad-analysis/
+      - name: Stage competitor-ad-analysis
+        run: |
+          mkdir -p public/competitor-ad-analysis
+          if [ -d _external/competitor-ad-analysis/dist/public ]; then
+            cp -r _external/competitor-ad-analysis/dist/public/. public/competitor-ad-analysis/
+          else
+            cp -r _external/competitor-ad-analysis/dist/. public/competitor-ad-analysis/
+          fi
+
+      # =====================================================================
+      # Finalize
+      # =====================================================================
       - name: Disable Jekyll
         run: touch public/.nojekyll
 
-      - name: List final output tree
+      - name: Tree
         run: |
-          echo "== top level =="
+          echo "== public/ =="
           ls -la public
-          echo "== subdirs =="
-          for d in public/*/; do echo "-- $d --"; ls "$d" | head -10; done
+          echo
+          for d in public/*/; do
+            echo "-- $d --"
+            ls "$d" | head -6
+          done
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
