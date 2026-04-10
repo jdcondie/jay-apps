@@ -36,7 +36,12 @@ export interface BrandExtractionResult {
 function getApiKey(): string {
   let key = '';
   try {
-    if (typeof window !== 'undefined' && (window as any).process?.env) {
+    if (typeof window !== 'undefined') {
+      try {
+        key = localStorage.getItem('ad_canvas_gemini_api_key') || '';
+      } catch {}
+    }
+    if (!key && typeof window !== 'undefined' && (window as any).process?.env) {
       key = (window as any).process.env.API_KEY || (window as any).process.env.GEMINI_API_KEY || '';
     }
     if (!key && typeof process !== 'undefined' && process.env) {
