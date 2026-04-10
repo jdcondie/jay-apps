@@ -1,0 +1,129 @@
+name: Deploy jay-apps to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Prepare public dir with static content
+        run: |
+          set -euo pipefail
+          mkdir -p public
+          cp index.html public/index.html
+          cp -r workflow-reference public/workflow-reference
+
+      - name: Render company-os README to HTML
+        run: |
+          set -euo pipefail
+          pip install --quiet markdown
+          mkdir -p public/company-os
+          python - <<'PY'
+          import markdown, html, os
+          src = 'company-os/README.md'
+          body = markdown.markdown(open(src).read(), extensions=['extra', 'toc', 'fenced_code', 'tables'])
+          page = f"""<!doctype html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width,initial-scale=1">
+          <title>company-os</title>
+          <style>
+            :root {{ color-scheme: light dark; }}
+            body {{ font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; max-width: 760px; margin: 3rem auto; padding: 0 1.25rem; }}
+            pre {{ background: rgba(128,128,128,.1); padding: 1rem; border-radius: 6px; overflow-x: auto; }}
+            code {{ background: rgba(128,128,128,.12); padding: .1em .35em; border-radius: 4px; font-size: .9em; }}
+            pre code {{ background: transparent; padding: 0; }}
+            h1, h2, h3 {{ line-height: 1.25; }}
+            table {{ border-collapse: collapse; }}
+            th, td {{ border: 1px solid rgba(128,128,128,.3); padding: .4em .7em; }}
+            a {{ color: #2563eb; }}
+          </style>
+          </head>
+          <body>
+          {body}
+          </body>
+          </html>
+          """
+          open('public/company-os/index.html', 'w').write(page)
+          PY
+
+      - name: Build AdCanvas-Max
+        working-directory: ./AdCanvas-Max
+        run: |
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npx vite build --base=/jay-apps/AdCanvas-Max/
+
+      - name: Stage AdCanvas-Max
+        run: |
+          mkdir -p public/AdCanvas-Max
+          cp -r AdCanvas-Max/dist/. public/AdCanvas-Max/
+
+      - name: Build conative-app
+        working-directory: ./conative-app
+        run: |
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npx vite build --base=/jay-apps/conative-app/
+
+      - name: Stage conative-app
+        run: |
+          mkdir -p public/conative-app
+          cp -r conative-app/dist/. public/conative-app/
+
+      - name: Build sticky-focus
+        working-directory: ./sticky-focus
+        run: |
+          npm ci --legacy-peer-deps || npm install --legacy-peer-deps
+          npx vite build --base=/jay-apps/sticky-focus/
+
+      - name: Stage sticky-focus
+        run: |
+          mkdir -p public/sticky-focus
+          cp -r sticky-focus/dist/. public/sticky-focus/
+
+      - name: Disable Jekyll
+        run: touch public/.nojekyll
+
+      - name: List final output tree
+        run: |
+          echo "== top level =="
+          ls -la public
+          echo "== subdirs =="
+          for d in public/*/; do echo "-- $d --"; ls "$d" | head -10; done
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
