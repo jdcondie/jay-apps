@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI for Home Services | Jay Condie</title>
+<meta name="description" content="AI implementation for HVAC, plumbing, electrical, landscaping and cleaning companies. Stop missing calls. Start booking more jobs.">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #E8541A;
+  --orange-light: #FFF3EE;
+  --orange-mid: #F97440;
+  --black: #111111;
+  --gray-900: #1a1a1a;
+  --gray-700: #3d3d3d;
+  --gray-500: #717171;
+  --gray-300: #d4d4d4;
+  --gray-100: #f5f5f5;
+  --gray-50: #fafafa;
+  --white: #ffffff;
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --blue: #2563eb;
+  --blue-bg: #eff6ff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+}
+.nav-logo { font-weight: 800; font-size: 16px; color: var(--black); letter-spacing: -0.02em; text-decoration: none; }
+.nav-logo span { color: var(--orange); }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links a { text-decoration: none; color: var(--gray-500); font-size: 13px; font-weight: 500; transition: color 0.15s; }
+.nav-links a:hover { color: var(--black); }
+.nav-cta {
+  background: var(--orange); color: white; border: none;
+  padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  font-family: inherit; cursor: pointer; transition: background 0.15s; text-decoration: none;
+}
+.nav-cta:hover { background: var(--orange-mid); }
+
+/* HERO */
+.hero { text-align: center; padding: 88px 40px 64px; max-width: 860px; margin: 0 auto; }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--orange-light); color: var(--orange);
+  font-size: 12px; font-weight: 600; padding: 5px 12px;
+  border-radius: 100px; margin-bottom: 24px; letter-spacing: 0.02em;
+}
+.hero h1 {
+  font-size: clamp(36px, 5.5vw, 60px); font-weight: 800;
+  line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px;
+}
+.hero h1 span { color: var(--orange); }
+.hero p { font-size: 18px; color: var(--gray-500); max-width: 560px; margin: 0 auto 36px; line-height: 1.7; }
+.hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* BUTTONS */
+.btn-primary {
+  background: var(--orange); color: white; padding: 12px 28px;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  text-decoration: none; transition: background 0.15s, transform 0.1s;
+  border: none; cursor: pointer; font-family: inherit; display: inline-block;
+}
+.btn-primary:hover { background: var(--orange-mid); transform: translateY(-1px); }
+.btn-secondary {
+  background: var(--white); color: var(--black); padding: 12px 28px;
+  border-radius: 8px; font-size: 15px; font-weight: 600;
+  text-decoration: none; border: 1.5px solid var(--gray-300);
+  transition: border-color 0.15s; cursor: pointer; font-family: inherit; display: inline-block;
+}
+.btn-secondary:hover { border-color: var(--gray-500); }
+
+/* STATS BAR */
+.stats-bar {
+  border-top: 1px solid var(--gray-300); border-bottom: 1px solid var(--gray-300);
+  display: grid; grid-template-columns: repeat(4, 1fr); text-align: center;
+}
+.stat-item { padding: 24px 16px; border-right: 1px solid var(--gray-300); }
+.stat-item:last-child { border-right: none; }
+.stat-val { font-size: 26px; font-weight: 800; color: var(--black); letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; }
+.stat-val span { color: var(--orange); }
+.stat-label { font-size: 12px; color: var(--gray-500); font-weight: 500; }
+
+/* WIRING STRIP */
+.wiring-strip {
+  background: var(--gray-50); border-bottom: 1px solid var(--gray-300);
+  padding: 20px 48px; display: flex; align-items: center; gap: 0; overflow-x: auto;
+}
+.wiring-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--gray-500); white-space: nowrap; margin-right: 20px;
+  padding-right: 20px; border-right: 1px solid var(--gray-300); flex-shrink: 0;
+}
+.wiring-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.wiring-tag {
+  font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 6px;
+  background: white; border: 1px solid var(--gray-300); color: var(--gray-700); white-space: nowrap;
+}
+.wiring-tag.orange { background: var(--orange-light); border-color: rgba(232,84,26,0.25); color: var(--orange); }
+
+/* SECTION WRAP */
+.section-wrap { max-width: 1160px; margin: 0 auto; padding: 72px 48px; }
+.section-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 10px; }
+.section-title { font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 14px; }
+.section-sub { font-size: 16px; color: var(--gray-500); max-width: 560px; line-height: 1.7; margin-bottom: 40px; }
+
+/* CARD GRID */
+.card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.card {
+  background: white; border: 1.5px solid var(--gray-300); border-radius: 12px;
+  padding: 24px; transition: all 0.2s;
+  opacity: 0; animation: slideUp 0.4s ease forwards;
+}
+.card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); border-color: var(--orange); }
+.card:nth-child(1) { animation-delay: 0.03s; }
+.card:nth-child(2) { animation-delay: 0.06s; }
+.card:nth-child(3) { animation-delay: 0.09s; }
+.card:nth-child(4) { animation-delay: 0.12s; }
+.card:nth-child(5) { animation-delay: 0.15s; }
+.card:nth-child(6) { animation-delay: 0.18s; }
+.card-icon { font-size: 28px; margin-bottom: 14px; display: block; }
+.card-title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 8px; }
+.card-desc { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+.card-stat { font-size: 12px; font-weight: 600; color: var(--green); margin-top: 12px; display: flex; align-items: center; gap: 6px; }
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* FEATURE ROWS */
+.feature-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  padding: 72px 48px; max-width: 1160px; margin: 0 auto;
+  border-bottom: 1px solid var(--gray-300);
+}
+.feature-row:last-child { border-bottom: none; }
+.feature-row.flip { direction: rtl; }
+.feature-row.flip > * { direction: ltr; }
+.feature-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 10px; }
+.feature-title { font-size: clamp(24px, 3vw, 34px); font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; color: var(--black); margin-bottom: 14px; }
+.feature-desc { font-size: 15px; color: var(--gray-500); line-height: 1.75; margin-bottom: 20px; }
+.feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.feature-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--gray-700); line-height: 1.6; }
+.feature-list li::before { content: '\2713'; color: var(--orange); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+.feature-visual {
+  background: var(--gray-50); border: 1.5px solid var(--gray-300);
+  border-radius: 14px; padding: 28px; position: relative; overflow: hidden;
+}
+.feature-visual::before {
+  content: ''; position: absolute; top: -30px; right: -30px;
+  width: 120px; height: 120px; background: var(--orange-light);
+  border-radius: 50%; opacity: 0.6;
+}
+.fv-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--gray-300); position: relative; z-index: 1; }
+.fv-row:last-child { border-bottom: none; }
+.fv-label { font-size: 13px; font-weight: 600; color: var(--gray-700); }
+.fv-val { font-size: 13px; font-weight: 800; color: var(--orange); }
+.fv-val.green { color: var(--green); }
+
+/* ORANGE SECTION */
+.orange-section { background: var(--orange); padding: 72px 48px; text-align: center; }
+.orange-section h2 { font-size: clamp(28px, 4vw, 44px); font-weight: 800; color: white; letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 14px; }
+.orange-section p { font-size: 16px; color: rgba(255,255,255,0.8); max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
+.btn-white { background: white; color: var(--orange); padding: 14px 32px; border-radius: 8px; font-size: 15px; font-weight: 700; border: none; cursor: pointer; font-family: inherit; transition: transform 0.1s; text-decoration: none; display: inline-block; }
+.btn-white:hover { transform: translateY(-1px); }
+
+/* HOW IT WORKS */
+.steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 40px; }
+.step-card { text-align: center; }
+.step-num { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--orange-light); color: var(--orange); font-weight: 800; font-size: 16px; margin-bottom: 16px; }
+.step-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.step-desc { font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+
+/* FAQ */
+.faq-list { max-width: 720px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--gray-300); }
+.faq-q {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 0; cursor: pointer; font-size: 15px; font-weight: 700;
+  color: var(--black); background: none; border: none; width: 100%;
+  text-align: left; font-family: inherit;
+}
+.faq-q:hover { color: var(--orange); }
+.faq-arrow { font-size: 18px; color: var(--gray-500); transition: transform 0.2s; flex-shrink: 0; margin-left: 16px; }
+.faq-item.open .faq-arrow { transform: rotate(45deg); }
+.faq-a { display: none; padding: 0 0 20px; font-size: 14px; color: var(--gray-500); line-height: 1.7; }
+.faq-item.open .faq-a { display: block; }
+
+/* FINAL CTA */
+.final-cta { background: var(--gray-50); border-top: 1px solid var(--gray-300); padding: 72px 48px; text-align: center; }
+.final-cta h2 { font-size: clamp(26px, 3.5vw, 38px); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 14px; }
+.final-cta p { font-size: 16px; color: var(--gray-500); max-width: 500px; margin: 0 auto 32px; line-height: 1.7; }
+
+/* FOOTER */
+footer { background: var(--black); padding: 40px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-logo { font-weight: 800; font-size: 16px; color: white; letter-spacing: -0.02em; }
+.footer-logo span { color: var(--orange); }
+footer p { font-size: 12px; color: #666; }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-grid { grid-template-columns: repeat(2, 1fr); }
+  .feature-row { grid-template-columns: 1fr; gap: 32px; padding: 48px 24px; }
+  .feature-row.flip { direction: ltr; }
+  nav { padding: 0 24px; }
+  .nav-links { display: none; }
+  .section-wrap { padding: 48px 24px; }
+  .wiring-strip { padding: 16px 24px; }
+  footer { padding: 28px 24px; }
+  .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+}
+@media (max-width: 600px) {
+  .card-grid { grid-template-columns: 1fr; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .hero { padding: 56px 24px 40px; }
+  .hero h1 { font-size: 32px; }
+  .orange-section { padding: 48px 24px; }
+  .stats-bar { grid-template-columns: 1fr; }
+  .stat-item { border-right: none; border-bottom: 1px solid var(--gray-300); }
+  .stat-item:last-child { border-bottom: none; }
+  .final-cta { padding: 48px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Jay Condie<span>.</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+  <a href="https://cal.com/jay-condie/free-ai-efficiency-audit" class="nav-cta" target="_blank">Free AI Audit →</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">📞 Built for home services companies</div>
+  <h1>Stop missing calls.<br>Start booking more <span>jobs.</span></h1>
+  <p>AI implementation for HVAC, plumbing, electrical, landscaping, and cleaning companies. No code. No confusion. Just results.</p>
+  <div class="hero-actions">
+    <a href="https://cal.com/jay-condie/free-ai-efficiency-audit" class="btn-primary" target="_blank">Book Your Free AI Audit →</a>
+    <a href="#services" class="btn-secondary">See What AI Can Do</a>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-val">78<span>%</span></div>
+    <div class="stat-label">of jobs go to the first responder</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">20-30<span>%</span></div>
+    <div class="stat-label">of leads lost to slow follow-up</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">24<span>/7</span></div>
+    <div class="stat-label">AI answers when your team can't</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">$100<span>M+</span></div>
+    <div class="stat-label">generated for businesses I've worked with</div>
+  </div>
+</div>
+
+<!-- WIRING STRIP -->
+<div class="wiring-strip">
+  <div class="wiring-label">Industries</div>
+  <div class="wiring-tags">
+    <span class="wiring-tag orange">HVAC</span>
+    <span class="wiring-tag orange">Plumbing</span>
+    <span class="wiring-tag orange">Electrical</span>
+    <span class="wiring-tag">Landscaping</span>
+    <span class="wiring-tag">Cleaning</span>
+    <span class="wiring-tag">Roofing</span>
+    <span class="wiring-tag">Painting</span>
+    <span class="wiring-tag">General Contractors</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div class="section-wrap" id="services">
+  <div class="section-eyebrow">What AI Actually Does for You</div>
+  <div class="section-title">Six ways AI makes your business faster</div>
+  <div class="section-sub">These aren't theories. They're systems that run in the background while your team focuses on the work that pays.</div>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">📞</span>
+      <div class="card-title">24/7 Call Answering</div>
+      <div class="card-desc">AI picks up after hours, captures lead info, books appointments directly into your calendar. No missed calls, no voicemail.</div>
+      <div class="card-stat">↑ 15-20% more booked jobs</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <div class="card-title">Instant Lead Follow-Up</div>
+      <div class="card-desc">Every new lead gets an immediate text and email response. AI qualifies them and books a time before your competitor even sees the notification.</div>
+      <div class="card-stat">↑ 9x higher conversion at 5-min response</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <div class="card-title">Automated Estimates</div>
+      <div class="card-desc">AI drafts estimates from your intake data and follows up automatically when a quote goes cold. No more ghosted proposals.</div>
+      <div class="card-stat">↑ 20-30% quote recovery rate</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">📅</span>
+      <div class="card-title">Smart Scheduling</div>
+      <div class="card-desc">Online booking, automated reminders, rescheduling handled without your team touching a phone. Customers book on their time.</div>
+      <div class="card-stat">↓ 40-60% scheduling overhead</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">💬</span>
+      <div class="card-title">Customer Communication</div>
+      <div class="card-desc">Automated service reminders, review requests, and seasonal reactivation campaigns. Stay top-of-mind without manual effort.</div>
+      <div class="card-stat">↑ 30% repeat customer retention</div>
+    </div>
+    <div class="card">
+      <span class="card-icon">📊</span>
+      <div class="card-title">Owner Dashboard</div>
+      <div class="card-desc">One screen showing your leads, revenue, team output, and pipeline. Ask it questions in plain English. Get answers instantly.</div>
+      <div class="card-stat">↓ 4-6 hrs/week pulling reports</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- ORANGE BREAK -->
+<div class="orange-section">
+  <h2>Your competitor is one AI system away from taking your leads.</h2>
+  <p>The first company to respond wins 78% of jobs. AI makes you that company, every time, even at 2am.</p>
+  <a href="https://cal.com/jay-condie/free-ai-efficiency-audit" class="btn-white" target="_blank">See Where You Stand →</a>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section-wrap" id="how">
+  <div class="section-eyebrow">How It Works</div>
+  <div class="section-title">Three steps to an AI-powered business</div>
+  <div class="section-sub">No jargon. No 6-month timelines. Just a clear process that gets results fast.</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-title">Free AI Audit</div>
+      <div class="step-desc">30-minute call. I map your workflows, identify where time and money are leaking, and show you exactly what AI can fix. No cost, no obligation.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-title">Build and Launch</div>
+      <div class="step-desc">I set up your AI systems in 1-2 weeks. Call answering, lead follow-up, scheduling, whatever your audit revealed. You see results within 30 days.</div>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-title">Optimize and Grow</div>
+      <div class="step-desc">Monthly check-ins to add new automations, train your team, and make sure everything keeps running. Your business gets smarter over time.</div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- FEATURE ROWS -->
+<div class="feature-row" id="results">
+  <div>
+    <div class="feature-eyebrow">The Problem</div>
+    <div class="feature-title">Your team is doing work that AI handles in seconds.</div>
+    <p class="feature-desc">Most home services companies have 3-5 employees spending hours every week on tasks that follow a repeatable pattern. Answering the same questions, entering data, chasing down quotes, pulling reports.</p>
+    <ul class="feature-list">
+      <li>Same customer questions answered 20+ times per week</li>
+      <li>Estimates sitting in inboxes with no follow-up system</li>
+      <li>After-hours leads going to voicemail and never returning</li>
+      <li>Owner spending 5+ hours/week building reports manually</li>
+    </ul>
+  </div>
+  <div class="feature-visual">
+    <div class="fv-row"><span class="fv-label">Missed after-hours calls/week</span><span class="fv-val">12-18</span></div>
+    <div class="fv-row"><span class="fv-label">Avg response time to new leads</span><span class="fv-val">4.2 hrs</span></div>
+    <div class="fv-row"><span class="fv-label">Quotes with no follow-up</span><span class="fv-val">60-70%</span></div>
+    <div class="fv-row"><span class="fv-label">Hours/week on manual admin</span><span class="fv-val">15-20 hrs</span></div>
+    <div class="fv-row"><span class="fv-label">Revenue left on the table/month</span><span class="fv-val">$8K-$15K</span></div>
+  </div>
+</div>
+
+<div class="feature-row flip">
+  <div>
+    <div class="feature-eyebrow">The Fix</div>
+    <div class="feature-title">AI systems that run while your team does real work.</div>
+    <p class="feature-desc">I don't sell software. I install systems. Your phones get answered. Your leads get followed up. Your team gets hours back every week. You see the numbers in a dashboard, not a spreadsheet.</p>
+    <ul class="feature-list">
+      <li>Calls answered 24/7, appointments booked automatically</li>
+      <li>Every lead contacted within 60 seconds</li>
+      <li>Automated 3-touch follow-up on every open estimate</li>
+      <li>One dashboard for revenue, leads, team output, pipeline</li>
+    </ul>
+  </div>
+  <div class="feature-visual">
+    <div class="fv-row"><span class="fv-label">After-hours calls captured</span><span class="fv-val green">100%</span></div>
+    <div class="fv-row"><span class="fv-label">Avg response time to new leads</span><span class="fv-val green">< 60 sec</span></div>
+    <div class="fv-row"><span class="fv-label">Quotes with automated follow-up</span><span class="fv-val green">100%</span></div>
+    <div class="fv-row"><span class="fv-label">Admin hours saved/week</span><span class="fv-val green">10-15 hrs</span></div>
+    <div class="fv-row"><span class="fv-label">Revenue recovered/month</span><span class="fv-val green">$5K-$12K</span></div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section-wrap" id="faq">
+  <div class="section-eyebrow">Common Questions</div>
+  <div class="section-title">What business owners ask me</div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q">Do I need to be tech-savvy for this to work? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">No. I handle all the setup and technical work. Your team doesn't need to learn coding or new software. If they can use a phone and check email, they can work with what I build.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">Will AI replace my employees? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">No. AI handles the repetitive tasks your team shouldn't be spending time on. It frees them up for higher-value work: building relationships, closing deals, doing the actual service work that generates revenue.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">How fast will I see results? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">Most businesses see measurable impact within 2-4 weeks. The first win is usually the call answering system, which starts capturing leads from day one. ROI typically shows up in the first monthly report.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What does it cost? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">It depends on what we build. A simple call answering + lead follow-up system starts at $2,500 to set up with a small monthly fee to maintain. Larger implementations with dashboards, team training, and ongoing optimization are priced based on the scope. The audit is free, and I'll give you exact numbers before anything starts.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">What if it doesn't work for my business? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">The free audit will tell us that before any money changes hands. Not every business needs AI right now. If I don't see a clear ROI opportunity, I'll tell you. I'd rather be honest than sell you something you don't need.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q">I've used ChatGPT. How is this different? <span class="faq-arrow">+</span></button>
+      <div class="faq-a">ChatGPT is a tool. What I build are systems. The difference: ChatGPT answers a question when you ask it. My systems run automatically in the background, 24/7, connected to your calendar, your CRM, your phone line. You don't have to think about it.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="final-cta">
+  <div class="section-eyebrow">Get Started</div>
+  <h2>Find out what AI can do for your business. Free.</h2>
+  <p>30-minute call. I'll map your workflows, show you where you're losing time and money, and give you a specific plan. No pitch. No pressure.</p>
+  <a href="https://cal.com/jay-condie/free-ai-efficiency-audit" class="btn-primary" target="_blank">Book Your Free AI Audit →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Jay Condie<span>.</span></div>
+  <p>AI implementation for home services companies.</p>
+  <p>Salt Lake City, Utah</p>
+</footer>
+
+<script>
+// FAQ toggle
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    document.querySelectorAll('.faq-item').forEach(other => {
+      if (other !== item) other.classList.remove('open');
+    });
+    item.classList.toggle('open');
+  });
+});
+
+// Card animation on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.style.animationPlayState = 'running'; });
+}, { threshold: 0.1 });
+document.querySelectorAll('.card').forEach(c => {
+  c.style.animationPlayState = 'paused';
+  observer.observe(c);
+});
+</script>
+</body>
+</html>
