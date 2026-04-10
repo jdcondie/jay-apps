@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Reference — Live Audit Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Workflow<span>.</span>Ref</div>
+  <div class="nav-right">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search workflows..." autocomplete="off">
+      <button class="search-clear" id="searchClear">×</button>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+</nav>
+
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-category="all">All Workflows</button>
+  <button class="filter-btn" data-category="lead">📞 Lead & Comms</button>
+  <button class="filter-btn" data-category="admin">📋 Admin & Data</button>
+  <button class="filter-btn" data-category="ops">⚙️ Operations</button>
+  <button class="filter-btn" data-category="sales">💼 Sales</button>
+  <button class="filter-btn" data-category="knowledge">🧠 Knowledge</button>
+</div>
+
+<div class="main">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="content" id="content">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">No workflows match</div>
+      <div class="empty-sub">Try a different search or category</div>
+    </div>
+  </div>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
