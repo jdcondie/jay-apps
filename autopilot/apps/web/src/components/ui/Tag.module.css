@@ -1,0 +1,20 @@
+.tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.dim    { background: var(--dim);        color: var(--muted); }
+.accent { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-mid); }
+.warn   { background: var(--warn-dim);   color: var(--warn); }
+.blue   { background: var(--blue-dim);   color: var(--blue); }
+.purple { background: var(--purple-dim); color: var(--purple); }
+.red    { background: var(--red-dim);    color: var(--red); }
+.orange { background: var(--orange-dim); color: var(--orange); }
+.teal   { background: var(--teal-dim);   color: var(--teal); }

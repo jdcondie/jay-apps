@@ -1,0 +1,36 @@
+.wrap { padding: 32px 24px; max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+.header { display: flex; flex-direction: column; gap: 4px; }
+.title { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  flex-wrap: wrap;
+}
+.flowStep { display: flex; align-items: center; gap: 8px; }
+.arrow { color: var(--muted); font-size: 16px; }
+
+.tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border); }
+
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  color: var(--muted);
+}
+.tab:hover { color: var(--text); }
+.tabActive { color: var(--accent); border-bottom-color: var(--accent); }
+
+.script { display: flex; flex-direction: column; gap: 8px; }
+
+.scriptDesc { font-style: italic; }
+
+.envVars { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.envLabel { flex-shrink: 0; text-transform: uppercase; letter-spacing: 0.05em; }

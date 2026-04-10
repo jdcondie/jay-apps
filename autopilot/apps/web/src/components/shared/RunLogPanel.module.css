@@ -1,0 +1,68 @@
+.panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.toggle:hover { background: var(--panel); }
+
+.body { padding: 12px; background: var(--panel); }
+
+.addRow {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.input {
+  flex: 1;
+  padding: 5px 8px;
+  font-size: 12px;
+}
+
+.list { display: flex; flex-direction: column; gap: 6px; }
+
+.entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.date { flex-shrink: 0; }
+.note { flex: 1; }
+
+.del {
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.15s;
+}
+.del:hover { color: var(--red); }
+
+.loading, .empty { padding: 8px 0; display: block; }

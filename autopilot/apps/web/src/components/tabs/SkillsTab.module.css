@@ -1,0 +1,58 @@
+.wrap { padding: 32px 24px; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+.header { display: flex; justify-content: space-between; align-items: flex-end; }
+.title { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+
+.howItWorks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  flex-wrap: wrap;
+}
+.step { display: flex; align-items: center; gap: 8px; }
+.arrow { color: var(--muted); font-size: 16px; }
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: fadeIn 0.15s ease both;
+}
+
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+
+.preset {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.preset:hover { border-color: var(--border2); background: var(--panel); }
+
+.input, .textarea { width: 100%; padding: 9px 12px; font-size: 13px; border-radius: var(--radius-sm); }
+.textarea { resize: vertical; line-height: 1.5; }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+.empty { padding: 40px; text-align: center; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  transition: border-color 0.15s;
+}
+.card:hover { border-color: var(--border2); }
+
+.cardTop { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.cardLeft { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+.cardActions { display: flex; gap: 6px; flex-shrink: 0; }

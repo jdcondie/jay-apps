@@ -1,0 +1,13 @@
+{
+  "name": "autopilot",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "db:push": "supabase db push"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  }
+}

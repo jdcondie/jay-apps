@@ -1,0 +1,93 @@
+.wrap {
+  padding: 32px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.inner { display: flex; flex-direction: column; gap: 20px; animation: fadeIn 0.2s ease both; }
+
+/* Score strip */
+.scoreStrip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.scoreItem { display: flex; align-items: center; gap: 10px; min-width: 180px; flex: 1; }
+
+.verdict { display: flex; align-items: center; gap: 10px; flex: 2; }
+
+/* Sections */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.sectionTitle {
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.stackTag { margin-bottom: 4px; }
+
+.issue { display: flex; align-items: center; gap: 8px; }
+
+/* Steps */
+.steps { display: flex; flex-direction: column; gap: 8px; }
+
+.stepRow { display: flex; gap: 10px; align-items: flex-start; }
+
+.stepNum {
+  min-width: 20px;
+  text-align: right;
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+
+.stepFields { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+.stepMeta {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.agentSelect {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.error {
+  display: block;
+  padding: 8px 12px;
+  background: var(--red-dim);
+  border: 1px solid var(--red);
+  border-radius: var(--radius-sm);
+}
+
+.footer { display: flex; justify-content: flex-end; }

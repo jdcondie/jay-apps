@@ -1,0 +1,48 @@
+.wrap { padding: 32px 24px; max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+.header { display: flex; flex-direction: column; gap: 4px; }
+.title { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+
+.textarea { width: 100%; padding: 14px 16px; font-size: 13px; border-radius: var(--radius); resize: vertical; line-height: 1.6; }
+
+.actions { display: flex; justify-content: space-between; align-items: center; }
+
+.results { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.2s ease both; }
+
+.topPick {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: var(--radius);
+}
+.topLabel { text-transform: uppercase; letter-spacing: 0.06em; }
+
+.table {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.tableHead, .tableRow {
+  display: grid;
+  grid-template-columns: 2fr 80px 80px 80px 80px 80px;
+  gap: 12px;
+  padding: 10px 14px;
+  align-items: center;
+}
+
+.tableHead {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.tableRow { border-bottom: 1px solid var(--border); }
+.tableRow:last-child { border-bottom: none; }
+
+.taskName { display: flex; flex-direction: column; gap: 3px; }
+
+.reason { font-style: italic; }

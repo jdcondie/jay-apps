@@ -1,0 +1,8 @@
+.mono { font-family: var(--font-mono); }
+.xs   { font-size: 10px; }
+.sm   { font-size: 12px; }
+.md   { font-size: 13px; }
+.dim    { color: var(--muted); }
+.accent { color: var(--accent); }
+.warn   { color: var(--warn); }
+.red    { color: var(--red); }

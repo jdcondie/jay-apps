@@ -1,0 +1,33 @@
+.field { display: flex; flex-direction: column; gap: 4px; }
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.display {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.display:hover { border-color: var(--border2); }
+
+.text { flex: 1; line-height: 1.5; }
+.placeholder { color: var(--muted); font-style: italic; }
+.edit { flex-shrink: 0; }
+
+.input, .textarea {
+  width: 100%;
+  padding: 8px 10px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  line-height: 1.5;
+}

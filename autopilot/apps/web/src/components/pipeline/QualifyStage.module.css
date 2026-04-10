@@ -1,0 +1,46 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px;
+  min-height: calc(100vh - 120px);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid var(--border2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.label { letter-spacing: 0.06em; text-transform: uppercase; }
+
+.steps { display: flex; flex-direction: column; gap: 10px; min-width: 260px; }
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.3;
+  transition: opacity 0.3s;
+}
+.active { opacity: 1; }
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+.active .dot { background: var(--accent); animation: pulse 1s ease infinite; }

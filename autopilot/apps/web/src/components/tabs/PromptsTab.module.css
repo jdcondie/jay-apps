@@ -1,0 +1,52 @@
+.wrap { padding: 32px 24px; max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+.header { display: flex; justify-content: space-between; align-items: flex-end; }
+.title { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+
+.addForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  animation: fadeIn 0.15s ease both;
+}
+
+.input, .textarea { width: 100%; padding: 9px 12px; font-size: 13px; border-radius: var(--radius-sm); }
+.textarea { resize: vertical; line-height: 1.5; }
+
+.list { display: flex; flex-direction: column; gap: 8px; }
+.empty { padding: 40px; text-align: center; }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px 14px;
+  cursor: pointer;
+  gap: 12px;
+}
+.cardTop:hover { background: var(--panel); }
+
+.cardLeft { flex: 1; display: flex; flex-direction: column; gap: 3px; }
+.cardRight { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+
+.cardBody {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardActions { display: flex; justify-content: flex-end; }

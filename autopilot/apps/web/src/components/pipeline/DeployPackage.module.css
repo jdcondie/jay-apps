@@ -1,0 +1,119 @@
+.wrap { padding: 32px 24px; max-width: 800px; margin: 0 auto; }
+
+.inner { display: flex; flex-direction: column; gap: 16px; animation: fadeIn 0.2s ease both; }
+
+/* Score strip */
+.scoreStrip {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* Decisive */
+.decisive {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: var(--radius);
+}
+.decisiveLabel { text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; }
+
+/* Sections */
+.section {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.sectionToggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sectionToggle:hover { background: var(--panel); }
+
+.sectionLeft {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.sectionBody { padding: 16px; background: var(--panel); display: flex; flex-direction: column; gap: 12px; }
+
+/* Map */
+.mapFields { display: flex; flex-direction: column; gap: 8px; }
+
+.mapRow {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mapRow:last-child { border-bottom: none; }
+.mapRow > :first-child { min-width: 56px; flex-shrink: 0; padding-top: 1px; }
+
+.mapStep {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 8px 10px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+.mapStep > :first-child { min-width: 20px; text-align: right; padding-top: 2px; flex-shrink: 0; }
+
+.mapStepBody { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-start; }
+
+/* Roles */
+.roleCards { display: flex; gap: 12px; }
+.roleCard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* Subagents */
+.subagents { display: flex; flex-direction: column; gap: 6px; }
+.subLabel { text-transform: uppercase; letter-spacing: 0.06em; }
+.subRow { display: flex; gap: 8px; align-items: center; }
+
+/* Skills */
+.skillBadges { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+
+/* Prompt */
+.promptBlock { display: flex; flex-direction: column; gap: 8px; }
+.promptHeader { display: flex; justify-content: space-between; align-items: center; }
+
+/* Scripts */
+.scriptBlock { display: flex; flex-direction: column; gap: 8px; }
+.scriptHeader { display: flex; align-items: center; gap: 10px; }
+
+/* Optimize */
+.logTargets { display: flex; flex-direction: column; gap: 6px; }
+.logLabel { text-transform: uppercase; letter-spacing: 0.06em; }
+.logItem { display: flex; align-items: center; gap: 8px; }
+.logDot { width: 4px; height: 4px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+.firstFix { display: flex; gap: 8px; align-items: flex-start; }
+
+/* Footer */
+.footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 8px; }
