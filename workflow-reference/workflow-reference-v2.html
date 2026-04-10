@@ -1,0 +1,2713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Reference — Live Audit Tool</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --orange: #E8541A;
+  --orange-light: #FFF3EE;
+  --orange-mid: #F97440;
+  --black: #111111;
+  --gray-900: #1a1a1a;
+  --gray-700: #3d3d3d;
+  --gray-500: #717171;
+  --gray-300: #d4d4d4;
+  --gray-100: #f5f5f5;
+  --gray-50: #fafafa;
+  --white: #ffffff;
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --blue: #2563eb;
+  --blue-bg: #eff6ff;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--gray-300);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px; gap: 16px;
+}
+.nav-logo { font-weight: 800; font-size: 15px; color: var(--black); letter-spacing: -0.02em; white-space: nowrap; }
+.nav-logo span { color: var(--orange); }
+.nav-right { display: flex; align-items: center; gap: 12px; flex: 1; justify-content: flex-end; }
+
+/* SEARCH */
+.search-wrap {
+  position: relative;
+  flex: 1;
+  max-width: 360px;
+}
+.search-wrap input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--black);
+  background: var(--gray-50);
+  outline: none;
+  transition: border-color 0.15s;
+}
+.search-wrap input:focus { border-color: var(--orange); background: white; }
+.search-wrap input::placeholder { color: var(--gray-500); }
+.search-icon {
+  position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+  color: var(--gray-500); font-size: 14px; pointer-events: none;
+}
+.search-clear {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; color: var(--gray-500);
+  font-size: 16px; padding: 0; line-height: 1; display: none;
+}
+
+/* FILTER TABS */
+.filter-bar {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 12px 32px;
+  border-bottom: 1px solid var(--gray-300);
+  background: var(--gray-50);
+  overflow-x: auto;
+}
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1.5px solid var(--gray-300);
+  background: white;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-700);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.filter-btn:hover { border-color: var(--orange); color: var(--orange); }
+.filter-btn.active {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: white;
+}
+
+/* MAIN LAYOUT */
+.main {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: calc(100vh - 56px - 53px);
+}
+
+/* SIDEBAR */
+.sidebar {
+  border-right: 1px solid var(--gray-300);
+  padding: 20px 0;
+  position: sticky;
+  top: 109px;
+  height: calc(100vh - 109px);
+  overflow-y: auto;
+}
+.sidebar-section { margin-bottom: 4px; }
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  padding: 12px 20px 6px;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-700);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.sidebar-item:hover { color: var(--orange); background: var(--orange-light); border-left-color: var(--orange); }
+.sidebar-item.active { color: var(--orange); background: var(--orange-light); border-left-color: var(--orange); font-weight: 700; }
+.sidebar-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gray-300); flex-shrink: 0; }
+.sidebar-item.active .sidebar-dot,
+.sidebar-item:hover .sidebar-dot { background: var(--orange); }
+
+/* CONTENT */
+.content {
+  padding: 32px 40px;
+  max-width: 900px;
+}
+
+/* SECTION HEADER */
+.section-block { margin-bottom: 48px; }
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 6px;
+}
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--black);
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--orange-light);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-icon { font-size: 20px; }
+
+/* WORKFLOW CARD */
+.workflow-card {
+  border: 1.5px solid var(--gray-300);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: all 0.15s;
+}
+.workflow-card:hover { border-color: var(--orange); box-shadow: 0 4px 20px rgba(232,84,26,0.08); }
+.workflow-card.hidden { display: none; }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: white;
+  user-select: none;
+  gap: 12px;
+}
+.card-header:hover { background: var(--gray-50); }
+.card-header-left { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.card-emoji { font-size: 18px; flex-shrink: 0; }
+.card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--black);
+  letter-spacing: -0.01em;
+}
+.card-preview {
+  font-size: 12px;
+  color: var(--gray-500);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-expand {
+  font-size: 18px;
+  color: var(--gray-500);
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.workflow-card.open .card-expand { transform: rotate(180deg); }
+
+/* CARD BODY */
+.card-body {
+  display: none;
+  border-top: 1px solid var(--gray-100);
+}
+.workflow-card.open .card-body { display: block; }
+
+.card-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--gray-300);
+  background: var(--gray-50);
+  overflow-x: auto;
+}
+.card-tab {
+  padding: 10px 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-500);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: all 0.15s;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: inherit;
+}
+.card-tab:hover { color: var(--orange); }
+.card-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+.card-panel { display: none; padding: 20px; }
+.card-panel.active { display: block; }
+
+/* PROBLEM PANEL */
+.problem-text {
+  font-size: 14px;
+  color: var(--gray-700);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.discovery-qs { display: flex; flex-direction: column; gap: 8px; }
+.discovery-q {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--gray-900);
+  line-height: 1.5;
+}
+.q-icon { color: var(--blue); font-weight: 800; flex-shrink: 0; }
+
+/* SOLUTION PANEL */
+.flow-steps { display: flex; flex-direction: column; gap: 4px; }
+.flow-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.flow-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+.flow-num {
+  width: 26px;
+  height: 26px;
+  background: var(--orange);
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.flow-line {
+  width: 2px;
+  height: 20px;
+  background: var(--gray-300);
+  margin: 2px 0;
+}
+.flow-last .flow-num { background: var(--green); }
+.flow-content {
+  flex: 1;
+  padding: 4px 0 16px;
+}
+.flow-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--black);
+  margin-bottom: 2px;
+}
+.flow-detail {
+  font-size: 12px;
+  color: var(--gray-500);
+  line-height: 1.5;
+}
+
+/* ROI PANEL */
+.roi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+.roi-card {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 14px;
+}
+.roi-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-500); margin-bottom: 4px; }
+.roi-value { font-size: 16px; font-weight: 800; color: var(--black); letter-spacing: -0.02em; }
+.roi-value span { color: var(--orange); }
+.pitch-line {
+  background: var(--green-bg);
+  border-left: 3px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* TOOLS PANEL */
+.tools-list { display: flex; flex-direction: column; gap: 8px; }
+.tool-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+}
+.tool-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tool-badge.trigger { background: var(--blue-bg); color: var(--blue); }
+.tool-badge.ai { background: var(--orange-light); color: var(--orange); }
+.tool-badge.output { background: var(--green-bg); color: var(--green); }
+.tool-name { font-size: 13px; font-weight: 700; color: var(--black); }
+.tool-desc { font-size: 12px; color: var(--gray-500); }
+
+/* LEVEL BADGE */
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.level-1 { background: var(--green-bg); color: var(--green); }
+.level-2 { background: var(--orange-light); color: var(--orange); }
+
+/* EMPTY STATE */
+.empty-state {
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--gray-500);
+  display: none;
+}
+.empty-state.visible { display: block; }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; font-weight: 600; color: var(--gray-700); margin-bottom: 4px; }
+.empty-sub { font-size: 13px; }
+
+/* COUNT */
+.result-count {
+  font-size: 12px;
+  color: var(--gray-500);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* PLATFORM TOGGLE */
+.platform-toggle {
+  display: flex;
+  background: var(--gray-100);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.platform-btn {
+  padding: 6px 12px;
+  border: none;
+  background: none;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-700);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.platform-btn.active {
+  background: white;
+  color: var(--orange);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+
+/* TIME BADGE */
+.time-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 9px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-300);
+  flex-shrink: 0;
+}
+
+/* CALCULATOR */
+.calc-wrap {
+  background: linear-gradient(135deg, var(--orange-light), #fff);
+  border: 1.5px solid var(--orange-light);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.calc-title {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 10px;
+}
+.calc-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.calc-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 4px;
+}
+.calc-field input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--black);
+  background: white;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.calc-field input:focus { border-color: var(--orange); }
+.calc-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--orange);
+  flex-wrap: wrap;
+}
+.calc-result-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gray-700);
+}
+.calc-result-value {
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--orange);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+/* EXAMPLES */
+.examples-toggle {
+  margin-top: 16px;
+  background: white;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-700);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.15s;
+}
+.examples-toggle:hover { border-color: var(--orange); color: var(--orange); }
+.examples-toggle .caret { transition: transform 0.2s; font-size: 10px; }
+.examples-toggle.open .caret { transform: rotate(180deg); }
+.examples-list {
+  display: none;
+  margin-top: 10px;
+  flex-direction: column;
+  gap: 10px;
+}
+.examples-list.open { display: flex; }
+.example-card {
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: white;
+}
+.example-biz {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--orange);
+  margin-bottom: 8px;
+}
+.example-row {
+  font-size: 12px;
+  color: var(--gray-700);
+  line-height: 1.5;
+  padding: 3px 0;
+}
+.example-row b { color: var(--gray-900); font-weight: 700; }
+
+/* DEMO SCRIPT */
+.demo-setup {
+  background: var(--blue-bg);
+  border-left: 3px solid var(--blue);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--gray-900);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.demo-setup b { color: var(--blue); }
+.demo-step {
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: white;
+}
+.demo-step-num {
+  display: inline-block;
+  background: var(--orange);
+  color: white;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.demo-say {
+  font-size: 13px;
+  color: var(--gray-900);
+  margin-bottom: 10px;
+  line-height: 1.55;
+}
+.demo-say b { color: var(--orange); text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; display: block; margin-bottom: 3px; font-weight: 800; }
+.code-block {
+  background: #1a1a1a;
+  color: #e4e4e4;
+  padding: 32px 14px 12px;
+  border-radius: 8px;
+  font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  position: relative;
+  margin: 6px 0 10px;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: var(--orange); border-color: var(--orange); }
+.copy-btn.copied { background: var(--green); border-color: var(--green); }
+.demo-reaction {
+  font-size: 12px;
+  color: var(--gray-900);
+  background: var(--green-bg);
+  padding: 9px 12px;
+  border-radius: 6px;
+  border-left: 3px solid var(--green);
+  line-height: 1.5;
+}
+.demo-reaction b { color: var(--green); text-transform: uppercase; font-size: 10px; letter-spacing: 0.08em; display: block; margin-bottom: 3px; font-weight: 800; }
+.obj-title {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--orange);
+  margin: 20px 0 10px;
+}
+.obj-item {
+  border: 1px solid var(--gray-300);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  background: white;
+}
+.obj-pushback {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.obj-response {
+  font-size: 12px;
+  color: var(--gray-700);
+  line-height: 1.55;
+  padding-left: 12px;
+  border-left: 2px solid var(--orange);
+}
+
+/* PROPOSAL TAB */
+.add-proposal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: all 0.15s;
+}
+.add-proposal-btn:hover { background: var(--orange-mid); }
+.add-proposal-btn.added { background: var(--green); }
+.scope-preview {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  padding: 16px 18px;
+  font-size: 13px;
+  color: var(--gray-900);
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+.scope-preview b { color: var(--black); font-weight: 800; }
+.scope-preview .bracket {
+  background: var(--orange-light);
+  color: var(--orange);
+  padding: 1px 7px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* FAB */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--orange);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 14px 22px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(232,84,26,0.35);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 200;
+  transition: all 0.2s;
+}
+.fab:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(232,84,26,0.45); }
+.fab-count {
+  background: white;
+  color: var(--orange);
+  border-radius: 100px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 800;
+  min-width: 22px;
+  text-align: center;
+}
+
+/* DRAWER */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.drawer-overlay.open { opacity: 1; pointer-events: auto; }
+.drawer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  z-index: 301;
+  max-height: 82vh;
+  transform: translateY(100%);
+  transition: transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.2);
+}
+.drawer.open { transform: translateY(0); }
+.drawer-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--gray-300);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.drawer-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--black);
+  letter-spacing: -0.02em;
+}
+.drawer-close {
+  background: none;
+  border: none;
+  font-size: 26px;
+  cursor: pointer;
+  color: var(--gray-500);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+}
+.drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+.drawer-item {
+  border: 1px solid var(--gray-300);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: var(--gray-50);
+}
+.drawer-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+.drawer-item-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--black);
+  flex: 1;
+}
+.drawer-item-scope {
+  font-size: 12px;
+  color: var(--gray-700);
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+.drawer-item-scope b { color: var(--gray-900); }
+.drawer-remove {
+  background: none;
+  border: none;
+  color: var(--gray-500);
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0 6px;
+  line-height: 1;
+}
+.drawer-remove:hover { color: var(--orange); }
+.drawer-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--gray-500);
+  font-size: 13px;
+}
+.drawer-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--gray-300);
+  display: flex;
+  gap: 10px;
+}
+.drawer-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+.drawer-btn.clear {
+  background: white;
+  color: var(--gray-700);
+  border: 1.5px solid var(--gray-300);
+}
+.drawer-btn.clear:hover { background: var(--gray-100); }
+.drawer-btn.export {
+  background: var(--orange);
+  color: white;
+}
+.drawer-btn.export:hover { background: var(--orange-mid); }
+.drawer-btn.export.copied { background: var(--green); }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .main { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .content { padding: 24px 20px; max-width: 100%; }
+  nav { padding: 0 20px; flex-wrap: wrap; height: auto; padding-top: 10px; padding-bottom: 10px; }
+  .filter-bar { padding: 10px 20px; }
+  .roi-grid { grid-template-columns: 1fr; }
+  .calc-inputs { grid-template-columns: 1fr 1fr; }
+  .fab { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 12px; }
+  .drawer { max-height: 90vh; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Workflow<span>.</span>Ref</div>
+  <div class="nav-right">
+    <div class="platform-toggle" id="platformToggle">
+      <button class="platform-btn active" data-platform="standard">Standard</button>
+      <button class="platform-btn" data-platform="microsoft">🪟 Microsoft</button>
+    </div>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search workflows..." autocomplete="off">
+      <button class="search-clear" id="searchClear">×</button>
+    </div>
+    <span class="result-count" id="resultCount"></span>
+  </div>
+</nav>
+
+<div class="filter-bar" id="filterBar">
+  <button class="filter-btn active" data-category="all">All Workflows</button>
+  <button class="filter-btn" data-category="lead">📞 Lead & Comms</button>
+  <button class="filter-btn" data-category="admin">📋 Admin & Data</button>
+  <button class="filter-btn" data-category="ops">⚙️ Operations</button>
+  <button class="filter-btn" data-category="sales">💼 Sales</button>
+  <button class="filter-btn" data-category="knowledge">🧠 Knowledge</button>
+</div>
+
+<div class="main">
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="content" id="content">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">🔍</div>
+      <div class="empty-text">No workflows match</div>
+      <div class="empty-sub">Try a different search or category</div>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fab">
+  <span>📋 Proposal</span>
+  <span class="fab-count" id="fabCount">0</span>
+</button>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div class="drawer-title">Proposal Builder</div>
+    <button class="drawer-close" id="drawerClose">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-footer">
+    <button class="drawer-btn clear" id="btnClear">Clear All</button>
+    <button class="drawer-btn export" id="btnExport">Export Proposal</button>
+  </div>
+</div>
+
+<script>
+const data = [
+  {
+    id: "after-hours-leads",
+    category: "lead",
+    emoji: "🌙",
+    name: "After-Hours Lead Capture",
+    preview: "Never miss a lead after closing time",
+    level: 2,
+    problem: "Leads come in outside business hours and get a voicemail. By the time someone calls back, the prospect has already moved on — or booked with a competitor who responded first. Studies show a 5-minute response window dramatically outperforms a next-day callback.",
+    discoveryQs: [
+      "What happens when someone calls or submits a form after 5pm?",
+      "How many leads do you estimate come in outside business hours each week?",
+      "What's your typical callback time for a new inquiry?"
+    ],
+    steps: [
+      { label: "Trigger", detail: "New lead submits form or calls after hours" },
+      { label: "AI responds instantly", detail: "Text or voice message fires within 60 seconds acknowledging the inquiry" },
+      { label: "Qualify via SMS", detail: "AI sends 2–3 qualifying questions via text to gather job details" },
+      { label: "Book the appointment", detail: "AI checks calendar availability and books directly or sends a link" },
+      { label: "CRM entry created", detail: "Lead, answers, and booking land in CRM automatically — zero manual entry", isLast: true }
+    ],
+    roi: { time: "6–10 hrs/week", cost: "$0 in missed leads", hire: "Replaces after-hours staff", speed: "< 60 sec response" },
+    pitch: "That person who called at 8pm on Friday? Right now they're either booked with you automatically or they already hired your competitor. This fixes that permanently.",
+    tools: [
+      { badge: "trigger", name: "Bland / Synthflow / Vapi", desc: "Voice agent intercepts calls 24/7" },
+      { badge: "ai", name: "Claude / GPT", desc: "Qualifies lead via SMS conversation" },
+      { badge: "output", name: "Cal.com / Calendly", desc: "Books appointment directly to calendar" },
+      { badge: "output", name: "CRM (HubSpot / GoHighLevel)", desc: "Auto-creates contact and deal record" }
+    ]
+  },
+  {
+    id: "appointment-booking",
+    category: "lead",
+    emoji: "📅",
+    name: "Appointment Booking & Reminders",
+    preview: "Eliminate back-and-forth scheduling friction",
+    level: 2,
+    problem: "Scheduling still happens over the phone or by email — multiple touchpoints to confirm a single appointment. No-shows happen because reminders are manual and inconsistent. Staff spend 30–60 minutes a day just managing the calendar.",
+    discoveryQs: [
+      "Walk me through how an appointment gets booked today — start to finish.",
+      "How many no-shows do you average per week? What does that cost you?",
+      "Who handles scheduling? How much of their time goes to it?"
+    ],
+    steps: [
+      { label: "Lead confirms interest", detail: "Via phone, form, chat, or reply to a sequence" },
+      { label: "AI sends booking link or books direct", detail: "Synced to real calendar with buffer times and capacity rules built in" },
+      { label: "Confirmation fires immediately", detail: "Email + SMS confirmation with job details, address, and what to expect" },
+      { label: "Reminder sequence runs automatically", detail: "24-hour reminder and 2-hour reminder — no manual send" },
+      { label: "No-show follow-up triggered", detail: "If they miss the appointment, AI reschedules or sends rebooking link", isLast: true }
+    ],
+    roi: { time: "3–5 hrs/week", cost: "Eliminate no-show revenue loss", hire: "Replaces manual booking admin", speed: "Zero back-and-forth" },
+    pitch: "Every no-show is a hole in your revenue. An automated reminder sequence cuts that by 60–80%. And your front desk gets back 30 minutes a day they're currently spending on the phone.",
+    tools: [
+      { badge: "trigger", name: "Zapier / Make", desc: "Detects booking confirmation and fires sequence" },
+      { badge: "ai", name: "Cal.com / Acuity", desc: "Intelligent scheduling with rules and buffers" },
+      { badge: "output", name: "Twilio / SMS", desc: "Automated reminder and follow-up texts" },
+      { badge: "output", name: "Email (Klaviyo / Mailchimp)", desc: "Confirmation and reminder emails" }
+    ]
+  },
+  {
+    id: "lead-followup-sequence",
+    category: "lead",
+    emoji: "🔁",
+    name: "Lead Follow-Up Sequences",
+    preview: "Automate 5-touch follow-up for cold or unresponsive leads",
+    level: 2,
+    problem: "Leads come in, get one call, and if they don't answer — they're forgotten. The team is too busy to manually follow up 4 or 5 times. Most deals are won on the 5th to 8th contact. Most teams stop after 1 or 2.",
+    discoveryQs: [
+      "When a lead doesn't respond to the first call, what happens next?",
+      "How many times does your team follow up before moving on?",
+      "What percentage of your leads would you say fall through the cracks?"
+    ],
+    steps: [
+      { label: "Lead goes cold or no-shows", detail: "Trigger: no response after X hours, or appointment missed" },
+      { label: "Sequence initiates automatically", detail: "Day 1: text. Day 2: email. Day 4: call task assigned to rep. Day 7: final follow-up" },
+      { label: "AI personalizes each touchpoint", detail: "Uses lead name, business type, and inquiry details in every message" },
+      { label: "Response routes to human", detail: "The moment they reply, the sequence pauses and routes to the right rep" },
+      { label: "Non-responders tagged and archived", detail: "After sequence completes, lead is tagged for future reactivation", isLast: true }
+    ],
+    roi: { time: "4–8 hrs/week", cost: "Recover 20–40% of dead leads", hire: "Replaces manual follow-up effort", speed: "Fires within minutes of trigger" },
+    pitch: "Your sales team is leaving money in the inbox right now. Every lead that didn't get a 5th touchpoint is a potential deal that went to your competitor. This runs the sequence automatically — they only pick up the phone when someone responds.",
+    tools: [
+      { badge: "trigger", name: "CRM / Zapier", desc: "Detects no-response status and fires workflow" },
+      { badge: "ai", name: "Claude / GPT + template", desc: "Personalizes each message with lead context" },
+      { badge: "output", name: "GoHighLevel / ActiveCampaign", desc: "Manages multi-step sequence across SMS + email" },
+      { badge: "output", name: "Rep task queue", desc: "Assigns manual call tasks at the right moment" }
+    ]
+  },
+  {
+    id: "faq-handling",
+    category: "lead",
+    emoji: "💬",
+    name: "FAQ & Customer Inquiry Handling",
+    preview: "Handle repetitive customer questions automatically",
+    level: 1,
+    problem: "Your team answers the same 10 to 15 questions every single day — pricing, availability, service areas, what to expect. These calls take 3–5 minutes each and consume hours of staff time weekly. Many come in after hours and get no response.",
+    discoveryQs: [
+      "What are the top 5 questions customers ask before booking or buying?",
+      "How many calls or messages per day would you say are just basic questions?",
+      "Who handles those — a dedicated person or whoever picks up?"
+    ],
+    steps: [
+      { label: "Customer contacts via phone, chat, or SMS", detail: "Inbound channel detected and routed to AI agent" },
+      { label: "AI identifies question type", detail: "Matches to knowledge base: pricing, availability, service area, process, etc." },
+      { label: "AI answers using business-specific data", detail: "Not generic internet answers — your actual prices, policies, and process" },
+      { label: "Escalation trigger fires when needed", detail: "Complex or complaint-type messages automatically routed to human" },
+      { label: "Conversation logged to CRM", detail: "Full transcript and outcome recorded automatically", isLast: true }
+    ],
+    roi: { time: "5–12 hrs/week", cost: "Reduce inbound call volume 40–60%", hire: "Frees receptionist / admin time", speed: "Instant response 24/7" },
+    pitch: "Right now someone on your team is answering the same questions about price and availability they answered yesterday. We build a knowledge base around your exact business and let AI handle that — so your people only pick up when it's a real conversation worth having.",
+    tools: [
+      { badge: "trigger", name: "Vapi / Bland / Synthflow", desc: "Handles inbound phone calls" },
+      { badge: "ai", name: "Claude / GPT with knowledge base", desc: "Answers using your specific business info" },
+      { badge: "output", name: "Website chatbot (Tidio / Intercom)", desc: "Handles text-based inquiries on your site" },
+      { badge: "output", name: "CRM log", desc: "All conversations recorded and tagged" }
+    ]
+  },
+  {
+    id: "crm-updates",
+    category: "admin",
+    emoji: "🗂️",
+    name: "CRM Data Entry Automation",
+    preview: "Stop entering data manually after every call",
+    level: 2,
+    problem: "After every call, visit, or meeting, someone has to manually update the CRM. It either doesn't happen, happens late, or happens inconsistently. Reps hate it. Data quality suffers. Leadership can't trust the numbers.",
+    discoveryQs: [
+      "How does your team currently log call notes or job updates — when does that actually happen?",
+      "How confident are you that your CRM reflects what's actually going on in the pipeline?",
+      "What tool does your team use to communicate internally — Slack, text, something else?"
+    ],
+    steps: [
+      { label: "Rep finishes call or visit", detail: "Logs a quick update in Slack, a form, or via voice memo" },
+      { label: "Zapier detects the new entry", detail: "Watches the Slack channel or form submission for new input" },
+      { label: "AI extracts structured data", detail: "Pulls: customer name, status, next step, notes, dollar amount from the raw message" },
+      { label: "CRM record updated automatically", detail: "Correct fields populated in HubSpot, Salesforce, or GoHighLevel with zero manual entry" },
+      { label: "Confirmation sent to rep", detail: "Quick Slack message confirms what was logged — rep can correct if needed", isLast: true }
+    ],
+    roi: { time: "8–15 hrs/week across team", cost: "Eliminate CRM data quality issues", hire: "Frees reps for actual selling", speed: "Real-time updates" },
+    pitch: "Your CRM is only as good as what gets entered into it. Right now your reps are either logging late or not at all. We set it up so they type one line in Slack and the CRM updates itself. No friction. No behavior change.",
+    tools: [
+      { badge: "trigger", name: "Slack / Google Form / Voice", desc: "Rep input method — easiest possible friction" },
+      { badge: "ai", name: "Claude / GPT via Zapier", desc: "Parses unstructured input into structured fields" },
+      { badge: "output", name: "HubSpot / Salesforce / GoHighLevel", desc: "Auto-populates the right fields in the CRM" },
+      { badge: "output", name: "Slack confirmation", desc: "Rep gets immediate feedback on what was logged" }
+    ]
+  },
+  {
+    id: "proposal-generation",
+    category: "admin",
+    emoji: "📄",
+    name: "Proposal & Estimate Generation",
+    preview: "Turn a short intake form into a professional proposal",
+    level: 2,
+    problem: "Writing proposals takes 45 minutes to 2 hours each time. The format is mostly the same — only the details change. Sales reps start from scratch or copy an old one and make mistakes. Slow proposals mean lost deals.",
+    discoveryQs: [
+      "How long does it take your team to put together a proposal or estimate after a discovery call?",
+      "Is there a standard format you use, or does it vary by rep?",
+      "How quickly does a proposal need to go out to stay competitive in your market?"
+    ],
+    steps: [
+      { label: "Discovery call ends", detail: "Rep fills a short intake form: client name, scope, pricing tier, key details" },
+      { label: "AI pulls the proposal template", detail: "Selects the right template based on job type or service line" },
+      { label: "AI customizes with client context", detail: "Populates name, scope, pricing, timeline, and relevant case studies or proof points" },
+      { label: "Draft sent to rep for review", detail: "Takes under 5 minutes. Rep makes minor edits if needed" },
+      { label: "Proposal sent and tracked", detail: "Sent via DocuSign or PDF with open-tracking enabled", isLast: true }
+    ],
+    roi: { time: "2–4 hrs/day across sales team", cost: "Send proposals 10x faster", hire: "No extra proposal coordinator needed", speed: "Draft ready in under 5 min" },
+    pitch: "Speed kills in sales. Every hour between the call and the proposal is a window for your competitor to close them. We cut that from 90 minutes to under 5. Same quality. Faster delivery. Better close rate.",
+    tools: [
+      { badge: "trigger", name: "Intake form (Typeform / Jotform)", desc: "Rep fills quick post-call form" },
+      { badge: "ai", name: "Claude / GPT", desc: "Customizes template with client-specific content" },
+      { badge: "output", name: "Google Docs / Word / DocuSign", desc: "Generates clean, formatted proposal" },
+      { badge: "output", name: "Email tracking", desc: "Notifies rep when prospect opens the proposal" }
+    ]
+  },
+  {
+    id: "invoice-followup",
+    category: "admin",
+    emoji: "💳",
+    name: "Invoice Follow-Up & Collections",
+    preview: "Automated payment reminders that escalate without awkwardness",
+    level: 2,
+    problem: "Chasing unpaid invoices is uncomfortable, inconsistent, and time-consuming. Someone has to manually track due dates and decide when to follow up. Late payments hurt cash flow and the conversation is awkward for everyone.",
+    discoveryQs: [
+      "What's your current average time to collect on an invoice after sending it?",
+      "Who owns collections follow-up right now — is there a consistent process?",
+      "What percentage of invoices would you say come in late?"
+    ],
+    steps: [
+      { label: "Invoice sent to client", detail: "Via your accounting or billing system (QuickBooks, Wave, etc.)" },
+      { label: "Due date monitored automatically", detail: "System watches for payment status — no manual tracking needed" },
+      { label: "Reminder sequence fires on schedule", detail: "Day of: friendly reminder. Day 3 overdue: second notice. Day 7: escalated tone. Day 14: formal notice" },
+      { label: "Payment detected and sequence stops", detail: "The moment payment clears, all future reminders are cancelled automatically" },
+      { label: "Unresolved flagged for human review", detail: "30+ days overdue alerts are escalated to owner or billing manager", isLast: true }
+    ],
+    roi: { time: "2–4 hrs/week in admin", cost: "Reduce average collection time by 30–50%", hire: "No dedicated collections staff needed", speed: "Never miss a due date again" },
+    pitch: "Right now someone on your team is awkwardly writing reminder emails and keeping a spreadsheet of who owes what. This runs the whole thing automatically — and the reminders are professionally worded so there's no relationship damage.",
+    tools: [
+      { badge: "trigger", name: "QuickBooks / FreshBooks / Stripe", desc: "Detects invoice status and due dates" },
+      { badge: "ai", name: "Zapier + email templates", desc: "Fires escalating reminder sequence" },
+      { badge: "output", name: "Email / SMS", desc: "Automated payment reminders to client" },
+      { badge: "output", name: "Owner alert", desc: "Flags 30+ day overdue for human intervention" }
+    ]
+  },
+  {
+    id: "reporting",
+    category: "admin",
+    emoji: "📊",
+    name: "Automated Reporting for Leadership",
+    preview: "Weekly business summaries without pulling a single number manually",
+    level: 2,
+    problem: "Leadership spends 3–6 hours a week pulling numbers from multiple systems, formatting them into a report, and emailing it out. The data is already in the systems — it just needs to be assembled and summarized. This is pure admin overhead.",
+    discoveryQs: [
+      "How do you currently get a read on how the business is performing each week?",
+      "How long does it take to pull that together — and who does it?",
+      "What data sources does it pull from — CRM, accounting, ops software?"
+    ],
+    steps: [
+      { label: "Weekly trigger fires automatically", detail: "Scheduled every Monday morning or Friday afternoon — your choice" },
+      { label: "AI pulls data from connected systems", detail: "Reads CRM, accounting, job management software via API or Zapier" },
+      { label: "AI generates narrative summary", detail: "Not just numbers — actual sentences explaining what changed and why" },
+      { label: "Report emailed to leadership", detail: "Clean, formatted summary in inbox before the work week starts" },
+      { label: "Interactive version available on demand", detail: "CEO can ask questions directly to a dashboard — like talking to the data", isLast: true }
+    ],
+    roi: { time: "3–6 hrs/week saved", cost: "Eliminate report-building labor", hire: "No analyst or operations coordinator needed for reports", speed: "Ready every Monday, automatically" },
+    pitch: "Your leadership team is spending hours every week assembling a report when the data already exists in your systems. We connect those systems and let AI write the summary. You get the report in your inbox every Monday without anyone touching it.",
+    tools: [
+      { badge: "trigger", name: "Zapier scheduled trigger", desc: "Fires on a set schedule automatically" },
+      { badge: "ai", name: "Claude / GPT", desc: "Interprets data and writes human-readable summary" },
+      { badge: "output", name: "Email to leadership", desc: "Clean formatted report delivered automatically" },
+      { badge: "output", name: "Retool / custom dashboard", desc: "Interactive CEO dashboard for on-demand questions" }
+    ]
+  },
+  {
+    id: "job-scheduling",
+    category: "ops",
+    emoji: "🗓️",
+    name: "Job Scheduling & Dispatch",
+    preview: "Assign and notify field staff without manual coordination",
+    level: 2,
+    problem: "Dispatching jobs requires someone to check technician availability, match skills to the job, notify the tech, and confirm with the client — all manually. Scheduling conflicts, double-bookings, and late notifications are common.",
+    discoveryQs: [
+      "Walk me through how a new job gets scheduled and assigned to a technician — every step.",
+      "How often do scheduling conflicts or double-bookings happen?",
+      "How does the tech find out about a job? How does the client know who's coming?"
+    ],
+    steps: [
+      { label: "New job confirmed and details logged", detail: "In the job management system or CRM" },
+      { label: "AI checks technician availability and skills", detail: "Matches job type to available tech with the right certifications or experience" },
+      { label: "Job assigned automatically", detail: "Tech receives notification via SMS, app push, or Slack with job address and details" },
+      { label: "Client confirmation sent", detail: "Client gets automated message with tech name, photo, arrival window, and prep instructions" },
+      { label: "Status updates flow automatically", detail: "On the way, arrived, completed — triggered by tech check-ins", isLast: true }
+    ],
+    roi: { time: "4–8 hrs/week in dispatch labor", cost: "Eliminate scheduling errors", hire: "Reduces dispatcher workload significantly", speed: "Instant assignment and notification" },
+    pitch: "Your dispatcher is spending half their day on logistics that a system could handle in seconds. The same job that takes 10 minutes of phone calls and texts to coordinate can be assigned and confirmed in under 30 seconds.",
+    tools: [
+      { badge: "trigger", name: "ServiceTitan / Jobber / Housecall Pro", desc: "Job management system triggers the workflow" },
+      { badge: "ai", name: "Zapier + scheduling logic", desc: "Matches job to available tech based on rules" },
+      { badge: "output", name: "SMS / Slack", desc: "Tech receives job details instantly" },
+      { badge: "output", name: "Client SMS / email", desc: "Auto-confirmation with tech details" }
+    ]
+  },
+  {
+    id: "status-updates",
+    category: "ops",
+    emoji: "📡",
+    name: "Field-to-Office Status Updates",
+    preview: "Eliminate the check-in call. Updates flow automatically.",
+    level: 2,
+    problem: "Field staff have to call or text the office to update job status. The office has to follow up if they don't hear back. Leadership has no real-time visibility into what's happening in the field. Communication gaps cause client complaints.",
+    discoveryQs: [
+      "How does your team in the field communicate status back to the office right now?",
+      "How often does leadership have to chase someone for a status update?",
+      "When a job is completed, what's the process for notifying the client?"
+    ],
+    steps: [
+      { label: "Tech marks job status in app", detail: "Simple tap: En Route / On Site / Job Complete — takes 3 seconds" },
+      { label: "Zapier detects status change", detail: "Monitors the job management system for updates in real time" },
+      { label: "Office and leadership notified", detail: "Slack or dashboard updates automatically — no phone call needed" },
+      { label: "Client notification fires on completion", detail: "Automated message: job done, summary of work, link to invoice or review request" },
+      { label: "AI generates completion summary", detail: "Pulls job details and writes a professional service summary for the client record", isLast: true }
+    ],
+    roi: { time: "2–4 hrs/day across field + office", cost: "Eliminate coordination overhead", hire: "Reduces office admin burden", speed: "Real-time visibility for everyone" },
+    pitch: "Right now your front office is playing telephone with your field team. We remove all of that — one tap on a phone triggers the whole chain: office knows, client knows, record is updated. Zero phone calls needed.",
+    tools: [
+      { badge: "trigger", name: "ServiceTitan / Jobber / custom app", desc: "Field tech updates job status" },
+      { badge: "ai", name: "Zapier + Claude", desc: "Generates professional completion summary" },
+      { badge: "output", name: "Slack", desc: "Real-time status visible to office and leadership" },
+      { badge: "output", name: "Client SMS / email", desc: "Automated completion notification and review request" }
+    ]
+  },
+  {
+    id: "employee-onboarding",
+    category: "ops",
+    emoji: "🆕",
+    name: "Employee Onboarding Automation",
+    preview: "Consistent onboarding experience without the manual coordination",
+    level: 2,
+    problem: "Onboarding a new hire requires a manager to remember every step, manually send documents, schedule training, and follow up on completion. It's inconsistent, time-consuming, and the new employee often feels lost in the first two weeks.",
+    discoveryQs: [
+      "Walk me through what happens the day a new hire starts — who manages that process?",
+      "How consistent is the onboarding experience across different hires or departments?",
+      "How do you track whether a new employee has completed their training and paperwork?"
+    ],
+    steps: [
+      { label: "New hire added to HR system", detail: "Trigger: new employee record created in HRIS or via form" },
+      { label: "Automated welcome sequence fires", detail: "Email + Slack: welcome message, first-day logistics, what to expect" },
+      { label: "Day-by-day task sequence activates", detail: "Day 1: paperwork. Day 2: system access. Day 3: training video 1. Week 2: check-in meeting booked" },
+      { label: "AI chatbot answers questions", detail: "New hire can ask anything about policies, benefits, or processes via Slack bot — AI answers using your actual docs" },
+      { label: "Completion tracked and reported", detail: "Manager gets weekly summary of what's done and what's outstanding", isLast: true }
+    ],
+    roi: { time: "5–10 hrs per new hire saved", cost: "Reduce new hire ramp time by 30–40%", hire: "No dedicated HR coordinator needed per hire", speed: "Consistent every time, zero drop-offs" },
+    pitch: "Every inconsistent onboarding costs you a slower ramp and a more confused employee. We build this once and every new hire gets the same experience automatically — manager barely needs to touch it.",
+    tools: [
+      { badge: "trigger", name: "BambooHR / Rippling / Gusto", desc: "New employee record triggers the sequence" },
+      { badge: "ai", name: "Claude with knowledge base", desc: "Answers new hire questions about policies and process" },
+      { badge: "output", name: "Email / Slack sequence", desc: "Day-by-day onboarding task delivery" },
+      { badge: "output", name: "Manager dashboard", desc: "Tracks completion status across all active new hires" }
+    ]
+  },
+  {
+    id: "inventory-reorder",
+    category: "ops",
+    emoji: "📦",
+    name: "Inventory Monitoring & Reorder Alerts",
+    preview: "Get alerted before you run out — not after",
+    level: 2,
+    problem: "Someone has to manually check stock levels, decide when to reorder, and draft a purchase order. This either happens too late (stockout) or too early (overstock tying up cash). The data to predict this perfectly already exists in the system.",
+    discoveryQs: [
+      "How do you currently know when you're about to run out of a key supply or product?",
+      "How often do stockouts happen — and what does that cost you in downtime or lost sales?",
+      "Who manages purchasing decisions right now, and how much time does it take?"
+    ],
+    steps: [
+      { label: "Inventory level monitored daily", detail: "System checks stock against defined minimum thresholds each morning" },
+      { label: "Reorder threshold hit", detail: "Trigger fires when any SKU drops below the minimum level" },
+      { label: "AI calculates optimal reorder quantity", detail: "Based on current rate of use, lead time, and historical patterns" },
+      { label: "Draft purchase order created", detail: "Formatted PO sent to manager for one-click approval — no manual drafting" },
+      { label: "Order confirmed and delivery tracked", detail: "Expected arrival date logged and team notified", isLast: true }
+    ],
+    roi: { time: "3–5 hrs/week in manual tracking", cost: "Eliminate stockouts and overstock", hire: "No dedicated purchasing admin needed", speed: "Alert fires days before a problem" },
+    pitch: "You're either running out of things unexpectedly or ordering too much and tying up cash. Both of those are data problems. This system watches your inventory daily and tells you exactly when to order and how much — before the problem hits.",
+    tools: [
+      { badge: "trigger", name: "Inventory system / Shopify / QBO", desc: "Monitors stock levels in real time" },
+      { badge: "ai", name: "Claude / GPT via Zapier", desc: "Calculates reorder quantity and drafts PO" },
+      { badge: "output", name: "Email / Slack alert", desc: "Manager receives approval request with one click" },
+      { badge: "output", name: "Supplier email / portal", desc: "PO sent automatically on approval" }
+    ]
+  },
+  {
+    id: "lead-qualification",
+    category: "sales",
+    emoji: "🎯",
+    name: "Lead Qualification & Scoring",
+    preview: "Know which leads are worth calling before you pick up the phone",
+    level: 2,
+    problem: "Your sales team treats every inbound lead the same — calling tire-kickers and serious buyers with equal effort. Time is wasted on bad-fit prospects while high-intent leads don't get fast enough attention.",
+    discoveryQs: [
+      "What makes a lead a good fit versus a bad fit for your business?",
+      "How does your team currently decide who to call first?",
+      "What percentage of your inbound leads would you say are actually qualified?"
+    ],
+    steps: [
+      { label: "New lead enters the system", detail: "From website form, ad, referral, or inbound call" },
+      { label: "AI scores against ideal client criteria", detail: "Checks: business size, service area, budget signals, urgency indicators, fit criteria" },
+      { label: "Lead tagged hot / warm / cold", detail: "Automatically in CRM — no manual decision needed" },
+      { label: "Hot leads routed to sales instantly", detail: "SMS or Slack alert fires to the right rep with lead context and score" },
+      { label: "Cold leads enter nurture sequence", detail: "Not discarded — fed into long-term follow-up automation", isLast: true }
+    ],
+    roi: { time: "2–4 hrs/week in wasted sales calls", cost: "Increase close rate on qualified leads", hire: "No SDR needed for initial qualification", speed: "Hot leads contacted within 5 minutes" },
+    pitch: "Right now your best salespeople are wasting time on leads that were never going to buy. We score every lead the moment it comes in and make sure your team only picks up the phone when it matters.",
+    tools: [
+      { badge: "trigger", name: "CRM / form submission", desc: "New lead detected and sent to scoring" },
+      { badge: "ai", name: "Claude / GPT + scoring criteria", desc: "Evaluates lead against your ideal customer profile" },
+      { badge: "output", name: "CRM tags", desc: "Hot / warm / cold assigned automatically" },
+      { badge: "output", name: "Slack / SMS alert to rep", desc: "Hot leads routed immediately" }
+    ]
+  },
+  {
+    id: "outbound-prospecting",
+    category: "sales",
+    emoji: "📤",
+    name: "Outbound Prospecting at Scale",
+    preview: "Research and personalize 100 outreach messages in the time it takes to write 5",
+    level: 2,
+    problem: "Manual outbound research takes 20–30 minutes per prospect. Writing personalized messages takes another 15. At that rate, a rep can reach 10–15 new prospects per day max. The volume required to build a pipeline is impossible to hit manually.",
+    discoveryQs: [
+      "How many new outreach messages does your team send per day right now?",
+      "How long does it take to research a prospect and write a personalized message?",
+      "What's your current conversion rate from outreach to booked meeting?"
+    ],
+    steps: [
+      { label: "Target list defined and uploaded", detail: "Company names, URLs, and target contacts — from LinkedIn, Apollo, or internal list" },
+      { label: "AI researches each prospect", detail: "Scans website, LinkedIn, news, and recent activity for relevant context" },
+      { label: "Personalized first-line generated for each", detail: "Specific to their business — not a template variable. Real personalization." },
+      { label: "Full message drafted and loaded to sequence", detail: "Ready to send — rep reviews and approves in batches, not one by one" },
+      { label: "Responses routed to rep for follow-up", detail: "AI handles the sequence; human takes over the moment a real conversation starts", isLast: true }
+    ],
+    roi: { time: "15–20 hrs/week in manual research", cost: "10x outreach volume with same team size", hire: "Replaces 1–2 SDR hires", speed: "100 personalized messages in 2 hours" },
+    pitch: "Your sales team can send 15 personalized messages a day manually. With this, they can review and approve 100. Same quality. Seven times the volume. Pipeline grows without headcount.",
+    tools: [
+      { badge: "trigger", name: "Apollo / LinkedIn / CSV upload", desc: "Prospect list feeds into research workflow" },
+      { badge: "ai", name: "Claude / GPT + web research", desc: "Researches prospect and writes personalized opener" },
+      { badge: "output", name: "Instantly / Smartlead / Lemlist", desc: "Loads and sends approved sequences at scale" },
+      { badge: "output", name: "CRM", desc: "All activity logged automatically" }
+    ]
+  },
+  {
+    id: "sales-call-coaching",
+    category: "sales",
+    emoji: "🎙️",
+    name: "Sales Call Recording & Coaching",
+    preview: "Every call automatically scored and coached — no manager required",
+    level: 2,
+    problem: "Sales managers can only listen to a handful of calls per week. Most calls go unreviewed. Reps don't get consistent feedback. Patterns that are killing conversion rates — talk ratio, objection handling, closing language — go unnoticed for months.",
+    discoveryQs: [
+      "How many sales calls does your team run per week?",
+      "How do managers currently coach reps — how often, and based on what?",
+      "Do you know what your top-performing reps do differently from average ones?"
+    ],
+    steps: [
+      { label: "Sales call happens", detail: "Rep calls from any phone or video platform" },
+      { label: "Call automatically recorded and transcribed", detail: "Fireflies, Gong, or similar — full transcript ready within minutes" },
+      { label: "AI scores the call", detail: "Measures: talk ratio, questions asked, objection handling, next-step clarity, tone signals" },
+      { label: "Coaching summary sent to rep", detail: "2–3 specific, actionable points — not a wall of text. What to do differently next time." },
+      { label: "Manager dashboard updated", detail: "All calls, scores, and trends visible in one place — manager reviews exceptions, not everything", isLast: true }
+    ],
+    roi: { time: "5–8 hrs/week of manager time saved", cost: "10–20% improvement in close rate with consistent coaching", hire: "No dedicated sales coach needed", speed: "Every rep coached after every call" },
+    pitch: "Right now your best call is only as good as the rep who made it — and nobody else learns from it. We record, transcribe, and score every call automatically so your whole team improves continuously, not just the ones whose calls your manager happened to listen to.",
+    tools: [
+      { badge: "trigger", name: "Fireflies.ai / Gong / Chorus", desc: "Auto-joins and records every sales call" },
+      { badge: "ai", name: "Claude / GPT with scoring criteria", desc: "Analyzes transcript against best-practice framework" },
+      { badge: "output", name: "Email / Slack to rep", desc: "Coaching summary with 2–3 specific improvements" },
+      { badge: "output", name: "Manager dashboard", desc: "Team-wide patterns, scores, and exception flagging" }
+    ]
+  },
+  {
+    id: "pipeline-visibility",
+    category: "sales",
+    emoji: "📈",
+    name: "Pipeline Visibility & Deal Alerts",
+    preview: "Know which deals are stalling before they die",
+    level: 2,
+    problem: "Deals go cold because nobody notices they've gone quiet. CRM data is stale. Managers have to ask reps for updates in meetings instead of knowing. Deals fall through cracks that a simple alert would have caught.",
+    discoveryQs: [
+      "How do you currently know which deals are moving and which are stuck?",
+      "How often do deals slip through without the team realizing until it's too late?",
+      "What does your weekly pipeline review process look like right now?"
+    ],
+    steps: [
+      { label: "Daily pipeline scan fires automatically", detail: "System reviews all open deals in CRM each morning" },
+      { label: "AI flags stale deals", detail: "Any deal with no activity in 3+ days flagged for attention" },
+      { label: "Rep receives prioritized action list", detail: "Clear list: these deals need a touch today. In order of value and urgency." },
+      { label: "Manager receives summary of at-risk deals", detail: "One email or Slack message — no meeting required to get visibility" },
+      { label: "Deal status trends tracked over time", detail: "Win rate, average deal age, and stage-by-stage conversion tracked weekly", isLast: true }
+    ],
+    roi: { time: "3–5 hrs/week in pipeline review meetings", cost: "Recover 10–15% of stalled deals", hire: "No dedicated ops manager needed for pipeline tracking", speed: "Issues surface daily, not weekly" },
+    pitch: "Your pipeline meeting is you asking reps to tell you what's in the CRM — which they also haven't updated. We reverse that: the system tells the manager and the rep exactly what needs attention every morning, automatically.",
+    tools: [
+      { badge: "trigger", name: "CRM scheduled scan (Zapier)", desc: "Daily check of all open deal activity" },
+      { badge: "ai", name: "Claude / GPT", desc: "Identifies stale deals and prioritizes by value" },
+      { badge: "output", name: "Slack / email to rep", desc: "Daily prioritized action list" },
+      { badge: "output", name: "Manager summary", desc: "At-risk deals and team pipeline health" }
+    ]
+  },
+  {
+    id: "employee-qa",
+    category: "knowledge",
+    emoji: "🤖",
+    name: "Internal Employee Q&A Bot",
+    preview: "Answer employee questions instantly using your own documents",
+    level: 1,
+    problem: "Employees ask HR, managers, or each other the same questions about policies, procedures, benefits, and processes every week. The answers are in your documents — but nobody can find them. Manager time gets consumed by questions that a document already answers.",
+    discoveryQs: [
+      "What are the most common questions your HR or operations team gets from employees?",
+      "Where does your team go to find answers about policies or processes — is there a central place?",
+      "How much time do you estimate managers spend answering routine employee questions?"
+    ],
+    steps: [
+      { label: "Employee asks a question in Slack", detail: "Natural language — no special formatting needed" },
+      { label: "AI bot searches your connected knowledge base", detail: "Scans: employee handbook, SOPs, policy docs, benefits info, onboarding materials" },
+      { label: "AI returns the answer with source", detail: "Direct, specific answer — plus a link to the actual document section it came from" },
+      { label: "Unknown questions escalated to HR", detail: "If the AI can't find the answer, it routes to the right person automatically" },
+      { label: "Question log reviewed monthly", detail: "Frequently asked questions used to identify documentation gaps", isLast: true }
+    ],
+    roi: { time: "3–6 hrs/week of manager and HR time", cost: "Zero time wasted repeating answers", hire: "Reduces HR admin burden significantly", speed: "Instant answers 24/7" },
+    pitch: "Your HR team is answering the same 15 questions on repeat. The answers are already written down — in your handbook, your policy docs, your SOPs. We connect those documents to a bot so employees get the answer in seconds and HR only gets interrupted for the things that actually need a human.",
+    tools: [
+      { badge: "trigger", name: "Slack bot", desc: "Employee asks question naturally" },
+      { badge: "ai", name: "Claude with RAG (document retrieval)", desc: "Searches connected documents and returns specific answer" },
+      { badge: "output", name: "Slack response with source link", desc: "Answer delivered in the same thread" },
+      { badge: "output", name: "HR ticket (if escalated)", desc: "Unknown questions routed appropriately" }
+    ]
+  },
+  {
+    id: "new-hire-training",
+    category: "knowledge",
+    emoji: "🎓",
+    name: "Role-Specific Training Delivery",
+    preview: "Sequenced training that runs itself for every new hire",
+    level: 2,
+    problem: "Training is inconsistent because it relies on whoever has time to deliver it. New hires learn different things depending on who onboards them. Training materials exist but aren't delivered in any structured sequence. The best training lives in people's heads, not in any system.",
+    discoveryQs: [
+      "How is new employee training currently delivered — is it structured or ad hoc?",
+      "How long does it typically take a new hire to feel fully productive in their role?",
+      "What's the biggest gap in how you currently train people?"
+    ],
+    steps: [
+      { label: "New hire role and department identified", detail: "Assigned in HR system or via form at start date" },
+      { label: "Role-specific training path activates", detail: "Different sequence for each role: sales rep, ops, field tech, admin, etc." },
+      { label: "Training content delivered day by day", detail: "Video links, document reads, quizzes, and shadowing tasks delivered via email or Slack on schedule" },
+      { label: "AI available for questions throughout", detail: "New hire can ask the AI about any content — gets immediate clarification without bothering a manager" },
+      { label: "Completion tracked and reported", detail: "Manager sees real-time status — who's on track, who's behind, what's been completed", isLast: true }
+    ],
+    roi: { time: "5–10 hrs per new hire saved across team", cost: "Reduce time-to-productivity by 30–40%", hire: "No dedicated training coordinator needed", speed: "Consistent every time — zero drop-offs" },
+    pitch: "Your best employees took 3 months to figure things out because training was scattered. The next cohort can be productive in 6 weeks if the knowledge is packaged and delivered on schedule. We build the sequence once and it runs automatically forever.",
+    tools: [
+      { badge: "trigger", name: "HR system / Zapier", desc: "New hire start date triggers training sequence" },
+      { badge: "ai", name: "Claude with training content", desc: "Answers questions and reinforces learning" },
+      { badge: "output", name: "Email / Slack sequence", desc: "Daily training content delivered on schedule" },
+      { badge: "output", name: "Manager tracking view", desc: "Completion status for all active training" }
+    ]
+  },
+  {
+    id: "document-retrieval",
+    category: "knowledge",
+    emoji: "📁",
+    name: "Internal Document Search & Retrieval",
+    preview: "Find any document or policy in seconds — not minutes of searching",
+    level: 1,
+    problem: "Documents are scattered across Google Drive, email threads, shared folders, and individual desktops. Employees spend 15–30 minutes tracking down the right version of a document. Outdated versions get used because they're easier to find than the current ones.",
+    discoveryQs: [
+      "Where do your employees go when they need to find an internal document or policy?",
+      "How often do you hear people say they can't find something or don't know where to look?",
+      "What's the most commonly-needed document that's the hardest to find?"
+    ],
+    steps: [
+      { label: "Employee needs a document or policy", detail: "Types a plain-language request: 'What's our refund policy?' or 'Find the new hire paperwork'" },
+      { label: "AI searches connected knowledge base", detail: "Searches Google Drive, Notion, SharePoint, or wherever docs are stored" },
+      { label: "Returns the right document with context", detail: "Not just a link — a direct answer plus the source document" },
+      { label: "Employee confirms or asks follow-up", detail: "Can ask follow-up questions in the same conversation" },
+      { label: "Search log identifies documentation gaps", detail: "Frequently searched, unanswered queries flag what needs to be documented", isLast: true }
+    ],
+    roi: { time: "15–30 min saved per employee per day", cost: "Eliminate outdated-document errors", hire: "No document management coordinator needed", speed: "Any document found in seconds" },
+    pitch: "Your team is spending real hours every week hunting for documents they know exist but can't find. We connect all your storage — Drive, Notion, wherever — to an AI that can find anything in seconds. They ask. It answers. Done.",
+    tools: [
+      { badge: "trigger", name: "Slack bot / chat interface", desc: "Employee asks in plain language" },
+      { badge: "ai", name: "Claude with Google Drive / Notion integration", desc: "Searches and retrieves relevant document sections" },
+      { badge: "output", name: "Direct answer + document link", desc: "Specific answer with source for verification" },
+      { badge: "output", name: "Gap report", desc: "Monthly log of unanswered queries for documentation improvement" }
+    ]
+  }
+];
+
+const extra = {
+  "after-hours-leads": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Microsoft Forms catches inquiry; Teams phone captures after-hours call" },
+      { label: "Power Automate routes the flow", detail: "Detects after-hours timestamp and launches Copilot agent" },
+      { label: "Copilot qualifies via SMS / Outlook", detail: "Sends 2-3 qualifying questions in your brand voice" },
+      { label: "Microsoft Bookings proposes a slot", detail: "Checks real calendar availability and books the appointment" },
+      { label: "Dynamics 365 creates the record", detail: "Lead, notes, and booking auto-populate into the CRM", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "After-hours leads/week", key: "leads", def: 8 },
+        { label: "Close rate %", key: "rate", def: 20 },
+        { label: "Avg job value $", key: "val", def: 500 }
+      ],
+      formula: i => i.leads * 52 * (i.rate/100) * i.val
+    },
+    examples: [
+      { business: "HVAC Contractor", before: "18 after-hours calls/week, only 2 booked, rest went to voicemail", after: "17/18 booked overnight via AI, 9 extra jobs/week" },
+      { business: "Residential Cleaning", before: "Losing $3k/month to competitors who responded first", after: "92% response within 60 seconds, $2.4k/month recovered" },
+      { business: "Estate Planning Attorney", before: "Intake forms sat untouched until 9am the next day", after: "Qualified consults booked overnight, 11 extra consults/month" }
+    ],
+    demo: {
+      setup: "Open a mock lead form in one tab and Claude in another. Know the client's service line and average ticket.",
+      steps: [
+        { say: "Watch what happens when a lead comes in at 8:42pm on a Friday.", prompt: "You are an AI agent for an HVAC company called Westside Air. A lead just submitted a form at 8:42pm: 'AC stopped working, house is 95 degrees, 2 kids inside.' Draft a 60-second SMS response that acknowledges the urgency, asks for exact address and unit type, and offers the first slot tomorrow morning. Warm, professional, human tone.", reaction: "Personalized response in 3 seconds, in your brand voice — not generic AI." },
+        { say: "Now watch the CRM entry write itself from the conversation.", prompt: "The lead confirmed 8am tomorrow for 'AC not cooling, 2-story home in Scottsdale, Trane unit ~10 years old'. Generate a clean CRM entry as JSON with: contact, job type, urgency level, property notes, suggested technician skill.", reaction: "Structured, ready-to-import CRM record. Zero manual entry anywhere in the chain." }
+      ],
+      objections: [
+        { pushback: "Won't customers hate talking to a robot?", response: "They aren't talking to a robot. They're getting a text. The alternative is voicemail. 78% of buyers book with whoever responds first. This makes sure that's you." },
+        { pushback: "What if the AI says something wrong or quotes the wrong price?", response: "We train it on your actual pricing, service area, and policies. It doesn't guess. Every conversation is logged so you see exactly what it said, and we tune it during the first 30 days." }
+      ]
+    },
+    proposalScope: "**After-Hours Lead Capture System**\nDeploy a 24/7 AI voice and SMS agent that intercepts every after-hours inquiry, qualifies the lead inside 60 seconds, books the appointment directly to your calendar, and creates a CRM record with zero manual entry. Based on your estimated [X leads/week] coming in outside business hours, this is projected to recover approximately $[ROI] in annual revenue currently going to voicemail or competitors.\nIncluded: voice agent setup, SMS qualification flow, calendar integration, CRM automation, and 30 days of live tuning."
+  },
+  "appointment-booking": {
+    buildTime: "⏱ 1-2 days",
+    msSteps: [
+      { label: "Trigger", detail: "Microsoft Bookings receives a request or Power Automate detects form submission" },
+      { label: "Microsoft Bookings reserves the slot", detail: "Buffers, capacity, and rules applied automatically" },
+      { label: "Outlook fires confirmation", detail: "Confirmation email + calendar invite delivered instantly" },
+      { label: "Power Automate schedules reminders", detail: "24-hour and 2-hour reminders via Outlook + Teams SMS connector" },
+      { label: "Dynamics 365 logs and tracks no-shows", detail: "Status flows to CRM and triggers rebook sequence", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "No-shows/week", key: "ns", def: 3 },
+        { label: "Avg appt value $", key: "val", def: 300 },
+        { label: "Admin hrs/week saved", key: "hrs", def: 4 }
+      ],
+      formula: i => (i.ns * 52 * i.val * 0.7) + (i.hrs * 52 * 30)
+    },
+    examples: [
+      { business: "Dental Practice", before: "14 no-shows/week × $280 = $3,920 weekly revenue gap", after: "4 no-shows/week, $2,800 weekly recovered" },
+      { business: "Med Spa", before: "45 min/day on the phone managing the calendar", after: "Zero phone scheduling, 100% automated booking" },
+      { business: "Plumbing Co", before: "Double-bookings 3x per week causing client conflicts", after: "Zero conflicts, 20% more billable jobs/week" }
+    ],
+    demo: {
+      setup: "Open Cal.com (or Microsoft Bookings) and a Twilio test number side by side.",
+      steps: [
+        { say: "Notice the booking link respects buffers and capacity rules without any manual oversight.", prompt: "Generate a friendly 24-hour appointment reminder SMS for a dental cleaning appointment. Include patient first name, date, time, and a short instruction about arriving 10 minutes early. Maximum 320 characters.", reaction: "Reminder appears instantly. Client can see this fires automatically the day before every appointment." },
+        { say: "Now imagine the patient no-shows. Watch the rebook flow.", prompt: "Write a no-show follow-up text that is warm, not guilt-trippy, offers two new times this week, and includes a one-tap rebooking link placeholder.", reaction: "Polite, professional rebook message. Client sees they recover the appointment without an awkward phone call." }
+      ],
+      objections: [
+        { pushback: "Our patients prefer to talk to a human.", response: "They still can. This handles the 70% who prefer self-serve and frees your front desk for the 30% who actually want a conversation. Front desk gets quality back, not replaced." },
+        { pushback: "We tried automated reminders and they didn't work.", response: "Generic ones don't. These are personalized with patient name, service type, and prep instructions, and they fire in two waves. That's the difference between a 5% lift and a 60% lift." }
+      ]
+    },
+    proposalScope: "**Appointment Booking & Reminders**\nReplace manual scheduling with an end-to-end booking system: real-time calendar sync, automated confirmations, two-stage reminders, and no-show recovery. Estimated to eliminate [X no-shows/week] and free [X hours/week] of admin time, recovering approximately $[ROI] annually.\nIncluded: scheduling tool setup, reminder sequence, no-show rebook flow, CRM sync."
+  },
+  "lead-followup-sequence": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Dynamics 365 detects no-response status on a lead record" },
+      { label: "Power Automate launches the sequence", detail: "Day 1 SMS via Teams connector, Day 2 Outlook email, Day 4 call task, Day 7 final touch" },
+      { label: "Copilot personalizes every message", detail: "Pulls lead context from Dynamics 365 and injects business-specific details" },
+      { label: "Teams notifies the rep on response", detail: "Sequence pauses and routes the conversation to the right human" },
+      { label: "Dynamics 365 tags non-responders", detail: "Auto-tagged for future reactivation campaigns", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Dead leads/month", key: "leads", def: 40 },
+        { label: "Recovery %", key: "rec", def: 15 },
+        { label: "Avg deal $", key: "val", def: 800 }
+      ],
+      formula: i => i.leads * (i.rec/100) * i.val * 12
+    },
+    examples: [
+      { business: "Solar Installer", before: "60% of leads got 1 call max before being abandoned", after: "5-touch sequence recovered 18% of dead leads, $24k/month new pipeline" },
+      { business: "Fitness Coaching", before: "Stopped follow-up after day 2 — most never replied", after: "11 extra discovery calls/month from the day-7 touch alone" },
+      { business: "B2B SaaS", before: "Cold leads were marked closed-lost and forgotten", after: "3 deals/quarter recovered from automated nurture sequence" }
+    ],
+    demo: {
+      setup: "Have a CRM (HubSpot or GoHighLevel) open with a real cold lead record visible.",
+      steps: [
+        { say: "Most teams stop after one or two touches. Watch what a 5-touch sequence looks like.", prompt: "Write 5 follow-up messages to a cold lead named Sarah who inquired 6 days ago about kitchen remodeling, never replied. Use this sequence: Day 1 SMS, Day 2 email, Day 4 voicemail script, Day 7 final email, Day 14 reactivation. Each message should reference her original inquiry naturally and not feel templated.", reaction: "Five different angles, each personalized — not a 'just checking in' chain." },
+        { say: "Now imagine she replies on day 7. Watch the sequence pause.", prompt: "Sarah just replied: 'Sorry, I've been swamped at work, can we talk Thursday?' Generate the exact rep handoff message and the CRM update needed.", reaction: "Sequence stops, rep gets context, CRM updates itself. Frictionless handoff." }
+      ],
+      objections: [
+        { pushback: "Won't 5 messages annoy people?", response: "Not if they're personalized and spaced right. Most deals close on the 5th to 8th touch. Sending one and giving up isn't being polite — it's leaving money on the table." },
+        { pushback: "Our reps are already too busy to follow up.", response: "Exactly. That's the point. The system runs the sequence automatically. Reps only pick up the phone when someone actually responds." }
+      ]
+    },
+    proposalScope: "**Lead Follow-Up Sequences**\nBuild a 5-touch nurture system that fires automatically when a lead goes cold. SMS, email, and call tasks across two weeks, all personalized using lead context and your brand voice. Based on [X dead leads/month], we expect to recover [X%] of leads previously written off, projected at $[ROI] annually.\nIncluded: sequence design, copy, automation build, response routing to reps, CRM integration."
+  },
+  "faq-handling": {
+    buildTime: "⏱ 1-2 days",
+    msSteps: [
+      { label: "Trigger", detail: "Teams chat or Outlook email arrives with a customer question" },
+      { label: "Power Automate routes to Copilot", detail: "Inbound channel detected and message handed off to AI" },
+      { label: "Copilot answers from SharePoint knowledge", detail: "Pulls pricing, availability, service area from your actual docs" },
+      { label: "Escalation to Teams channel on edge cases", detail: "Complaints or complex requests routed to a human" },
+      { label: "Dynamics 365 logs every conversation", detail: "Full transcript and outcome captured automatically", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Repeat questions/week", key: "q", def: 60 },
+        { label: "Min per question", key: "min", def: 4 },
+        { label: "Hourly cost $", key: "rate", def: 25 }
+      ],
+      formula: i => (i.q * i.min / 60) * 52 * i.rate
+    },
+    examples: [
+      { business: "Auto Repair Shop", before: "40 price-check calls/day eating front desk time", after: "85% handled by AI, front desk freed for in-shop customers" },
+      { business: "Dermatology Clinic", before: "6 hours/day answering insurance and prep questions", after: "1 hour/day on edge cases only, staff redeployed" },
+      { business: "Restaurant Group", before: "120 'are you open' calls/week across locations", after: "Chatbot fields 95%, hosts focus on actual reservations" }
+    ],
+    demo: {
+      setup: "Open a chat interface and pre-load 5 of the client's most common customer questions on a sticky note.",
+      steps: [
+        { say: "Pretend you're a customer who's never been here before. Type a real question.", prompt: "You are a knowledge-base AI for a roofing company called Apex Roofing. Service area: Phoenix metro. Free inspections. Average install: 2-3 days. Materials: shingle, metal, tile. A customer just asked: 'Do you do tile roofs and how much does it cost?' Answer accurately, conversationally, and offer to book a free inspection.", reaction: "Specific, on-brand answer in seconds. Client realizes the bot uses their actual info, not generic data." },
+        { say: "Now ask something it shouldn't try to answer.", prompt: "Same Apex Roofing AI. Customer says: 'My roof is leaking and water is coming through the ceiling right now, this is an emergency.' How do you respond and what should the system do automatically?", reaction: "AI escalates immediately to a human and triggers an emergency alert. Client sees the safety net working." }
+      ],
+      objections: [
+        { pushback: "I don't trust AI to answer customers correctly.", response: "It only uses your documents — your actual prices, policies, and process. It can't make things up. And anything it doesn't know gets routed to a human within 5 seconds." },
+        { pushback: "What if it can't handle a complaint?", response: "Complaints are flagged automatically using sentiment detection and routed to whoever handles them. The bot never tries to talk a frustrated customer down." }
+      ]
+    },
+    proposalScope: "**FAQ & Customer Inquiry Handling**\nDeploy an AI agent across phone, chat, and SMS that answers your most common customer questions using your actual business data — pricing, availability, service area, process. Based on [X questions/week], this will save approximately [X hours/week] of staff time, projected at $[ROI] annually.\nIncluded: knowledge base build, AI agent setup, escalation rules, CRM logging, and 30 days of tuning."
+  },
+  "crm-updates": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Rep posts a quick update in Teams channel or sends a voice memo" },
+      { label: "Power Automate detects the message", detail: "Watches the channel for new entries and routes to AI" },
+      { label: "Copilot extracts structured data", detail: "Pulls customer name, status, next step, dollar amount from raw text" },
+      { label: "Dynamics 365 fields auto-populate", detail: "The right CRM record updates itself with zero rep effort" },
+      { label: "Teams confirmation back to rep", detail: "Quick confirmation message — rep can correct if needed", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "# reps", key: "reps", def: 5 },
+        { label: "Hrs/week lost to CRM", key: "hrs", def: 3 },
+        { label: "Hourly cost $", key: "rate", def: 40 }
+      ],
+      formula: i => i.reps * i.hrs * 52 * i.rate
+    },
+    examples: [
+      { business: "SaaS Sales Team", before: "CRM 40% blank on open deals — pipeline reviews were guesswork", after: "98% field completion within 2 hrs of every call" },
+      { business: "HVAC Dispatch", before: "Tech notes lost in text threads", after: "Every job logged in CRM within 15 min of completion" },
+      { business: "Real Estate Brokerage", before: "Manager chased agents for notes weekly", after: "12 hrs/week of admin time eliminated" }
+    ],
+    demo: {
+      setup: "Open Slack and a CRM (HubSpot, GoHighLevel, or Salesforce) side by side.",
+      steps: [
+        { say: "Watch what happens when a rep types one line in Slack after a call.", prompt: "Extract structured CRM data from this rep update: 'Just got off with Mike at Anderson Plumbing. They want a quote on the bigger package, ~$8k. Said decision by Friday. Send the proposal Tuesday.' Output as JSON with: contact_name, company, deal_value, stage, next_action, next_action_date.", reaction: "Clean structured data appears instantly. Client realizes reps never have to log in to the CRM again." },
+        { say: "Now imagine a rep dictates a voice memo from the field.", prompt: "Same task, but the rep said: 'Hey just left the Johnsons, they're ready to move forward with the master bath remodel, around 35 grand, want to start in 3 weeks, send the contract tomorrow.' Output the same JSON.", reaction: "Voice transcribed and parsed in seconds. Client sees how field reps update CRM hands-free." }
+      ],
+      objections: [
+        { pushback: "What if the AI puts data in the wrong field?", response: "Reps get a Slack confirmation showing exactly what was logged. They can correct it in one click. And during the first 30 days we tune it until field accuracy is above 95%." },
+        { pushback: "Our reps already complain about CRM.", response: "Right — because the CRM asks them to do data entry. This removes that entirely. They send one casual message in Slack, the CRM updates itself. The behavior change is zero." }
+      ]
+    },
+    proposalScope: "**CRM Data Entry Automation**\nReplace manual CRM logging with a frictionless capture system: reps type one line in Teams or send a voice memo, AI extracts the right fields, and your CRM updates itself. Across [X reps] losing an estimated [X hours/week] each to data entry, this is projected to recover $[ROI] annually in selling time.\nIncluded: capture interface, AI extraction, CRM field mapping, confirmation workflow, 30-day tuning."
+  },
+  "proposal-generation": {
+    buildTime: "⏱ 2-4 days",
+    msSteps: [
+      { label: "Trigger", detail: "Rep submits a Microsoft Forms intake after the discovery call" },
+      { label: "Power Automate pulls the right Word template", detail: "Selects template from SharePoint based on service line" },
+      { label: "Copilot customizes with client context", detail: "Populates name, scope, pricing, timeline, case studies" },
+      { label: "SharePoint stores the draft", detail: "Rep reviews the Word doc — minor edits if needed" },
+      { label: "Outlook sends and tracks opens", detail: "Proposal goes out with read receipts enabled", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Proposals/week", key: "qty", def: 8 },
+        { label: "Hours per proposal now", key: "hrs", def: 1.5 },
+        { label: "Hourly cost $", key: "rate", def: 50 }
+      ],
+      formula: i => i.qty * (i.hrs - 0.08) * 52 * i.rate
+    },
+    examples: [
+      { business: "Marketing Agency", before: "90 minutes per proposal, often delayed days", after: "4 minutes per proposal, 30% more sent each week" },
+      { business: "Roofing Contractor", before: "2 hours per estimate, sales team bottlenecked", after: "8-minute drafts, 18% close rate lift from speed alone" },
+      { business: "IT Services Firm", before: "Inconsistent formats across reps", after: "On-brand every time, 22% faster sales cycle" }
+    ],
+    demo: {
+      setup: "Open a Google Doc with a real proposal template and a Typeform/Jotform intake side by side.",
+      steps: [
+        { say: "I'm filling out a 6-field intake form right now. Watch the proposal write itself.", prompt: "Generate a professional proposal for a kitchen remodel project. Client: Johnson Family. Scope: full demo, new cabinets, quartz counters, lighting. Budget: $42k. Timeline: 4-6 weeks. Use a warm but professional tone, include a deliverables section, payment schedule (40/40/20), and a 7-day acceptance window. Format as markdown ready to drop into a doc.", reaction: "A complete proposal appears in 30 seconds. Client realizes the 90-minute task is now 4 minutes." },
+        { say: "Now watch the version with their actual case studies pulled in automatically.", prompt: "Add a 'Recent Projects' section to that proposal with 2 fictional but believable case studies from similar Phoenix-area kitchen remodels. Each should include scope, timeline, and a client quote.", reaction: "Proof points injected automatically. Client realizes every proposal can include the right social proof." }
+      ],
+      objections: [
+        { pushback: "Our proposals are too complex for AI.", response: "We don't replace your proposal — we replace the typing. Your structure, your pricing, your terms. The AI just fills it in faster than a human can." },
+        { pushback: "What if the AI gets the pricing wrong?", response: "Pricing is rule-based, not AI-generated. The AI fills in narrative sections; the math comes from your actual rate sheet. Zero hallucination risk on numbers." }
+      ]
+    },
+    proposalScope: "**Proposal & Estimate Generation**\nTurn a 6-field intake form into a fully drafted proposal in under 5 minutes. Templates pulled from your library, customized with client context, ready for rep review and one-click send. Across [X proposals/week], this is projected to recover $[ROI] annually in sales hours and lift close rate via faster turnaround.\nIncluded: template build, intake form, AI customization, doc generation, send + tracking integration."
+  },
+  "invoice-followup": {
+    buildTime: "⏱ 1-2 days",
+    msSteps: [
+      { label: "Trigger", detail: "Dynamics 365 / Business Central detects an invoice past due date" },
+      { label: "Power Automate schedules the sequence", detail: "Day-of, day-3, day-7, day-14 reminder cadence" },
+      { label: "Outlook sends escalating emails", detail: "Each message progressively firmer, copy drafted by Copilot" },
+      { label: "Sequence stops on payment", detail: "Power Automate detects payment status and cancels reminders" },
+      { label: "Teams alert on 30+ overdue", detail: "Finance manager gets a card to escalate manually", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Admin hrs/week", key: "hrs", def: 3 },
+        { label: "Overdue $/month", key: "ovd", def: 15000 },
+        { label: "Collection lift %", key: "lift", def: 35 }
+      ],
+      formula: i => (i.hrs * 52 * 30) + (i.ovd * 12 * (i.lift/100) * 0.04)
+    },
+    examples: [
+      { business: "Construction Co", before: "52-day average to collect on invoices", after: "28 days, $180k freed up in cash flow" },
+      { business: "Consulting Firm", before: "25% of invoices 30+ days late", after: "6% late, collection admin role eliminated" },
+      { business: "Wholesale Supplier", before: "Manual reminders missed regularly", after: "Zero missed reminders, $40k recovered from past-due accounts" }
+    ],
+    demo: {
+      setup: "Open QuickBooks (or any invoicing tool) with an unpaid invoice visible.",
+      steps: [
+        { say: "Watch the system draft the day-3 reminder automatically.", prompt: "Draft a friendly day-3 overdue invoice reminder for invoice #4521 to Acme Co for $4,200, due last Friday. Tone: warm, professional, not awkward. Include the invoice number, amount, and a one-click pay link placeholder.", reaction: "A perfectly polite reminder appears. Client realizes they no longer have to write these awkwardly." },
+        { say: "Now watch the day-14 escalation. Different tone — same brand voice.", prompt: "Same invoice, now 14 days overdue. Draft a firmer reminder that maintains the relationship but creates urgency. Mention that the next step is a phone call from accounting.", reaction: "Firmer message with clear next step. Client sees the system handles the awkward conversation for them." }
+      ],
+      objections: [
+        { pushback: "Our customers will be offended by automated dunning emails.", response: "These don't read as automated. They're warm, named, and human. The alternative is your team forgetting to send anything for 3 weeks — which is when relationships actually break down." },
+        { pushback: "Our accounting tool already does reminders.", response: "Generic ones, on a fixed schedule. This personalizes the tone, escalates intelligently, and stops the moment payment lands. Big difference in collection speed." }
+      ]
+    },
+    proposalScope: "**Invoice Follow-Up & Collections**\nAutomate the entire reminder cadence: friendly day-of nudge, escalating tone over two weeks, automatic stop on payment, human alert at 30+ days overdue. Based on [X overdue/month] and a projected [X%] collection lift, this is estimated to recover $[ROI] annually in cash flow and admin time.\nIncluded: invoice integration, reminder copy, escalation rules, payment detection, alert system."
+  },
+  "reporting": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Power Automate scheduled to run every Monday morning" },
+      { label: "Connectors pull source data", detail: "Dynamics 365, SharePoint lists, and Excel workbooks aggregated" },
+      { label: "Power BI builds the dashboard", detail: "Visuals and KPIs refresh automatically" },
+      { label: "Copilot writes the narrative", detail: "Generates a plain-English summary explaining what changed and why" },
+      { label: "Outlook delivers the report", detail: "Email lands in leadership inboxes before the work week starts", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Hrs/week building reports", key: "hrs", def: 4 },
+        { label: "Hourly cost $", key: "rate", def: 50 }
+      ],
+      formula: i => i.hrs * 52 * i.rate
+    },
+    examples: [
+      { business: "Multi-Unit Franchise", before: "5 hrs/week building leadership report by hand", after: "Monday morning auto-delivery, all data current" },
+      { business: "Marketing Agency", before: "Client reports took 3 hrs each", after: "15 min review and send per client" },
+      { business: "Ecom Brand", before: "CEO flew blind mid-week between weekly reports", after: "Daily Slack sales summary, never out of touch" }
+    ],
+    demo: {
+      setup: "Open a CRM and an accounting tool. Have last week's numbers handy.",
+      steps: [
+        { say: "Watch the AI write a complete weekly summary from raw data.", prompt: "Write a weekly business summary for leadership. Data: Revenue $128k (up 14% WoW), 42 new leads (down 8%), 11 deals closed (up 22%), pipeline $450k. Write it as a 4-paragraph narrative, not a dashboard. Tone: confident, plain English, point out one concern and one win.", reaction: "A 4-paragraph summary that reads like a competent ops manager wrote it. Client sees their report is a 30-second read instead of a spreadsheet to interpret." },
+        { say: "Now imagine the CEO wants to ask a follow-up question directly.", prompt: "CEO replies: 'Why are leads down 8%? Pull the breakdown by source.' Generate a focused follow-up answer assuming Google Ads spend dropped 20% last week and Facebook performed flat.", reaction: "Direct, sourced answer. Client realizes leadership can interrogate the data without anyone building a chart." }
+      ],
+      objections: [
+        { pushback: "We already have a dashboard — we don't read it.", response: "Exactly. Dashboards make people work to get insights. This delivers a 30-second narrative summary to your inbox. You read the email, you know the state of the business. No clicking required." },
+        { pushback: "What if the AI misinterprets the numbers?", response: "It pulls real data — it doesn't guess. The narrative is a summary of what happened, sourced directly. We tune it during the first month so the framing matches how you actually think about the business." }
+      ]
+    },
+    proposalScope: "**Automated Leadership Reporting**\nReplace the [X hours/week] of manual report building with an automated weekly summary that pulls from your CRM, accounting, and ops tools and writes a plain-English narrative — delivered to your inbox every Monday morning. Includes an interactive dashboard for on-demand questions. Projected annual savings: $[ROI].\nIncluded: data integrations, narrative AI, email delivery, optional dashboard build."
+  },
+  "job-scheduling": {
+    buildTime: "⏱ 3-5 days",
+    msSteps: [
+      { label: "Trigger", detail: "New job created in Dynamics 365 Field Service or Microsoft Forms" },
+      { label: "Power Automate checks Outlook calendars", detail: "Matches job to available tech with the right skills" },
+      { label: "Teams notifies the assigned technician", detail: "Job address, details, and arrival window pushed instantly" },
+      { label: "Outlook sends client confirmation", detail: "Tech name, photo, and arrival window delivered to client" },
+      { label: "Dynamics 365 tracks status updates", detail: "On the way, arrived, completed flow back to office", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Dispatch hrs/week", key: "hrs", def: 6 },
+        { label: "Hourly cost $", key: "rate", def: 30 },
+        { label: "Errors/month", key: "err", def: 4 }
+      ],
+      formula: i => (i.hrs * 52 * i.rate) + (i.err * 12 * 200)
+    },
+    examples: [
+      { business: "Plumbing Co", before: "Dispatcher spent 4 hrs/day on logistics", after: "45 min/day, 30% more jobs scheduled per week" },
+      { business: "Cleaning Service", before: "Text chains for every single assignment", after: "Auto-assigned, clients always know who's coming" },
+      { business: "HVAC Co", before: "Double-bookings 2x/week", after: "Zero conflicts, 100% on-time arrivals" }
+    ],
+    demo: {
+      setup: "Open ServiceTitan, Jobber, or a mock dispatch board with 5 techs and 12 jobs visible.",
+      steps: [
+        { say: "Watch the system match a new job to the right tech in seconds.", prompt: "A new HVAC service call just came in: Trane heat pump, no cooling, Scottsdale 85251, customer requests morning. Available techs: Mike (certified Trane, in Mesa today), Sarah (general, in Tempe), Carlos (Trane certified, in Scottsdale already). Assign the best match and write the SMS to send to that tech with full job context.", reaction: "Smart assignment in 3 seconds, with rationale. Client sees their dispatcher's job condensed into one call." },
+        { say: "Now watch the customer confirmation that fires automatically.", prompt: "Generate the customer confirmation SMS: tech name Carlos, certification Trane, photo placeholder, arrival window 9-11am, prep instructions to clear the area around the unit, and a one-tap reschedule link.", reaction: "Professional confirmation with all the details. Client realizes their customer experience just got a tier better." }
+      ],
+      objections: [
+        { pushback: "Our dispatcher knows things the system doesn't.", response: "True — at first. The system learns your rules: which tech handles which client, which jobs need which skills. After 30 days it makes the same calls your dispatcher makes, just in 3 seconds instead of 10 minutes." },
+        { pushback: "What if a job needs a manual override?", response: "Dispatcher can override anything in one click. The system handles the routine 80%, dispatcher handles the exceptions. They get their day back for the hard calls." }
+      ]
+    },
+    proposalScope: "**Job Scheduling & Dispatch Automation**\nTurn manual dispatch into a smart assignment engine: jobs auto-matched to techs based on skill, location, and availability; client confirmations fire instantly with tech details; status updates flow back to the office in real time. Recovers an estimated [X hours/week] of dispatcher time, projected at $[ROI] annually.\nIncluded: dispatch logic build, tech notification flow, client confirmation system, status tracking integration."
+  },
+  "status-updates": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Tech taps status in Teams mobile app or Dynamics 365 Field Service" },
+      { label: "Power Automate detects the change", detail: "Watches the field service module for status updates" },
+      { label: "Teams channel + Power BI update", detail: "Office and leadership see real-time status" },
+      { label: "Outlook fires client notification", detail: "Customer gets job complete summary and review request" },
+      { label: "Copilot writes the completion summary", detail: "Service notes auto-generated and saved to Dynamics 365", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Coordination hrs/day", key: "hrs", def: 2 },
+        { label: "Working days/week", key: "days", def: 5 },
+        { label: "Hourly cost $", key: "rate", def: 25 }
+      ],
+      formula: i => i.hrs * i.days * 52 * i.rate
+    },
+    examples: [
+      { business: "Electrical Contractor", before: "Office called techs 6x/day for status", after: "Real-time visibility, zero check-in calls needed" },
+      { business: "Landscaping Co", before: "Clients called wondering when crew was arriving", after: "Auto 'on the way' text, 80% fewer client calls" },
+      { business: "Roofing Co", before: "Job completion reports delivered 2 days late", after: "Instant client summary with photos on completion" }
+    ],
+    demo: {
+      setup: "Open Slack and a job management app with a tech currently 'on the way' to a job.",
+      steps: [
+        { say: "Watch what happens when the tech taps 'arrived' on his phone.", prompt: "Generate the Slack message that fires to the office channel when a tech updates status to 'On Site' for job #1247: Customer Johnson, Address 123 Main St Tempe, Service AC Repair, Tech Carlos, Scheduled 9am, Arrived 9:04am.", reaction: "Office sees the update instantly. Client realizes nobody has to call to ask anymore." },
+        { say: "Now watch the customer notification that fires on completion.", prompt: "Tech marks job complete. Generate: (1) the customer 'job complete' SMS with a 2-sentence summary of work performed, link to invoice, and 1-click review request; (2) a professional service summary for the customer's service record.", reaction: "Customer gets a polished notification, internal record gets a clean summary. Client sees the entire close-out process happens with one tap." }
+      ],
+      objections: [
+        { pushback: "Our techs won't actually update statuses.", response: "We make it one tap. Three buttons: en route, on site, complete. If they can swipe a phone they can do it. And we tie a small reward to compliance during the first month if needed." },
+        { pushback: "What if a tech updates the wrong status?", response: "Easy fix in one tap. And the system catches anomalies — if status flips back and forth, the office gets a flag. Better than the current state where nobody knows anything." }
+      ]
+    },
+    proposalScope: "**Field-to-Office Status Updates**\nReplace check-in calls with one-tap status updates that flow from field to office to client automatically. Job complete notifications, customer review requests, and service summaries all generated and delivered without phone calls. Saves an estimated [X hours/day] of coordination time, projected at $[ROI] annually.\nIncluded: mobile workflow setup, real-time office dashboard, customer notification system, AI-generated service summaries."
+  },
+  "employee-onboarding": {
+    buildTime: "⏱ 3-5 days",
+    msSteps: [
+      { label: "Trigger", detail: "New employee record created in SharePoint or Dynamics 365 HR" },
+      { label: "Power Automate launches the sequence", detail: "Day 1 through week 2 task plan activated" },
+      { label: "Teams welcomes and delivers content", detail: "Daily welcome messages, training links, and check-ins via Teams" },
+      { label: "Copilot answers questions from SharePoint", detail: "New hire can ask anything about policies, AI answers from your docs" },
+      { label: "Power BI tracks completion", detail: "Manager sees onboarding progress in real time", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "New hires/year", key: "hires", def: 10 },
+        { label: "Hours per hire", key: "hrs", def: 8 },
+        { label: "Hourly cost $", key: "rate", def: 40 }
+      ],
+      formula: i => i.hires * i.hrs * i.rate
+    },
+    examples: [
+      { business: "Staffing Agency", before: "3 days per new hire to fully onboard", after: "Fully onboarded in 6 hours with self-serve content" },
+      { business: "Franchise Restaurant", before: "Inconsistent training across stores", after: "Identical experience everywhere, ramp time down 40%" },
+      { business: "Tech Startup", before: "HR forgot steps regularly", after: "Zero drop-offs, day 1 productivity baseline hit" }
+    ],
+    demo: {
+      setup: "Open a sample new-hire form (BambooHR, Rippling, or just a Google Form) and a Slack workspace.",
+      steps: [
+        { say: "I'm 'hiring' a new salesperson right now. Watch the entire onboarding sequence kick off automatically.", prompt: "Generate the Day 1 welcome Slack message for new hire Alex (sales role) starting Monday. Include: warm welcome, where to be at 9am, what to bring, link to training portal placeholder, and the name of their buddy (Jordan, also in sales). Tone: warm, on-brand, not corporate.", reaction: "Personalized welcome in seconds. Client realizes every new hire gets the same quality experience." },
+        { say: "Now imagine Alex has a question during week 1 — instead of bothering a manager, they ask the bot.", prompt: "Alex asks the onboarding bot: 'How do I submit my expense for the laptop bag I bought?' Use this policy: Expenses under $100 require manager Slack approval and submission via Expensify within 30 days. Answer specifically with the steps.", reaction: "Specific, sourced answer. Manager doesn't get interrupted, new hire isn't lost." }
+      ],
+      objections: [
+        { pushback: "We're too small for an automated onboarding system.", response: "Even 2 hires per year wastes 16+ hours of manager time. This pays for itself by the third hire. And the consistency means every new person gets the same experience, not whatever the manager remembers that week." },
+        { pushback: "Our onboarding is too unique to systemize.", response: "Most of it isn't. The first-day welcome, the paperwork, the system access, the policy questions — those are the same every time. We systemize the 80% so your manager spends time on the 20% that actually matters." }
+      ]
+    },
+    proposalScope: "**Employee Onboarding Automation**\nDeliver a consistent, structured onboarding experience for every new hire without manual coordination. Day-by-day task sequence, embedded Q&A bot, manager dashboard tracking completion. Saves an estimated [X hours per hire] across [X hires/year], projected at $[ROI] annually.\nIncluded: HR system integration, sequence build, AI Q&A bot trained on your handbook, manager reporting."
+  },
+  "inventory-reorder": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Dynamics 365 / Business Central inventory levels checked daily" },
+      { label: "Power Automate detects threshold breach", detail: "Any SKU below minimum triggers the workflow" },
+      { label: "Copilot calculates reorder quantity", detail: "Uses lead time, usage rate, and historical patterns" },
+      { label: "Teams approval card to manager", detail: "One-click approval directly in Teams" },
+      { label: "Outlook sends PO to supplier", detail: "On approval, PO emailed and tracked automatically", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Tracking hrs/week", key: "hrs", def: 4 },
+        { label: "Stockouts/year", key: "so", def: 6 },
+        { label: "Cost per stockout $", key: "cost", def: 2000 }
+      ],
+      formula: i => (i.hrs * 52 * 30) + (i.so * i.cost)
+    },
+    examples: [
+      { business: "Auto Parts Store", before: "8 stockouts/month sending customers to competitors", after: "1 stockout/month, customers stay" },
+      { business: "Restaurant Group", before: "Overstocked $12k in produce going to waste", after: "40% waste reduction with smarter reorder math" },
+      { business: "Retail Boutique", before: "Manual weekly stock checks", after: "Daily automated alerts, zero overselling" }
+    ],
+    demo: {
+      setup: "Open Shopify inventory or QuickBooks with a few SKUs near minimum.",
+      steps: [
+        { say: "Watch the reorder calculation for a SKU about to run out.", prompt: "SKU: Brake Pad Set BP-204. Current stock: 8 units. Average sales: 3 units/week. Lead time from supplier: 10 days. Safety buffer: 2 weeks. Calculate the reorder quantity and write a one-paragraph justification a manager can approve in under 10 seconds.", reaction: "Math + plain-English explanation. Client realizes purchasing decisions can happen in seconds." },
+        { say: "Now watch the PO that drafts itself.", prompt: "Generate a clean purchase order email to the supplier (AutoParts Direct) for 20 units of BP-204. Include reference to current PO terms (Net 30), requested delivery date 10 days out, and a polite closing.", reaction: "Ready-to-send PO. Client realizes purchasing admin time goes to zero." }
+      ],
+      objections: [
+        { pushback: "Our inventory is too unpredictable for AI.", response: "AI is actually better at unpredictable than humans. It looks at 90 days of patterns instead of a gut feel from last week. And you approve every order — it's a recommendation, not an autonomous decision." },
+        { pushback: "What if it orders too much?", response: "It calculates conservatively and a human approves every PO before it sends. The point is to remove the math, not to remove the control." }
+      ]
+    },
+    proposalScope: "**Inventory Monitoring & Reorder Alerts**\nDaily automated stock checks with AI-calculated reorder quantities and one-click PO approval. Eliminates [X stockouts/year] and recovers [X hours/week] of manual tracking, projected at $[ROI] annually.\nIncluded: inventory system integration, threshold rules, reorder math, approval workflow, supplier email automation."
+  },
+  "lead-qualification": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "New lead enters Dynamics 365 from a Microsoft Forms submission" },
+      { label: "Power Automate routes to Copilot", detail: "Scoring engine activates against your ICP criteria" },
+      { label: "Copilot scores hot / warm / cold", detail: "Evaluates business size, urgency, fit, budget signals" },
+      { label: "Dynamics 365 tags the lead", detail: "Score and rationale auto-populated on the record" },
+      { label: "Teams alerts the right rep on hot", detail: "Instant push notification with lead context", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Leads/week", key: "leads", def: 40 },
+        { label: "% unqualified", key: "pct", def: 50 },
+        { label: "Min wasted/bad lead", key: "min", def: 15 }
+      ],
+      formula: i => i.leads * (i.pct/100) * (i.min/60) * 52 * 60
+    },
+    examples: [
+      { business: "B2B SaaS", before: "Reps called every lead with equal effort", after: "Hot leads called in 3 min, close rate up 45%" },
+      { business: "Home Services", before: "50% of sales time on bad-fit leads", after: "Only qualified leads called, 30% more revenue" },
+      { business: "Real Estate", before: "Agents chased tire-kickers all week", after: "Buyer-ready leads prioritized, $2M more in closings" }
+    ],
+    demo: {
+      setup: "Open a CRM with 5 recent inbound leads visible — mix of clearly hot and clearly cold.",
+      steps: [
+        { say: "Watch the AI score a lead against the ideal customer profile in seconds.", prompt: "Score this lead from 0-100 and tag as hot/warm/cold: 'Hi, I'm the GM at a 4-location restaurant group in Phoenix. We're growing fast and our scheduling is a mess. Looking for a solution this month, budget around $5k.' ICP: hospitality / 3+ locations / urgency signal / budget under $10k. Show your reasoning briefly.", reaction: "Hot lead, scored 94, with reasoning. Client realizes scoring is consistent and fast." },
+        { say: "Now score one that should fall to the bottom.", prompt: "Same scoring system. Lead: 'Hi just curious how much your software costs, no real timeline, looking to maybe upgrade someday.' Same ICP.", reaction: "Cold lead, scored 12, routed to nurture. Client sees they stop wasting time on this kind." }
+      ],
+      objections: [
+        { pushback: "Our reps want to talk to every lead just in case.", response: "And they should — for the warm and hot ones. This isn't blocking anyone. It's putting the warm ones at the top of the call list so the right ones get the energy first." },
+        { pushback: "What if the AI mis-scores a great lead as cold?", response: "It explains its reasoning on every score. Reps can override in one click. We tune it during the first month until accuracy is above 90% — and the hot/cold call is rarely the close call." }
+      ]
+    },
+    proposalScope: "**Lead Qualification & Scoring**\nDeploy an AI scoring engine that evaluates every inbound lead against your ideal customer profile and tags hot/warm/cold automatically. Hot leads route to reps within minutes, cold leads enter nurture, no manual triage needed. Across [X leads/week] with [X%] unqualified, this is projected to recover $[ROI] annually in sales hours and lift close rate.\nIncluded: ICP criteria build, scoring engine, CRM tag automation, hot lead alert system."
+  },
+  "outbound-prospecting": {
+    buildTime: "⏱ 3-5 days",
+    msSteps: [
+      { label: "Trigger", detail: "Target list uploaded as SharePoint list or via Power Automate" },
+      { label: "Copilot researches each prospect", detail: "Pulls website, LinkedIn, news context for personalization" },
+      { label: "Word drafts personalized openers", detail: "Templates filled with real research, not generic merge tags" },
+      { label: "Outlook sends in approved batches", detail: "Rep reviews and approves dozens at once, not one by one" },
+      { label: "Dynamics 365 logs every activity", detail: "Outreach history tracked on every contact record", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Current msgs/day", key: "cur", def: 15 },
+        { label: "Target msgs/day", key: "tgt", def: 100 },
+        { label: "Reply rate %", key: "reply", def: 5 },
+        { label: "Avg deal $", key: "val", def: 2000 }
+      ],
+      formula: i => (i.tgt - i.cur) * 250 * (i.reply/100) * 0.2 * i.val
+    },
+    examples: [
+      { business: "Recruiting Firm", before: "15 manual emails/day per rep", after: "100 researched emails/day, pipeline 6x" },
+      { business: "Marketing Agency", before: "Cold email reply rate stuck at 2%", after: "8% reply rate with AI personalization" },
+      { business: "Software Vendor", before: "1 SDR cost $8k/month with mediocre output", after: "Same SDR now performs like 3, no extra hires" }
+    ],
+    demo: {
+      setup: "Open Apollo, LinkedIn Sales Nav, or any lead source with 5 prospects visible.",
+      steps: [
+        { say: "Watch the AI research a prospect and draft a personalized opener in 20 seconds.", prompt: "Prospect: Lisa Chen, VP Operations at MetroFresh Foods (mid-size grocery chain, 12 stores in Pacific Northwest, recently announced expansion to Idaho). Write a cold email opener that references the expansion specifically, ties it to a relevant pain point in supply chain ops, and ends with a low-friction CTA. Maximum 4 short sentences.", reaction: "Personalized email that mentions Lisa's actual situation. Client realizes templated outreach just got obsolete." },
+        { say: "Now imagine doing that 100 times in batch — watch the volume.", prompt: "Generate 5 unique cold email openers for 5 different VPs at 5 different mid-size companies in the food industry, each personalized with a fictional but specific recent news angle. Each unique, no template feel.", reaction: "Five distinct, personalized emails in 30 seconds. Client sees the multiplier effect." }
+      ],
+      objections: [
+        { pushback: "AI cold emails feel obvious.", response: "Generic AI does. This isn't generic — it researches each prospect individually and references real, specific things about their business. The 'AI feel' comes from no research, not from AI itself." },
+        { pushback: "What if we burn our domain with too much volume?", response: "We use proper sending infrastructure — multiple domains, warmed up, rate limited. Volume goes up without deliverability going down. That's part of the build." }
+      ]
+    },
+    proposalScope: "**Outbound Prospecting at Scale**\nResearch and personalize hundreds of outreach messages in the time it takes to write a handful manually. AI scans each prospect, drafts a unique opener, batch loads to your sequencer, and routes responses to reps. Expected to lift outbound volume from [X/day] to [X/day], projected at $[ROI] annually in new pipeline.\nIncluded: research workflow, personalization engine, sequencer integration, response routing, CRM logging."
+  },
+  "sales-call-coaching": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Teams call recorded automatically" },
+      { label: "Power Automate pulls the transcript", detail: "Speech-to-text via Microsoft Speech Services" },
+      { label: "Copilot scores against your framework", detail: "Talk ratio, questions asked, objection handling, next step" },
+      { label: "Outlook sends coaching summary to rep", detail: "2-3 specific improvements per call, not a wall of text" },
+      { label: "Power BI dashboard for the manager", detail: "Team-wide trends and exception flagging", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Calls/week", key: "calls", def: 40 },
+        { label: "Current close %", key: "cur", def: 20 },
+        { label: "Close lift %", key: "lift", def: 4 },
+        { label: "Avg deal $", key: "val", def: 1500 }
+      ],
+      formula: i => i.calls * 52 * (i.lift/100) * i.val
+    },
+    examples: [
+      { business: "Insurance Agency", before: "Manager reviewed 3 calls/week", after: "All 80 calls scored automatically, close rate +18%" },
+      { business: "Solar Installer", before: "Top rep was unique, nobody copied her approach", after: "Her language extracted and shared, team avg now matches her" },
+      { business: "Digital Agency", before: "New reps ramped in 4 months", after: "7 weeks with auto coaching feedback after every call" }
+    ],
+    demo: {
+      setup: "Have a real or sample sales call transcript ready (Fireflies, Gong, or just paste one).",
+      steps: [
+        { say: "Watch the AI score a sales call against best-practice criteria.", prompt: "Score this 30-minute discovery call on a scale of 1-10 across 5 dimensions: talk-to-listen ratio, quality of discovery questions, objection handling, mutual next step, tone match. Provide one specific action the rep should take next time. Sample call summary: rep talked 70%, asked 3 surface questions, dodged the pricing objection, ended without a clear next step, prospect was reserved.", reaction: "A fair, specific scorecard with one clear coaching point. Client realizes this happens after every single call." },
+        { say: "Now watch how the coaching feedback gets delivered.", prompt: "Write the rep's coaching email based on that scorecard. Tone: supportive, specific, no fluff. Format: one win, one focus area, one tactical thing to try next time.", reaction: "Coaching email that reads like a great manager wrote it. Client sees their entire sales team can get this on every call." }
+      ],
+      objections: [
+        { pushback: "Reps will hate being recorded.", response: "Most CRMs already record. The difference here is that the recordings actually become useful — reps get feedback that helps them close more deals. Top performers love it because it accelerates their growth." },
+        { pushback: "Our coaching is too nuanced for AI.", response: "AI handles the basics — talk ratio, question quality, next-step clarity — so your manager spends their time on the nuanced stuff. The system makes your coaching deeper, not shallower." }
+      ]
+    },
+    proposalScope: "**Sales Call Recording & Coaching**\nEvery sales call automatically recorded, transcribed, scored against best-practice criteria, and turned into a 2-3 point coaching summary delivered to the rep. Manager dashboard tracks team-wide trends and flags exceptions. Across [X calls/week] and a projected [X%] close rate lift, this is estimated to recover $[ROI] annually.\nIncluded: recording integration, AI scoring framework, rep feedback automation, manager dashboard build."
+  },
+  "pipeline-visibility": {
+    buildTime: "⏱ 2-3 days",
+    msSteps: [
+      { label: "Trigger", detail: "Power Automate scans Dynamics 365 deals every morning" },
+      { label: "Copilot identifies stale deals", detail: "Any deal with no activity in 3+ days flagged for attention" },
+      { label: "Teams sends rep their action list", detail: "Prioritized by value and urgency" },
+      { label: "Outlook delivers manager summary", detail: "At-risk deals visible without a meeting" },
+      { label: "Power BI tracks pipeline health", detail: "Win rate, stage conversion, deal age trends", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "Open deals", key: "deals", def: 50 },
+        { label: "Stalled %", key: "st", def: 20 },
+        { label: "Recovery lift %", key: "rec", def: 12 },
+        { label: "Avg deal $", key: "val", def: 3000 }
+      ],
+      formula: i => i.deals * (i.st/100) * (i.rec/100) * i.val * 4
+    },
+    examples: [
+      { business: "Manufacturing Sales", before: "$400k in stalled deals discovered monthly during reviews", after: "Zero surprises, 18% of stalled deals recovered" },
+      { business: "SaaS Company", before: "Weekly pipeline meetings ran 90 min", after: "20-min standups, all deals current" },
+      { business: "Consulting Firm", before: "Forecast off by 30% every quarter", after: "Forecast within 5%, planning got real" }
+    ],
+    demo: {
+      setup: "Open a CRM with 10-15 open deals visible in different stages and ages.",
+      steps: [
+        { say: "Watch the AI scan the pipeline and tell you exactly which deals need a touch today.", prompt: "Review these 5 open deals and tell me which need action today and why: (1) Acme Co, $25k, no activity 4 days, stage proposal sent. (2) Global Inc, $8k, last touch yesterday, stage discovery. (3) Westside, $40k, no activity 9 days, stage negotiation. (4) Bluefin, $12k, last touch 2 days, stage closed-won pending paperwork. (5) Northpoint, $60k, no activity 6 days, stage proposal sent. Prioritize by value and urgency.", reaction: "A ranked action list in 5 seconds. Client sees the daily scan replace their pipeline meeting." },
+        { say: "Now watch the manager summary that fires every Monday.", prompt: "Generate a 3-paragraph manager summary covering: total open pipeline, biggest 2 at-risk deals by value, one rep performing above trend, one needing attention. Sample data: $480k pipeline, biggest at-risk Westside $40k stalled 9 days, top performer Sarah closed 4 deals this week, rep who needs attention is Tom at 0 closes in 14 days.", reaction: "Manager gets a clean executive read. Client realizes leadership doesn't need a 90-minute pipeline meeting anymore." }
+      ],
+      objections: [
+        { pushback: "Our CRM data is too messy for this to work.", response: "That's exactly the problem this fixes. The system flags stale deals — which are usually the ones with bad data — and forces them to surface. Pipeline cleans itself up in the first month." },
+        { pushback: "Reps won't update the CRM.", response: "Pair this with our CRM data entry automation and the problem disappears. Reps log via Slack, AI updates the CRM, this scans the result. Whole loop closes itself." }
+      ]
+    },
+    proposalScope: "**Pipeline Visibility & Deal Alerts**\nDaily automated pipeline scan that identifies stale deals, sends reps a prioritized action list, and delivers a manager summary of at-risk revenue — without a single meeting. Across [X open deals] with [X%] typically stalling, projected to recover $[ROI] annually in deals that would have died quietly.\nIncluded: pipeline scan logic, rep alert system, manager dashboard, trend tracking."
+  },
+  "employee-qa": {
+    buildTime: "⏱ 1-2 days",
+    msSteps: [
+      { label: "Trigger", detail: "Employee asks a question in Teams chat" },
+      { label: "Power Automate routes to Copilot", detail: "Question handed off to AI agent" },
+      { label: "Copilot searches SharePoint docs", detail: "Pulls answer from your handbook, SOPs, policy docs" },
+      { label: "Teams returns answer with source link", detail: "Direct, specific answer plus link to the source" },
+      { label: "Escalation to HR Teams channel", detail: "Unknown questions routed to a human", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "# employees", key: "emp", def: 30 },
+        { label: "Q's/week each", key: "q", def: 2 },
+        { label: "Min per question", key: "min", def: 6 },
+        { label: "Hourly cost $", key: "rate", def: 35 }
+      ],
+      formula: i => i.emp * i.q * (i.min/60) * 52 * i.rate
+    },
+    examples: [
+      { business: "60-person Agency", before: "HR fielded 40 questions/day", after: "8 escalated, 32 auto-answered" },
+      { business: "Restaurant Chain", before: "Managers repeated policies daily", after: "Staff self-serve via Slack bot, manager freed up" },
+      { business: "Multi-Site Franchise", before: "Inconsistent policy interpretations across locations", after: "Single source of truth answers everywhere" }
+    ],
+    demo: {
+      setup: "Open Slack with a sample bot integration in a test channel.",
+      steps: [
+        { say: "Watch what happens when an employee asks the bot a real HR question.", prompt: "You are an HR knowledge bot for a 60-person agency. Policy: PTO accrues at 1.25 days/month, max 20 days, must be requested 2 weeks in advance for blocks over 3 days. Employee asks: 'Can I take a week off in 10 days?' Answer specifically and helpfully.", reaction: "Specific, sourced answer. Client realizes HR doesn't have to be the bottleneck anymore." },
+        { say: "Now an unusual one — watch the escalation.", prompt: "Same bot. Employee asks: 'I think my manager is treating me unfairly because of my religion. What should I do?' How does the bot respond?", reaction: "Bot does NOT try to handle this — it routes to HR immediately with the right tone. Client sees the safety net working." }
+      ],
+      objections: [
+        { pushback: "Our employees won't use a bot.", response: "They will if it answers them in 5 seconds vs waiting 2 days for HR. Adoption is high when the alternative is slower. We measure usage in week 2 and tune from there." },
+        { pushback: "What if the bot gives the wrong answer?", response: "It only answers from your actual documents. If a policy isn't documented, it escalates instead of guessing. And we audit the first 100 conversations to make sure accuracy is right." }
+      ]
+    },
+    proposalScope: "**Internal Employee Q&A Bot**\nDeploy a Slack/Teams bot that answers employee questions about policies, benefits, and process by searching your actual documents — handbook, SOPs, HR docs. Across [X employees] asking [X questions/week] each, this saves an estimated $[ROI] annually in HR and manager time.\nIncluded: knowledge base ingestion, AI agent setup, escalation rules, usage dashboard."
+  },
+  "new-hire-training": {
+    buildTime: "⏱ 3-5 days",
+    msSteps: [
+      { label: "Trigger", detail: "New hire role and start date set in SharePoint or Dynamics 365 HR" },
+      { label: "Power Automate launches role-specific path", detail: "Different sequence for each role, activated automatically" },
+      { label: "Teams delivers daily training content", detail: "Videos, reads, quizzes, and shadowing tasks on schedule" },
+      { label: "Copilot answers questions on content", detail: "New hire can ask anything about training material in real time" },
+      { label: "Power BI manager tracking view", detail: "Real-time completion status across all active trainees", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "New hires/year", key: "hires", def: 10 },
+        { label: "Weeks faster to productive", key: "wks", def: 4 },
+        { label: "Weekly salary $", key: "sal", def: 1200 }
+      ],
+      formula: i => i.hires * i.wks * i.sal * 0.6
+    },
+    examples: [
+      { business: "Inside Sales Org", before: "90 days to productive", after: "45 days with structured AI-supported path" },
+      { business: "Call Center", before: "Variable training quality across cohorts", after: "Standardized across 200 agents" },
+      { business: "Field Services Co", before: "Shadow-only training, slow ramp", after: "Video + AI reinforcement, 50% faster ramp" }
+    ],
+    demo: {
+      setup: "Open the client's existing training docs (or pretend you have them) in one tab.",
+      steps: [
+        { say: "Watch the AI deliver day 3 of a sales rep's training automatically.", prompt: "Day 3 training delivery for a new sales rep. Topic: discovery call framework. Generate the morning Slack message that introduces today's content (link to a 12-min video placeholder), explains the goal, and ends with a 3-question micro-quiz the rep must complete by end of day.", reaction: "Daily training feels intentional, not random. Client sees structured ramp without anyone manually delivering it." },
+        { say: "Now watch the rep ask a question about what they just learned.", prompt: "Rep asks the training bot: 'What's the difference between a SPIN question and an open-ended discovery question?' Answer like a patient sales coach with one specific example of each.", reaction: "Specific, helpful answer in seconds. Rep gets reinforcement without bothering anyone." }
+      ],
+      objections: [
+        { pushback: "Our training is too hands-on to automate.", response: "We don't replace the hands-on parts. We replace the sequencing, delivery, reinforcement, and tracking. Your manager still does the human stuff — they just stop doing the operational stuff." },
+        { pushback: "We don't have training content built.", response: "Most clients don't have it written down formally — but they have it in their best people's heads. We extract it during the build. By the end you have a documented training program plus the delivery system." }
+      ]
+    },
+    proposalScope: "**Role-Specific Training Delivery**\nStructured training sequences delivered automatically to every new hire based on their role, with embedded Q&A bot and manager tracking. Across [X new hires/year] reaching productivity [X weeks] faster, projected at $[ROI] annually in compressed ramp time.\nIncluded: content sequencing, role-based paths, embedded AI tutor, manager dashboard."
+  },
+  "document-retrieval": {
+    buildTime: "⏱ 1-2 days",
+    msSteps: [
+      { label: "Trigger", detail: "Employee asks a question in Teams or Outlook" },
+      { label: "Power Automate routes the request", detail: "Hands the query off to Copilot search" },
+      { label: "Copilot searches SharePoint + OneDrive", detail: "Indexes your full document library" },
+      { label: "Teams returns answer + document link", detail: "Direct answer plus the source document for verification" },
+      { label: "Power BI logs gaps in documentation", detail: "Frequently-asked-but-unanswered queries flagged monthly", isLast: true }
+    ],
+    calc: {
+      inputs: [
+        { label: "# employees", key: "emp", def: 20 },
+        { label: "Min/day searching", key: "min", def: 20 },
+        { label: "Hourly cost $", key: "rate", def: 35 }
+      ],
+      formula: i => i.emp * (i.min/60) * 250 * i.rate
+    },
+    examples: [
+      { business: "Law Firm", before: "30 minutes to find a case precedent", after: "15 seconds via AI search" },
+      { business: "Engineering Firm", before: "Old spec versions used by mistake", after: "Always current, errors eliminated" },
+      { business: "Healthcare Practice", before: "Staff asked each other for procedure info", after: "Instant answers, no interruptions" }
+    ],
+    demo: {
+      setup: "Open Slack with a doc-search bot integration in a test channel.",
+      steps: [
+        { say: "Watch the AI find a specific document section in seconds.", prompt: "You are a document retrieval bot for a marketing agency. Knowledge base includes: client SOWs, brand guidelines, vendor list, expense policy, SOPs. Employee asks: 'Where's the latest brand voice guide for client Acme?' Respond with the answer and a placeholder document link.", reaction: "Document found and surfaced instantly. Client realizes their team will never lose a doc again." },
+        { say: "Now watch a follow-up question in the same conversation.", prompt: "Same bot. Employee asks as a follow-up: 'And what tone should I use for their LinkedIn posts vs email?' Answer specifically based on a typical brand voice guide structure.", reaction: "Conversational follow-up handled. Client sees this isn't just search — it's understanding." }
+      ],
+      objections: [
+        { pushback: "Our docs are scattered across 4 different systems.", response: "We connect to all of them — Drive, Notion, SharePoint, Dropbox, wherever. The AI searches across all sources simultaneously. Employees ask once, we handle the rest." },
+        { pushback: "What about confidentiality?", response: "Permissions are respected. The AI only surfaces what an employee already has access to. Nothing gets exposed that wasn't already accessible." }
+      ]
+    },
+    proposalScope: "**Internal Document Search & Retrieval**\nDeploy an AI search agent that connects to all your document systems and answers employee questions in plain language with sourced answers. Across [X employees] losing [X minutes/day] to manual search, this saves $[ROI] annually in productive time.\nIncluded: document system integrations, AI search agent, source citation, gap reporting."
+  }
+};
+
+let activeCategory = 'all';
+let searchQuery = '';
+let openCards = new Set();
+let platformMode = 'standard';
+let proposalSet = new Set();
+let calcState = {};
+
+function getFilteredData() {
+  return data.filter(w => {
+    const matchCat = activeCategory === 'all' || w.category === activeCategory;
+    const q = searchQuery.toLowerCase();
+    const matchSearch = !q || 
+      w.name.toLowerCase().includes(q) ||
+      w.preview.toLowerCase().includes(q) ||
+      w.problem.toLowerCase().includes(q) ||
+      w.pitch.toLowerCase().includes(q);
+    return matchCat && matchSearch;
+  });
+}
+
+function groupByCategory(items) {
+  const groups = {};
+  const catOrder = ['lead','admin','ops','sales','knowledge'];
+  const catLabels = {
+    lead: '📞 Lead & Communications',
+    admin: '📋 Admin & Data Entry',
+    ops: '⚙️ Operations',
+    sales: '💼 Sales',
+    knowledge: '🧠 Internal Knowledge'
+  };
+  catOrder.forEach(c => {
+    const group = items.filter(i => i.category === c);
+    if (group.length) groups[c] = { label: catLabels[c], items: group };
+  });
+  return groups;
+}
+
+function renderSidebar(filtered) {
+  const sidebar = document.getElementById('sidebar');
+  const groups = groupByCategory(filtered);
+  sidebar.innerHTML = '';
+  Object.entries(groups).forEach(([cat, group]) => {
+    const sec = document.createElement('div');
+    sec.className = 'sidebar-section';
+    sec.innerHTML = `<div class="sidebar-label">${group.label}</div>`;
+    group.items.forEach(w => {
+      const a = document.createElement('a');
+      a.className = 'sidebar-item';
+      a.href = '#' + w.id;
+      a.innerHTML = `<span class="sidebar-dot"></span>${w.name}`;
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const el = document.getElementById(w.id);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (!openCards.has(w.id)) {
+            toggleCard(w.id);
+          }
+        }
+      });
+      sec.appendChild(a);
+    });
+    sidebar.appendChild(sec);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function formatMoney(n) {
+  if (!isFinite(n) || n < 0) n = 0;
+  return '$' + Math.round(n).toLocaleString();
+}
+
+function renderScopePreview(text) {
+  return escapeHtml(text)
+    .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')
+    .replace(/\[([^\]]+)\]/g, '<span class="bracket">$1</span>')
+    .replace(/\n/g, '<br>');
+}
+
+function renderCard(w) {
+  const isOpen = openCards.has(w.id);
+  const ex = extra[w.id] || {};
+  const levelClass = w.level === 1 ? 'level-1' : 'level-2';
+  const levelText = w.level === 1 ? 'Level 1 — Native AI' : 'Level 2 — AI + Automation';
+  const buildTime = ex.buildTime || '';
+
+  const stepsSource = (platformMode === 'microsoft' && ex.msSteps) ? ex.msSteps : w.steps;
+  const stepsHtml = stepsSource.map((s, i) => {
+    const isLast = i === stepsSource.length - 1 || s.isLast;
+    return `
+      <div class="flow-step ${isLast ? 'flow-last' : ''}">
+        <div class="flow-connector">
+          <div class="flow-num">${i + 1}</div>
+          ${!isLast ? '<div class="flow-line"></div>' : ''}
+        </div>
+        <div class="flow-content">
+          <div class="flow-label">${escapeHtml(s.label)}</div>
+          <div class="flow-detail">${escapeHtml(s.detail)}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const qsHtml = w.discoveryQs.map(q => `
+    <div class="discovery-q">
+      <span class="q-icon">→</span>
+      <span>${escapeHtml(q)}</span>
+    </div>`).join('');
+
+  const toolsHtml = w.tools.map(t => `
+    <div class="tool-item">
+      <span class="tool-badge ${t.badge}">${t.badge === 'trigger' ? 'Trigger' : t.badge === 'ai' ? 'AI Layer' : 'Output'}</span>
+      <div>
+        <div class="tool-name">${escapeHtml(t.name)}</div>
+        <div class="tool-desc">${escapeHtml(t.desc)}</div>
+      </div>
+    </div>`).join('');
+
+  // Examples
+  const examplesHtml = (ex.examples || []).map(e => `
+    <div class="example-card">
+      <div class="example-biz">${escapeHtml(e.business)}</div>
+      <div class="example-row"><b>Before:</b> ${escapeHtml(e.before)}</div>
+      <div class="example-row"><b>After:</b> ${escapeHtml(e.after)}</div>
+    </div>`).join('');
+
+  // Calculator
+  let calcHtml = '';
+  if (ex.calc) {
+    const state = calcState[w.id] || {};
+    const inputsHtml = ex.calc.inputs.map(inp => {
+      const val = (state[inp.key] !== undefined) ? state[inp.key] : inp.def;
+      return `
+        <div class="calc-field">
+          <label>${escapeHtml(inp.label)}</label>
+          <input type="number" min="0" step="any" data-calc="${w.id}" data-key="${inp.key}" value="${val}">
+        </div>`;
+    }).join('');
+    const initial = {};
+    ex.calc.inputs.forEach(inp => initial[inp.key] = (state[inp.key] !== undefined) ? state[inp.key] : inp.def);
+    const initialResult = ex.calc.formula(initial);
+    calcHtml = `
+      <div class="calc-wrap">
+        <div class="calc-title">Live ROI Calculator</div>
+        <div class="calc-inputs">${inputsHtml}</div>
+        <div class="calc-result">
+          <div class="calc-result-label">Estimated Annual Savings</div>
+          <div class="calc-result-value" data-calc-result="${w.id}">${formatMoney(initialResult)}</div>
+        </div>
+      </div>`;
+  }
+
+  // Demo Script
+  let demoHtml = '';
+  if (ex.demo) {
+    const stepsBlock = ex.demo.steps.map((st, idx) => `
+      <div class="demo-step">
+        <div class="demo-step-num">Step ${idx + 1}</div>
+        <div class="demo-say"><b>Say this:</b>${escapeHtml(st.say)}</div>
+        <div class="code-block"><button class="copy-btn" data-copy="${w.id}-${idx}">Copy</button><span id="prompt-${w.id}-${idx}">${escapeHtml(st.prompt)}</span></div>
+        <div class="demo-reaction"><b>Client will see:</b>${escapeHtml(st.reaction)}</div>
+      </div>`).join('');
+    const objHtml = ex.demo.objections.map(o => `
+      <div class="obj-item">
+        <div class="obj-pushback">${escapeHtml(o.pushback)}</div>
+        <div class="obj-response">${escapeHtml(o.response)}</div>
+      </div>`).join('');
+    demoHtml = `
+      <div class="demo-setup"><b>Setup:</b> ${escapeHtml(ex.demo.setup)}</div>
+      ${stepsBlock}
+      <div class="obj-title">Common Objections</div>
+      ${objHtml}`;
+  }
+
+  // Proposal tab
+  const isAdded = proposalSet.has(w.id);
+  let proposalHtml = '';
+  if (ex.proposalScope) {
+    proposalHtml = `
+      <button class="add-proposal-btn ${isAdded ? 'added' : ''}" data-add-proposal="${w.id}">${isAdded ? '✓ Added to Proposal' : '+ Add to Proposal'}</button>
+      <div class="scope-preview">${renderScopePreview(ex.proposalScope)}</div>`;
+  }
+
+  const platformLabel = platformMode === 'microsoft' ? 'Automation Flow 🪟' : 'Automation Flow';
+
+  return `
+    <div class="workflow-card ${isOpen ? 'open' : ''}" id="${w.id}" data-id="${w.id}">
+      <div class="card-header" onclick="toggleCard('${w.id}')">
+        <div class="card-header-left">
+          <span class="card-emoji">${w.emoji}</span>
+          <div>
+            <div class="card-name">${escapeHtml(w.name)}</div>
+            <div class="card-preview">${escapeHtml(w.preview)}</div>
+          </div>
+        </div>
+        ${buildTime ? `<span class="time-badge">${escapeHtml(buildTime)}</span>` : ''}
+        <span class="level-badge ${levelClass}">${levelText}</span>
+        <span class="card-expand">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="card-tabs">
+          <button class="card-tab active" onclick="switchTab(this, '${w.id}', 'problem')">Problem</button>
+          <button class="card-tab" onclick="switchTab(this, '${w.id}', 'solution')">${platformLabel}</button>
+          <button class="card-tab" onclick="switchTab(this, '${w.id}', 'roi')">ROI Pitch</button>
+          <button class="card-tab" onclick="switchTab(this, '${w.id}', 'tools')">Tool Stack</button>
+          <button class="card-tab" onclick="switchTab(this, '${w.id}', 'demo')">Demo Script</button>
+          <button class="card-tab" onclick="switchTab(this, '${w.id}', 'proposal')">Proposal</button>
+        </div>
+        <div class="card-panel active" data-panel="${w.id}-problem">
+          <div class="problem-text">${escapeHtml(w.problem)}</div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--orange);margin-bottom:10px;">Discovery Questions to Ask</div>
+          <div class="discovery-qs">${qsHtml}</div>
+          ${examplesHtml ? `
+            <button class="examples-toggle" data-examples="${w.id}"><span>📌 Real Business Examples</span><span class="caret">▾</span></button>
+            <div class="examples-list" data-examples-list="${w.id}">${examplesHtml}</div>
+          ` : ''}
+        </div>
+        <div class="card-panel" data-panel="${w.id}-solution">
+          <div class="flow-steps">${stepsHtml}</div>
+        </div>
+        <div class="card-panel" data-panel="${w.id}-roi">
+          ${calcHtml}
+          <div class="roi-grid">
+            <div class="roi-card"><div class="roi-label">Time Saved</div><div class="roi-value"><span>${escapeHtml(w.roi.time)}</span></div></div>
+            <div class="roi-card"><div class="roi-label">Cost Impact</div><div class="roi-value">${escapeHtml(w.roi.cost)}</div></div>
+            <div class="roi-card"><div class="roi-label">Hire Avoided</div><div class="roi-value">${escapeHtml(w.roi.hire)}</div></div>
+            <div class="roi-card"><div class="roi-label">Speed</div><div class="roi-value">${escapeHtml(w.roi.speed)}</div></div>
+          </div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--orange);margin:16px 0 8px;">Say This to the Client</div>
+          <div class="pitch-line">"${escapeHtml(w.pitch)}"</div>
+        </div>
+        <div class="card-panel" data-panel="${w.id}-tools">
+          <div class="tools-list">${toolsHtml}</div>
+        </div>
+        <div class="card-panel" data-panel="${w.id}-demo">${demoHtml}</div>
+        <div class="card-panel" data-panel="${w.id}-proposal">${proposalHtml}</div>
+      </div>
+    </div>`;
+}
+
+function renderContent() {
+  const content = document.getElementById('content');
+  const empty = document.getElementById('emptyState');
+  const filtered = getFilteredData();
+  const count = document.getElementById('resultCount');
+
+  if (filtered.length === 0) {
+    content.innerHTML = '';
+    content.appendChild(empty);
+    empty.classList.add('visible');
+    count.textContent = '0 results';
+    renderSidebar([]);
+    return;
+  }
+
+  empty.classList.remove('visible');
+  count.textContent = `${filtered.length} workflow${filtered.length !== 1 ? 's' : ''}`;
+
+  const groups = groupByCategory(filtered);
+  let html = '';
+  Object.entries(groups).forEach(([cat, group]) => {
+    html += `<div class="section-block">
+      <div class="section-eyebrow">${group.label}</div>`;
+    group.items.forEach(w => { html += renderCard(w); });
+    html += '</div>';
+  });
+
+  content.innerHTML = html;
+  content.appendChild(empty);
+  renderSidebar(filtered);
+}
+
+function toggleCard(id) {
+  if (openCards.has(id)) {
+    openCards.delete(id);
+  } else {
+    openCards.add(id);
+  }
+  const card = document.getElementById(id);
+  if (!card) return;
+  card.classList.toggle('open', openCards.has(id));
+}
+
+function switchTab(btn, id, panel) {
+  const card = document.getElementById(id);
+  card.querySelectorAll('.card-tab').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.card-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const target = card.querySelector(`[data-panel="${id}-${panel}"]`);
+  if (target) target.classList.add('active');
+}
+
+// Filter buttons
+document.getElementById('filterBar').addEventListener('click', e => {
+  const btn = e.target.closest('.filter-btn');
+  if (!btn) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  activeCategory = btn.dataset.category;
+  renderContent();
+});
+
+// Search
+const searchInput = document.getElementById('searchInput');
+const searchClear = document.getElementById('searchClear');
+searchInput.addEventListener('input', e => {
+  searchQuery = e.target.value;
+  searchClear.style.display = searchQuery ? 'block' : 'none';
+  renderContent();
+});
+searchClear.addEventListener('click', () => {
+  searchInput.value = '';
+  searchQuery = '';
+  searchClear.style.display = 'none';
+  searchInput.focus();
+  renderContent();
+});
+
+// Platform toggle
+document.getElementById('platformToggle').addEventListener('click', e => {
+  const btn = e.target.closest('.platform-btn');
+  if (!btn) return;
+  document.querySelectorAll('.platform-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  platformMode = btn.dataset.platform;
+  renderContent();
+});
+
+// Delegated events on content for: calc, examples toggle, add-to-proposal, copy
+document.getElementById('content').addEventListener('input', e => {
+  const t = e.target;
+  if (t.matches('input[data-calc]')) {
+    const id = t.dataset.calc;
+    const key = t.dataset.key;
+    if (!calcState[id]) calcState[id] = {};
+    calcState[id][key] = parseFloat(t.value) || 0;
+    const ex = extra[id];
+    if (!ex || !ex.calc) return;
+    const inputs = {};
+    ex.calc.inputs.forEach(inp => {
+      inputs[inp.key] = (calcState[id][inp.key] !== undefined) ? calcState[id][inp.key] : inp.def;
+    });
+    const result = ex.calc.formula(inputs);
+    const out = document.querySelector(`[data-calc-result="${id}"]`);
+    if (out) out.textContent = formatMoney(result);
+  }
+});
+
+document.getElementById('content').addEventListener('click', e => {
+  // Examples toggle
+  const exBtn = e.target.closest('[data-examples]');
+  if (exBtn) {
+    e.stopPropagation();
+    const id = exBtn.dataset.examples;
+    exBtn.classList.toggle('open');
+    const list = document.querySelector(`[data-examples-list="${id}"]`);
+    if (list) list.classList.toggle('open');
+    return;
+  }
+  // Add to proposal
+  const addBtn = e.target.closest('[data-add-proposal]');
+  if (addBtn) {
+    e.stopPropagation();
+    const id = addBtn.dataset.addProposal;
+    if (proposalSet.has(id)) {
+      proposalSet.delete(id);
+      addBtn.classList.remove('added');
+      addBtn.textContent = '+ Add to Proposal';
+    } else {
+      proposalSet.add(id);
+      addBtn.classList.add('added');
+      addBtn.textContent = '✓ Added to Proposal';
+    }
+    updateFabCount();
+    renderDrawer();
+    return;
+  }
+  // Copy code
+  const copyBtn = e.target.closest('[data-copy]');
+  if (copyBtn) {
+    e.stopPropagation();
+    const key = copyBtn.dataset.copy;
+    const target = document.getElementById('prompt-' + key);
+    if (target) {
+      const text = target.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.classList.add('copied');
+        copyBtn.textContent = 'Copied';
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.textContent = 'Copy';
+        }, 1500);
+      }).catch(() => {
+        copyBtn.textContent = 'Failed';
+      });
+    }
+  }
+});
+
+// Proposal drawer
+function updateFabCount() {
+  document.getElementById('fabCount').textContent = proposalSet.size;
+}
+
+function renderDrawer() {
+  const body = document.getElementById('drawerBody');
+  if (proposalSet.size === 0) {
+    body.innerHTML = '<div class="drawer-empty">No workflows added yet.<br>Open any card and tap "+ Add to Proposal".</div>';
+    return;
+  }
+  body.innerHTML = Array.from(proposalSet).map(id => {
+    const w = data.find(d => d.id === id);
+    const ex = extra[id];
+    if (!w || !ex) return '';
+    return `
+      <div class="drawer-item">
+        <div class="drawer-item-head">
+          <span style="font-size:18px;">${w.emoji}</span>
+          <div class="drawer-item-name">${escapeHtml(w.name)}</div>
+          <button class="drawer-remove" data-remove="${id}" title="Remove">×</button>
+        </div>
+        <div class="drawer-item-scope">${renderScopePreview(ex.proposalScope)}</div>
+      </div>`;
+  }).join('');
+}
+
+document.getElementById('drawerBody').addEventListener('click', e => {
+  const rm = e.target.closest('[data-remove]');
+  if (!rm) return;
+  const id = rm.dataset.remove;
+  proposalSet.delete(id);
+  updateFabCount();
+  renderDrawer();
+  // Update any visible add buttons
+  const btn = document.querySelector(`[data-add-proposal="${id}"]`);
+  if (btn) {
+    btn.classList.remove('added');
+    btn.textContent = '+ Add to Proposal';
+  }
+});
+
+const drawer = document.getElementById('drawer');
+const drawerOverlay = document.getElementById('drawerOverlay');
+function openDrawer() {
+  drawer.classList.add('open');
+  drawerOverlay.classList.add('open');
+}
+function closeDrawer() {
+  drawer.classList.remove('open');
+  drawerOverlay.classList.remove('open');
+}
+document.getElementById('fab').addEventListener('click', openDrawer);
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+drawerOverlay.addEventListener('click', closeDrawer);
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  const ids = Array.from(proposalSet);
+  proposalSet.clear();
+  updateFabCount();
+  renderDrawer();
+  ids.forEach(id => {
+    const btn = document.querySelector(`[data-add-proposal="${id}"]`);
+    if (btn) {
+      btn.classList.remove('added');
+      btn.textContent = '+ Add to Proposal';
+    }
+  });
+});
+
+document.getElementById('btnExport').addEventListener('click', () => {
+  if (proposalSet.size === 0) return;
+  const lines = [];
+  lines.push('PROPOSAL — AUTOMATION SCOPE');
+  lines.push('================================');
+  lines.push('');
+  lines.push(`Prepared: ${new Date().toLocaleDateString()}`);
+  lines.push(`Workflows included: ${proposalSet.size}`);
+  lines.push('');
+  lines.push('--------------------------------');
+  lines.push('');
+  Array.from(proposalSet).forEach((id, i) => {
+    const w = data.find(d => d.id === id);
+    const ex = extra[id];
+    if (!w || !ex) return;
+    const clean = ex.proposalScope
+      .replace(/\*\*(.+?)\*\*/g, '$1')
+      .replace(/\[([^\]]+)\]/g, '[$1]');
+    lines.push(`${i + 1}. ${w.name.toUpperCase()}`);
+    lines.push('');
+    lines.push(clean);
+    lines.push('');
+    lines.push('--------------------------------');
+    lines.push('');
+  });
+  lines.push('NEXT STEPS');
+  lines.push('Reply to confirm scope and we will send a simple agreement to start.');
+  lines.push('');
+  const text = lines.join('\n');
+  const btn = document.getElementById('btnExport');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copied to Clipboard';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.textContent = 'Export Proposal';
+    }, 2000);
+  }).catch(() => {
+    btn.textContent = 'Copy failed';
+  });
+});
+
+// Init
+renderContent();
+renderDrawer();
+updateFabCount();
+</script>
+</body>
+</html>
