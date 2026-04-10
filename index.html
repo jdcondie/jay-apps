@@ -6,41 +6,73 @@
 <title>jay-apps</title>
 <style>
   :root { color-scheme: light dark; }
+  * { box-sizing: border-box; }
   body {
     font: 16px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    max-width: 680px;
-    margin: 4rem auto;
+    max-width: 860px;
+    margin: 3rem auto;
     padding: 0 1.25rem;
   }
-  h1 { margin: 0 0 .25rem; font-size: 1.6rem; }
-  h2 { margin-top: 2.5rem; font-size: .85rem; text-transform: uppercase; letter-spacing: .05em; opacity: .5; }
+  h1 { margin: 0 0 .25rem; font-size: 1.8rem; }
+  h2 { margin-top: 2.5rem; font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; opacity: .55; }
   p.sub { margin: 0; opacity: .65; }
-  ul { list-style: none; padding: 0; margin: .5rem 0 0; }
-  li { border-top: 1px solid rgba(128,128,128,.18); }
-  li:last-child { border-bottom: 1px solid rgba(128,128,128,.18); }
-  a { display: block; padding: .85rem .25rem; text-decoration: none; color: inherit; font-weight: 500; }
-  a:hover { background: rgba(128,128,128,.08); }
-  small { display: block; font-weight: 400; opacity: .55; font-size: .8em; margin-top: .15rem; }
-  .muted { opacity: .5; padding: .85rem .25rem; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: .75rem;
+    margin-top: .75rem;
+  }
+  .card {
+    display: block;
+    padding: 1rem 1.1rem;
+    border: 1px solid rgba(128,128,128,.22);
+    border-radius: 10px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color .15s, transform .15s;
+  }
+  .card:hover { border-color: rgba(128,128,128,.55); transform: translateY(-1px); }
+  .card .name { font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+  .card .meta { font-size: .78rem; opacity: .55; }
+  .muted {
+    padding: 1rem 1.1rem;
+    border: 1px dashed rgba(128,128,128,.3);
+    border-radius: 10px;
+    opacity: .55;
+  }
+  .muted .name { font-weight: 600; font-size: 1rem; margin-bottom: .15rem; }
+  .muted .meta { font-size: .78rem; }
 </style>
 </head>
 <body>
 <h1>jay-apps</h1>
-<p class="sub">Static apps deployed from this repo via GitHub Actions.</p>
+<p class="sub">Unified portfolio. Rebuilt from source on every push and nightly at 10:00 UTC.</p>
 
-<h2>Live apps</h2>
-<ul>
-  <li><a href="./AdCanvas-Max/">AdCanvas Max<small>Vite + React, built from source</small></a></li>
-  <li><a href="./conative-app/">Conative App<small>Vite + React, built from source</small></a></li>
-  <li><a href="./sticky-focus/">Sticky Focus<small>Vite + React + PWA, built from source</small></a></li>
-  <li><a href="./workflow-reference/">workflow-reference<small>Plain HTML</small></a></li>
-  <li><a href="./company-os/">company-os<small>README rendered to HTML</small></a></li>
-</ul>
+<h2>React / Vite apps</h2>
+<div class="grid">
+  <a class="card" href="./AdCanvas-Max/"><div class="name">AdCanvas Max</div><div class="meta">Vite + React &middot; in-tree</div></a>
+  <a class="card" href="./conative-app/"><div class="name">Conative App</div><div class="meta">Vite + React &middot; in-tree</div></a>
+  <a class="card" href="./sticky-focus/"><div class="name">Sticky Focus</div><div class="meta">Vite + React + PWA &middot; in-tree</div></a>
+  <a class="card" href="./ad-sprint-app/"><div class="name">Ad Sprint App</div><div class="meta">Vite client &middot; in-tree</div></a>
+  <a class="card" href="./competitor-ad-analysis/"><div class="name">Competitor Ad Analysis</div><div class="meta">Vite client &middot; external repo</div></a>
+</div>
 
-<h2>Not yet deployed</h2>
-<ul>
-  <li class="muted">ad-sprint-app <small>Client lives in a ./client subdir, needs a custom build step</small></li>
-  <li class="muted">autopilot <small>Turbo monorepo, no single root entry</small></li>
-</ul>
+<h2>Static sites &amp; reference</h2>
+<div class="grid">
+  <a class="card" href="./workflow-reference/"><div class="name">workflow-reference</div><div class="meta">Plain HTML &middot; in-tree</div></a>
+  <a class="card" href="./company-os/"><div class="name">company-os</div><div class="meta">README rendered &middot; in-tree</div></a>
+  <a class="card" href="./jay-os/"><div class="name">jay-os</div><div class="meta">Plain HTML &middot; external repo</div></a>
+  <a class="card" href="./claude-system/"><div class="name">claude-system</div><div class="meta">README rendered &middot; external repo</div></a>
+  <a class="card" href="./skills-reference/"><div class="name">skills-reference</div><div class="meta">Single HTML &middot; external repo</div></a>
+</div>
+
+<h2>Not yet wired</h2>
+<div class="grid">
+  <div class="muted"><div class="name">autopilot</div><div class="meta">Turbo monorepo &middot; needs target app selection</div></div>
+  <div class="muted"><div class="name">teacher-os</div><div class="meta">Private &middot; needs PAT</div></div>
+  <div class="muted"><div class="name">ad-canvas-pro</div><div class="meta">Private &middot; needs PAT</div></div>
+  <div class="muted"><div class="name">Ai-Product-Shot-Generator</div><div class="meta">Private &middot; needs PAT</div></div>
+  <div class="muted"><div class="name">desktop-tutorial</div><div class="meta">Private &middot; needs PAT</div></div>
+</div>
 </body>
 </html>
