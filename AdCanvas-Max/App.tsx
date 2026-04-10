@@ -4,6 +4,8 @@ import { AD_TEMPLATES, ASPECT_RATIOS } from './constants';
 import { generateAdImage } from './services/geminiService';
 import { saveToHistory, getCustomTemplates, urlToBase64 } from './src/lib/utils';
 import AddTemplateModal from './components/AddTemplateModal';
+import ApiKeyModal from './components/ApiKeyModal';
+import { getStoredApiKey, onApiKeyChange } from './src/lib/apiKeyStore';
 import Sidebar from './components/Sidebar';
 import ImageUploader from './components/ImageUploader';
 import AdTemplateSelector from './components/AdTemplateSelector';
@@ -97,32 +99,39 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState(false);
   const [hasApiKey, setHasApiKey] = useState<boolean>(false);
 
   useEffect(() => {
     const checkApiKey = async () => {
-      // Check if a key is already selected in AI Studio
-      let hasKey = false;
+      // 1. User-provided key in localStorage (primary source for public deploy)
+      if (getStoredApiKey()) {
+        setHasApiKey(true);
+        return;
+      }
+      // 2. AI Studio platform-injected key (when app is embedded in AI Studio)
       if (window.aistudio) {
-        hasKey = await window.aistudio.hasSelectedApiKey();
+        const hasStudio = await window.aistudio.hasSelectedApiKey();
+        if (hasStudio) {
+          setHasApiKey(true);
+          return;
+        }
       }
-      
-      // Also check if a key is provided via environment variables as a fallback
-      // Note: process.env.GEMINI_API_KEY is usually available in the dev environment
-      if (!hasKey && process.env.GEMINI_API_KEY) {
-        hasKey = true;
+      // 3. Build-time env fallback (self-hosted deploys)
+      if (typeof process !== 'undefined' && process.env?.GEMINI_API_KEY) {
+        setHasApiKey(true);
+        return;
       }
-      
-      setHasApiKey(hasKey);
+      setHasApiKey(false);
     };
     checkApiKey();
+    // Re-run whenever the user saves or removes a key through the modal.
+    const unsubscribe = onApiKeyChange(() => { checkApiKey(); });
+    return unsubscribe;
   }, []);
 
-  const handleConnectKey = async () => {
-    if (window.aistudio) {
-      await window.aistudio.openSelectKey();
-      setHasApiKey(true);
-    }
+  const handleConnectKey = () => {
+    setIsApiKeyModalOpen(true);
   };
 
   const handlePageChange = (page: string) => {
@@ -499,6 +508,11 @@ const App: React.FC = () => {
           setCustomTemplates(prev => [template, ...prev]);
           setIsAddTemplateOpen(false);
         }}
+      />
+      {/* API Key Modal */}
+      <ApiKeyModal
+        isOpen={isApiKeyModalOpen}
+        onClose={() => setIsApiKeyModalOpen(false)}
       />
     </div>
   );
