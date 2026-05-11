@@ -199,6 +199,29 @@ export const GAME_TYPE = {
   }
 };
 
+export const LOOP_DESCRIPTION = {
+  FF: {
+    counteract: "Scan → extract the signal → decide and move on",
+    accommodate: "Absorb context → calibrate depth → translate for the room",
+    initiate:   "Question → research → validate → present the case",
+  },
+  FT: {
+    counteract: "Interrupt → route around → improvise → ship",
+    accommodate: "Inherit system → tune → keep it running",
+    initiate:   "Diagnose chaos → design sequence → implement → optimize",
+  },
+  QS: {
+    counteract: "Test → protect what works → hold the line",
+    accommodate: "Evaluate → refine → improve without breaking",
+    initiate:   "Spot the gap → ideate → prototype → launch → restart",
+  },
+  IMP: {
+    counteract: "Analyze → model → predict → advise",
+    accommodate: "Inspect → diagnose failure → restore → upgrade",
+    initiate:   "Concept → build → demonstrate → iterate",
+  }
+};
+
 export const SCORE_CONTEXT = {
   1: "lowest possible", 2: "very low", 3: "low",
   4: "below center", 5: "center", 6: "above center",

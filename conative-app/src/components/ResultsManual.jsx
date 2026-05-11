@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE } from '../data/strengthData.js';
+import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE, LOOP_DESCRIPTION } from '../data/strengthData.js';
 import SpectrumBar, { BEHAVIORAL_LINES } from './SpectrumBar.jsx';
 import { CAREER_ARCHETYPES } from '../data/careerData.js';
 import { scoreCareerFit } from '../scoring/careerScoring.js';
@@ -12,15 +12,16 @@ const REPORT_CARDS = [
   { key: 'game',           num: '03', label: 'Your Game',         desc: 'What you\'re wired to win at' },
   { key: 'strengths',      num: '04', label: 'Your Strengths',    desc: 'What you naturally do better' },
   { key: 'superpowers',    num: '05', label: 'Top Strengths',     desc: 'Where you have the most energy' },
-  { key: 'shadows',        num: '06', label: 'Watch For',         desc: 'Where your wiring works against you' },
-  { key: 'danger',         num: '07', label: 'Friction Points',   desc: 'Conditions that drain you' },
-  { key: 'success',        num: '08', label: 'Your Success',      desc: 'What your wiring optimizes for' },
-  { key: 'procrastination',num: '09', label: 'Procrastination',   desc: 'Why you stall and how to unstick' },
-  { key: 'reset',          num: '10', label: 'Reset Protocol',    desc: 'How to get back online fast' },
-  { key: 'daily',          num: '11', label: 'Daily Rules',       desc: 'Baseline operating conditions' },
-  { key: 'comms',          num: '12', label: 'Communication',     desc: 'What others should know' },
-  { key: 'stress',         num: '13', label: 'Under Stress',      desc: 'What happens when your tank is low' },
-  { key: 'careers',        num: '14', label: 'Career Map',        desc: '78 roles ranked by wiring fit' },
+  { key: 'ability',        num: '06', label: 'Unique Ability',    desc: 'Your one-sentence professional superpower' },
+  { key: 'shadows',        num: '07', label: 'Watch For',         desc: 'Where your wiring works against you' },
+  { key: 'danger',         num: '08', label: 'Friction Points',   desc: 'Conditions that drain you' },
+  { key: 'success',        num: '09', label: 'Your Success',      desc: 'What your wiring optimizes for' },
+  { key: 'procrastination',num: '10', label: 'Procrastination',   desc: 'Why you stall and how to unstick' },
+  { key: 'reset',          num: '11', label: 'Reset Protocol',    desc: 'How to get back online fast' },
+  { key: 'daily',          num: '12', label: 'Daily Rules',       desc: 'Baseline operating conditions' },
+  { key: 'comms',          num: '13', label: 'Communication',     desc: 'What others should know' },
+  { key: 'stress',         num: '14', label: 'Under Stress',      desc: 'What happens when your tank is low' },
+  { key: 'careers',        num: '15', label: 'Career Map',        desc: '78 roles ranked by wiring fit' },
 ];
 
 const TOOL_CARDS = [
@@ -55,6 +56,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const [weeklySubmitted, setWeeklySubmitted] = useState(false);
   const [dailyDismissed, setDailyDismissed] = useState(false);
   const [expandedSections, setExpandedSections] = useState({});
+  const [abilityDomain, setAbilityDomain] = useState('');
 
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
   const goBack = () => { setActiveSection(null); window.scrollTo(0, 0); };
@@ -143,6 +145,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
         <Pull dark>{GAME_TYPE[dominant][zones[dominant]].wins}</Pull>
         <Label dark>Your Game Type</Label>
         <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
+        <Label dark>Your Loop</Label>
+        <P dark style={{ fontSize: 15, fontFamily: S.mono, letterSpacing: '0.04em' }}>{LOOP_DESCRIPTION[dominant][zones[dominant]]}</P>
         <Label dark>Fatal Game</Label>
         <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
         <Label dark>All Four Dimensions</Label>
@@ -189,6 +193,51 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </div>
         ))}
       </>);
+
+      case 'ability': {
+        const strengthNames = modes.map(m => STRENGTH_DATA[m][zones[m]].name);
+        const topTwo = [...modes].sort((a, b) => energy[b] - energy[a]).slice(0, 2).map(m => STRENGTH_DATA[m][zones[m]].name);
+        const assembled = abilityDomain.trim()
+          ? `${topTwo[0]} + ${topTwo[1]} applied to ${abilityDomain.trim()}.`
+          : null;
+        return W('Unique Ability', true, <>
+          {Eye('YOUR UNIQUE ABILITY', true)}{H('NAME YOUR PROFESSIONAL SUPERPOWER', true)}
+          <P dark>Your unique ability is the combination of wirings that produces results others can't easily replicate. The assessment surfaces the raw material. Your job is to compress it into one sentence.</P>
+          <P dark>Template: <span style={{ color: S.white, fontFamily: S.mono, fontSize: 13 }}>[Wiring 1] + [Wiring 2] applied to [your domain/audience]</span></P>
+          <Label dark>Your Two Strongest Wirings</Label>
+          <div style={{ display: 'flex', gap: 12, margin: '4px 0 24px' }}>
+            {topTwo.map(name => (
+              <div key={name} style={{ padding: '10px 20px', border: '1px solid #444', fontFamily: S.bebas, fontSize: 20, color: S.white, letterSpacing: '0.05em' }}>{name}</div>
+            ))}
+          </div>
+          <Label dark>All Four Wirings</Label>
+          {modes.map(m => (
+            <div key={m} style={{ padding: '8px 0', borderBottom: '1px solid #1a1a1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, letterSpacing: '0.15em' }}>{MODE_LABELS[m]}</span>
+              <span style={{ fontFamily: S.bebas, fontSize: 18, color: energy[m] >= 50 ? S.white : '#555', letterSpacing: '0.05em' }}>{STRENGTH_DATA[m][zones[m]].name}</span>
+            </div>
+          ))}
+          <Label dark>Your Domain / Audience</Label>
+          <P dark style={{ fontSize: 14, marginBottom: 8 }}>What field, industry, or type of person does your wiring run best in service of?</P>
+          <input
+            value={abilityDomain}
+            onChange={e => setAbilityDomain(e.target.value)}
+            placeholder="e.g. early-stage founders, DTC brands, product teams..."
+            style={{
+              width: '100%', padding: '14px 16px', background: '#111', border: '1px solid #2a2a2a',
+              color: S.white, fontFamily: S.cormorant, fontSize: 16, outline: 'none',
+              boxSizing: 'border-box', letterSpacing: '0.02em',
+            }}
+          />
+          {assembled && (
+            <>
+              <Label dark>Your Unique Ability</Label>
+              <Pull dark>{assembled}</Pull>
+              <P dark style={{ fontSize: 13, color: S.onDarkDim }}>If it sounds generic, the domain is too broad. Sharpen the audience until the sentence has teeth.</P>
+            </>
+          )}
+        </>);
+      }
 
       case 'shadows': return W('Watch For', false, <>
         {Eye('WATCH FOR', false)}{H('WHERE YOUR WIRING CAN WORK AGAINST YOU', false)}
@@ -697,7 +746,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
 
       {/* Report grid — grouped */}
       {[
-        { label: 'YOUR WIRING',                keys: ['explain','scores','game','strengths','superpowers','shadows'] },
+        { label: 'YOUR WIRING',                keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
         { label: 'HOW YOU OPERATE',            keys: ['danger','success','procrastination','reset','daily'] },
         { label: 'WORKING WITH OTHERS / CAREER', keys: ['comms','stress','careers'] },
       ].map(group => {
