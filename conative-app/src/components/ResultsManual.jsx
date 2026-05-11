@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES } from '../data/strengthData.js';
+import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE } from '../data/strengthData.js';
 import SpectrumBar, { BEHAVIORAL_LINES } from './SpectrumBar.jsx';
 import { CAREER_ARCHETYPES } from '../data/careerData.js';
 import { scoreCareerFit } from '../scoring/careerScoring.js';
@@ -9,17 +9,18 @@ import { S } from '../styles/theme.js';
 const REPORT_CARDS = [
   { key: 'explain',        num: '01', label: 'What This Means',  desc: 'Your wiring in plain language' },
   { key: 'scores',         num: '02', label: 'Your Scores',       desc: 'Four dimensions and energy' },
-  { key: 'strengths',      num: '03', label: 'Your Strengths',    desc: 'What you naturally do better' },
-  { key: 'superpowers',    num: '04', label: 'Top Strengths',     desc: 'Where you have the most energy' },
-  { key: 'shadows',        num: '05', label: 'Watch For',         desc: 'Where your wiring works against you' },
-  { key: 'danger',         num: '06', label: 'Friction Points',   desc: 'Conditions that drain you' },
-  { key: 'success',        num: '07', label: 'Your Success',      desc: 'What your wiring optimizes for' },
-  { key: 'procrastination',num: '08', label: 'Procrastination',   desc: 'Why you stall and how to unstick' },
-  { key: 'reset',          num: '09', label: 'Reset Protocol',    desc: 'How to get back online fast' },
-  { key: 'daily',          num: '10', label: 'Daily Rules',       desc: 'Baseline operating conditions' },
-  { key: 'comms',          num: '11', label: 'Communication',     desc: 'What others should know' },
-  { key: 'stress',         num: '12', label: 'Under Stress',      desc: 'What happens when your tank is low' },
-  { key: 'careers',        num: '13', label: 'Career Map',        desc: '78 roles ranked by wiring fit' },
+  { key: 'game',           num: '03', label: 'Your Game',         desc: 'What you\'re wired to win at' },
+  { key: 'strengths',      num: '04', label: 'Your Strengths',    desc: 'What you naturally do better' },
+  { key: 'superpowers',    num: '05', label: 'Top Strengths',     desc: 'Where you have the most energy' },
+  { key: 'shadows',        num: '06', label: 'Watch For',         desc: 'Where your wiring works against you' },
+  { key: 'danger',         num: '07', label: 'Friction Points',   desc: 'Conditions that drain you' },
+  { key: 'success',        num: '08', label: 'Your Success',      desc: 'What your wiring optimizes for' },
+  { key: 'procrastination',num: '09', label: 'Procrastination',   desc: 'Why you stall and how to unstick' },
+  { key: 'reset',          num: '10', label: 'Reset Protocol',    desc: 'How to get back online fast' },
+  { key: 'daily',          num: '11', label: 'Daily Rules',       desc: 'Baseline operating conditions' },
+  { key: 'comms',          num: '12', label: 'Communication',     desc: 'What others should know' },
+  { key: 'stress',         num: '13', label: 'Under Stress',      desc: 'What happens when your tank is low' },
+  { key: 'careers',        num: '14', label: 'Career Map',        desc: '78 roles ranked by wiring fit' },
 ];
 
 const TOOL_CARDS = [
@@ -129,7 +130,28 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {Eye('IN PLAIN LANGUAGE', true)}{H('HOW YOU OPERATE', true)}
         <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.5vw, 24px)', lineHeight: 1.65, color: S.onDarkBody, marginBottom: 20 }}>{domData.how}</p>
         <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.onDarkDim, marginBottom: 20 }}>Your strongest instinct is <strong style={{ color: S.white }}>{MODE_LABELS[dominant]}</strong> ({strengths[dominant].name}). {strengths[dominant].superpower}</p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.onDarkDim }}>Your lowest-energy dimension is <strong style={{ color: S.white }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
+        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.onDarkDim, marginBottom: 20 }}>Your lowest-energy dimension is <strong style={{ color: S.white }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
+        <div style={{ borderLeft: '3px solid #333', paddingLeft: 20, marginTop: 8 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.onDarkDim, marginBottom: 6 }}>YOUR GAME</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.white, margin: 0 }}><strong>{GAME_TYPE[dominant][zones[dominant]].title}.</strong> {GAME_TYPE[dominant][zones[dominant]].wins}</p>
+        </div>
+      </>);
+
+      case 'game': return W('Your Game', true, <>
+        {Eye('WHAT YOU\'RE WIRED TO WIN AT', true)}{H('KNOW WHAT GAME YOU\'RE PLAYING', true)}
+        <P dark>Your wiring predisposes you to thrive in certain environments and grind against others. This isn't about what you can do. It's about where you're set up to win.</P>
+        <Pull dark>{GAME_TYPE[dominant][zones[dominant]].wins}</Pull>
+        <Label dark>Your Game Type</Label>
+        <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
+        <Label dark>Fatal Game</Label>
+        <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
+        <Label dark>All Four Dimensions</Label>
+        {modes.map(m => (
+          <div key={m} style={{ borderLeft: '4px solid #2a2a2a', padding: '12px 20px', margin: '10px 0' }}>
+            <div style={{ fontFamily: S.bebas, fontSize: 16, color: S.white, marginBottom: 4 }}>{MODE_LABELS[m]}: {GAME_TYPE[m][zones[m]].title}</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.onDarkDim, margin: 0, lineHeight: 1.6 }}>{GAME_TYPE[m][zones[m]].wins}</p>
+          </div>
+        ))}
       </>);
 
       case 'scores': return W('Your Scores', true, <>
@@ -675,7 +697,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
 
       {/* Report grid — grouped */}
       {[
-        { label: 'YOUR WIRING',                keys: ['explain','scores','strengths','superpowers','shadows'] },
+        { label: 'YOUR WIRING',                keys: ['explain','scores','game','strengths','superpowers','shadows'] },
         { label: 'HOW YOU OPERATE',            keys: ['danger','success','procrastination','reset','daily'] },
         { label: 'WORKING WITH OTHERS / CAREER', keys: ['comms','stress','careers'] },
       ].map(group => {

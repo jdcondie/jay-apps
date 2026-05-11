@@ -128,6 +128,77 @@ export const DANGER_ZONES = {
   IMP: { high: "Building before validating. Creating something beautiful that solves the wrong problem.", low: "Dismissing physical prototypes when the situation actually requires them." }
 };
 
+export const GAME_TYPE = {
+  FF: {
+    counteract: {
+      title: "Solo, fast-read",
+      wins: "You win in games where rapid synthesis beats deep research. Compressed timelines, executive decisions, high-stakes editing. You cut through noise faster than anyone in the room.",
+      fatal: "Games that reward the most thorough research. You'll always feel like you didn't go deep enough."
+    },
+    accommodate: {
+      title: "Bridge, context-dependent",
+      wins: "You win when the game requires translation — between technical and practical, between detail and decision. You're the person who makes complex things usable.",
+      fatal: "Pure solo work with no one to translate for. Your gift needs an audience."
+    },
+    initiate: {
+      title: "Solo, deliberate, evidence-based",
+      wins: "You win in games where thoroughness determines outcomes. Due diligence, research-heavy strategy, anything where the person with the best evidence wins.",
+      fatal: "Move-fast cultures that treat gut feel as a feature. You'll always be 'over-thinking it.'"
+    }
+  },
+  FT: {
+    counteract: {
+      title: "High-chaos, flexible",
+      wins: "You win in unpredictable games. Startups in flux, crisis response, environments where the system keeps changing and everyone else freezes. You're already three moves ahead.",
+      fatal: "Bureaucratic, high-process games where every step must be logged. Compliance-heavy roles will drain you fast."
+    },
+    accommodate: {
+      title: "Systems-keeper, consistency",
+      wins: "You win in games where reliability is the edge. Ops, scaling, anything that needs someone to hold the middle together while others build or break things.",
+      fatal: "Greenfield roles with no existing structure to maintain. Pure creation from nothing isn't your game."
+    },
+    initiate: {
+      title: "Structure-builder, rule-setter",
+      wins: "You win when the game has no rules yet and someone needs to write them. Early-stage operations, new market entry, anything that needs a process where there isn't one.",
+      fatal: "Environments where you're forced to follow someone else's rigid system, especially a broken one."
+    }
+  },
+  QS: {
+    counteract: {
+      title: "Steady-state, protection",
+      wins: "You win in games where protecting what works is the competitive advantage. Mature products, risk management, roles where the cost of change is higher than the benefit.",
+      fatal: "Fast-pivot games where the strategy changes every quarter. You'll spend all your energy absorbing the whiplash."
+    },
+    accommodate: {
+      title: "Iteration, tested evolution",
+      wins: "You win in games that reward smart evolution. Product improvement, market expansion, anything that needs someone to push change through without blowing up what already works.",
+      fatal: "All-or-nothing games: burn it down or freeze it completely. You need room to test."
+    },
+    initiate: {
+      title: "Creative-first, possibility-driven",
+      wins: "You win in games where the idea is the edge. New ventures, creative strategy, early-stage anything. You see the opening before others know there's a wall.",
+      fatal: "Maintenance games. Any role that asks you to do the same thing next year as you did this year."
+    }
+  },
+  IMP: {
+    counteract: {
+      title: "Abstract strategy, vision-first",
+      wins: "You win in games played before anything is built. Architecture, high-level consulting, strategic planning. You see the full picture in your head before anyone touches anything.",
+      fatal: "Roles where you're expected to build or execute. Being the one with the shovel will frustrate you."
+    },
+    accommodate: {
+      title: "Improvement, upgrade-first",
+      wins: "You win in games where the goal is better, not new. Operations improvement, renovation, turnarounds. You make things work the way they were supposed to.",
+      fatal: "Greenfield builds with nothing to work from. Starting from zero when there's nothing to improve isn't your game."
+    },
+    initiate: {
+      title: "Maker, hands-on",
+      wins: "You win in games where the prototype is the argument. Product, physical creation, anything where making something real changes the conversation.",
+      fatal: "Pure advisory or strategy roles. If you can't build something, you'll feel invisible."
+    }
+  }
+};
+
 export const SCORE_CONTEXT = {
   1: "lowest possible", 2: "very low", 3: "low",
   4: "below center", 5: "center", 6: "above center",
