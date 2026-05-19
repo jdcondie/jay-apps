@@ -151,22 +151,15 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
           fontWeight: 500, lineHeight: 1.35, color: S.black, margin: '0 0 20px',
         }}>{question.stem}</h2>
 
-        {/* Status dots — top indicator */}
-        <div style={{ display: 'flex', gap: 20, marginBottom: 16 }}>
-          {[{ label: 'MOST LIKELY', filled: !!most }, { label: 'LEAST LIKELY', filled: !!least }].map(({ label, filled }) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              <div style={{
-                width: 8, height: 8, borderRadius: '50%',
-                background: filled ? S.black : 'transparent',
-                border: `1.5px solid ${filled ? S.black : '#bbb'}`,
-                transition: 'all 0.15s',
-              }} />
-              <span style={{
-                fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em',
-                color: filled ? S.black : '#bbb', transition: 'color 0.15s',
-              }}>{label}</span>
-            </div>
-          ))}
+        {/* Column headers above M/L dots */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+          <div style={{ flex: 1 }} />
+          <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
+            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: most ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>MOST<br/>LIKELY</span>
+          </div>
+          <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
+            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: least ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>LEAST<br/>LIKELY</span>
+          </div>
         </div>
 
         {/* Options */}
