@@ -763,7 +763,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const NavRow = ({ card }) => (
     <button
       onClick={() => handleCard(card)}
-      style={{ display: 'flex', alignItems: 'center', gap: 16, width: '100%', padding: '16px 0', background: 'transparent', border: 'none', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
+      style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '18px 16px', background: 'transparent', border: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
       onMouseEnter={e => e.currentTarget.style.background = '#f0ede8'}
       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
     >
@@ -862,10 +862,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
           const cards = REPORT_CARDS.filter(c => group.keys.includes(c.key));
           return (
             <div key={group.label} style={{ padding: '0 24px' }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
+              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 14px' }}>
                 {group.label}
               </div>
-              {cards.map(card => <NavRow key={card.key} card={card} />)}
+              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 8 }}>
+                {cards.map(card => <NavRow key={card.key} card={card} />)}
+              </div>
             </div>
           );
         })}
@@ -873,10 +875,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {/* Tools */}
         {showTools && (
           <div style={{ padding: isMobile ? '0 24px 64px' : '0 24px 80px' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 14px' }}>
               TOOLS
             </div>
-            {TOOL_CARDS.map(card => <NavRow key={card.key} card={card} />)}
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 8 }}>
+              {TOOL_CARDS.map(card => <NavRow key={card.key} card={card} />)}
+            </div>
           </div>
         )}
       </div>
