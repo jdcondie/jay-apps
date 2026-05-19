@@ -177,6 +177,20 @@ export default function App() {
     setPhase('quiz');
   };
 
+  const handleTestFill = () => {
+    const testResponses = {};
+    QUESTIONS.forEach(q => {
+      const ids = q.options.map(o => o.id);
+      const shuffled = [...ids].sort(() => Math.random() - 0.5);
+      testResponses[q.id] = { most: shuffled[0], least: shuffled[1] };
+    });
+    setResponses(testResponses);
+    setQIndex(QUESTIONS.length - 1);
+    setResumeData(null);
+    clearSession();
+    setPhase('processing');
+  };
+
   // ── Loading splash ─────────────────────────────────────────
   if (authLoading) {
     return (
@@ -202,6 +216,7 @@ export default function App() {
             resumeData={resumeData}
             onResume={handleResume}
             onStartFresh={handleStartFresh}
+            onTestFill={handleTestFill}
           />
         )}
         {phase === 'quiz' && (
@@ -250,6 +265,7 @@ export default function App() {
             resumeData={resumeData}
             onResume={handleResume}
             onStartFresh={handleStartFresh}
+            onTestFill={handleTestFill}
           />
         )}
         {phase === 'quiz' && (

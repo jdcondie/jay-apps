@@ -1,6 +1,6 @@
 import { S } from '../styles/theme.js';
 
-export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, onStartFresh }) {
+export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, onStartFresh, onTestFill }) {
   const total = 36;
   const pct = resumeData ? Math.round(((resumeData.qIndex) / total) * 100) : 0;
 
@@ -53,6 +53,14 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           >BEGIN ASSESSMENT</button>
           <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginTop: 24, letterSpacing: "0.15em" }}>~8 MINUTES</div>
         </>
+      )}
+      {onTestFill && (
+        <button onClick={onTestFill} style={{
+          position: "absolute", bottom: 20, left: "50%", transform: "translateX(-50%)",
+          fontFamily: S.mono, fontSize: 9, letterSpacing: "0.12em",
+          background: "transparent", border: "none", color: S.rule,
+          cursor: "pointer", padding: "8px 12px",
+        }}>FILL RANDOM + SKIP TO RESULTS</button>
       )}
     </div>
   );
