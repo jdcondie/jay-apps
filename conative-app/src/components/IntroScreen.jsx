@@ -1,6 +1,9 @@
 import { S } from '../styles/theme.js';
 
-export default function IntroScreen({ onStart, onSignIn }) {
+export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, onStartFresh }) {
+  const total = 36;
+  const pct = resumeData ? Math.round(((resumeData.qIndex) / total) * 100) : 0;
+
   return (
     <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: S.black, padding: "48px 24px", textAlign: "center", position: "relative" }}>
       {onSignIn && (
@@ -18,11 +21,39 @@ export default function IntroScreen({ onStart, onSignIn }) {
       <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.onDarkDim, maxWidth: 420, marginTop: 16, lineHeight: 1.6 }}>
         Four options per question. Pick the one you'd most likely take, then the one you'd least likely take. Go with your gut.
       </p>
-      <button onClick={onStart} style={{ marginTop: 48, fontFamily: S.bebas, fontSize: 22, letterSpacing: "0.08em", background: S.white, color: S.black, border: "none", padding: "16px 56px", cursor: "pointer", transition: "transform 0.15s" }}
-        onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
-        onMouseLeave={e => e.target.style.transform = "scale(1)"}
-      >BEGIN ASSESSMENT</button>
-      <div style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, marginTop: 24, letterSpacing: "0.15em" }}>~8 MINUTES</div>
+
+      {resumeData ? (
+        <div style={{ marginTop: 48, width: "100%", maxWidth: 360 }}>
+          {/* Resume banner */}
+          <div style={{ border: "1px solid #2a2a2a", padding: "20px 24px", marginBottom: 12, textAlign: "left" }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: "0.2em", color: S.onDarkDim, marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
+            {/* Mini progress bar */}
+            <div style={{ height: 2, background: "#1a1a1a", marginBottom: 10 }}>
+              <div style={{ height: "100%", background: S.white, width: `${pct}%` }} />
+            </div>
+            <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 16 }}>
+              QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
+            </div>
+            <button onClick={onResume} style={{
+              width: "100%", fontFamily: S.bebas, fontSize: 20, letterSpacing: "0.08em",
+              background: S.white, color: S.black, border: "none", padding: "14px", cursor: "pointer",
+            }}>RESUME</button>
+          </div>
+          <button onClick={onStartFresh} style={{
+            width: "100%", fontFamily: S.mono, fontSize: 10, letterSpacing: "0.1em",
+            background: "transparent", border: "1px solid #1a1a1a", color: "#555",
+            padding: "12px", cursor: "pointer",
+          }}>START OVER INSTEAD</button>
+        </div>
+      ) : (
+        <>
+          <button onClick={onStart} style={{ marginTop: 48, fontFamily: S.bebas, fontSize: 22, letterSpacing: "0.08em", background: S.white, color: S.black, border: "none", padding: "16px 56px", cursor: "pointer", transition: "transform 0.15s" }}
+            onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
+            onMouseLeave={e => e.target.style.transform = "scale(1)"}
+          >BEGIN ASSESSMENT</button>
+          <div style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, marginTop: 24, letterSpacing: "0.15em" }}>~8 MINUTES</div>
+        </>
+      )}
     </div>
   );
 }

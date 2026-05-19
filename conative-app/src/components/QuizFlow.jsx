@@ -6,7 +6,7 @@ const BREAK_MESSAGES = {
   23: { headline: 'FINAL\nSTRETCH.', sub: 'TWELVE MORE' },
 };
 
-export default function QuizFlow({ question, index, total, response, onSelect, onNext, onBack }) {
+export default function QuizFlow({ question, index, total, response, onSelect, onNext, onBack, onPause }) {
   const { most, least } = response || {};
   const canProceed = !!(most && least);
 
@@ -112,8 +112,17 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
           cursor: index === 0 ? 'default' : 'pointer',
           pointerEvents: index === 0 ? 'none' : 'auto',
         }}>← BACK</button>
-        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em', color: S.mid }}>
-          {index + 1} / {total}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em', color: S.mid }}>
+            {index + 1} / {total}
+          </div>
+          {onPause && (
+            <button onClick={onPause} style={{
+              fontFamily: S.mono, fontSize: 9, letterSpacing: '0.1em',
+              background: 'transparent', border: 'none', padding: 0,
+              color: '#888', cursor: 'pointer',
+            }}>SAVE & EXIT</button>
+          )}
         </div>
       </div>
 

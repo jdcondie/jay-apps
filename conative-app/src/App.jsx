@@ -77,9 +77,18 @@ export default function App() {
   // quiz state
   const [qIndex, setQIndex] = useState(0);
   const [responses, setResponses] = useState({});
+  const [resumeData, setResumeData] = useState(null); // { qIndex } if in-progress session found
 
   // ── Auth listener ──────────────────────────────────────────
   useEffect(() => {
+    // Restore any in-progress quiz from localStorage
+    const inProgress = loadSession();
+    if (inProgress?.phase === 'quiz' && inProgress.responses && Object.keys(inProgress.responses).length > 0) {
+      setResponses(inProgress.responses);
+      setQIndex(inProgress.qIndex || 0);
+      setResumeData({ qIndex: inProgress.qIndex || 0 });
+    }
+
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
@@ -137,6 +146,7 @@ export default function App() {
     setCurrentResults(r);
     setPhase('results');
     clearSession();
+    setResumeData(null);
     if (user) await saveResults(user.id, r);
   }, [responses, user]);
 
@@ -144,8 +154,27 @@ export default function App() {
     setResponses({});
     setQIndex(0);
     setCurrentResults(null);
+    setResumeData(null);
     clearSession();
     setPhase('intro');
+  };
+
+  const handlePause = () => {
+    // State is already saved to localStorage on every answer — just navigate away
+    setPhase(savedResults ? 'dashboard' : 'intro');
+  };
+
+  const handleResume = () => {
+    setResumeData(null);
+    setPhase('quiz');
+  };
+
+  const handleStartFresh = () => {
+    setResponses({});
+    setQIndex(0);
+    setResumeData(null);
+    clearSession();
+    setPhase('quiz');
   };
 
   // ── Loading splash ─────────────────────────────────────────
@@ -166,7 +195,15 @@ export default function App() {
       <>
         <style>{fonts}</style>
         {phase === 'auth' && <AuthScreen />}
-        {phase === 'intro' && <IntroScreen onStart={() => setPhase('quiz')} onSignIn={() => setPhase('auth')} />}
+        {phase === 'intro' && (
+          <IntroScreen
+            onStart={() => setPhase('quiz')}
+            onSignIn={() => setPhase('auth')}
+            resumeData={resumeData}
+            onResume={handleResume}
+            onStartFresh={handleStartFresh}
+          />
+        )}
         {phase === 'quiz' && (
           <QuizFlow
             question={QUESTIONS[qIndex]}
@@ -176,6 +213,7 @@ export default function App() {
             onSelect={handleSelect}
             onNext={handleNext}
             onBack={handleBack}
+            onPause={handlePause}
           />
         )}
         {phase === 'processing' && <ProcessingScreen onDone={handleProcessingDone} />}
@@ -206,7 +244,14 @@ export default function App() {
         {phase === 'role-fit' && activeResults && <RoleFitChecker results={activeResults} onBack={() => setPhase('dashboard')} />}
         {phase === 'conflict' && activeResults && <ConflictDecoder results={activeResults} onBack={() => setPhase('dashboard')} />}
         {phase === 'chat' && activeResults && <MoChat results={activeResults} onBack={() => setPhase('dashboard')} />}
-        {phase === 'intro' && <IntroScreen onStart={() => setPhase('quiz')} />}
+        {phase === 'intro' && (
+          <IntroScreen
+            onStart={() => setPhase('quiz')}
+            resumeData={resumeData}
+            onResume={handleResume}
+            onStartFresh={handleStartFresh}
+          />
+        )}
         {phase === 'quiz' && (
           <QuizFlow
             question={QUESTIONS[qIndex]}
@@ -216,6 +261,7 @@ export default function App() {
             onSelect={handleSelect}
             onNext={handleNext}
             onBack={handleBack}
+            onPause={handlePause}
           />
         )}
         {phase === 'processing' && <ProcessingScreen onDone={handleProcessingDone} />}
