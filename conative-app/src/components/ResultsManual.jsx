@@ -805,30 +805,19 @@ export default function ResultsManual({ results, onBack, onTool }) {
         <div style={{ fontFamily: S.bebas, fontSize: 'clamp(44px, 9vw, 80px)', color: S.black, lineHeight: 0.9, marginBottom: 24 }}>{MODE_LABELS[dominant].toUpperCase()}</div>
         <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 2vw, 19px)', lineHeight: 1.7, color: '#333', maxWidth: 520, marginBottom: 0 }}>{domData.how}</p>
 
-        <div style={{ height: 1, background: S.rule, margin: '36px 0' }} />
-
-        <div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: S.rule, border: `1px solid ${S.rule}`, marginTop: 40 }}>
           {modes.map(m => (
-            <div key={m} style={{ display: 'flex', gap: 20, padding: '14px 0', borderBottom: `1px solid ${S.rule}`, alignItems: 'flex-start' }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, width: 88, flexShrink: 0, paddingTop: 3 }}>{MODE_LABELS[m].toUpperCase()}</div>
-              <div style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#333' }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
+            <div key={m} style={{ background: m === dominant ? '#f0ede8' : S.white, padding: isMobile ? '18px 16px' : '22px 24px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid }}>{MODE_LABELS[m].toUpperCase()}</div>
+                <div style={{ fontFamily: S.bebas, fontSize: 28, color: energy[m] >= 55 ? S.black : S.mid, lineHeight: 1 }}>{energy[m]}%</div>
+              </div>
+              <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.03em', marginBottom: 6 }}>{strengths[m].name}</div>
+              <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', lineHeight: 1.6, color: '#555' }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
+              {m === dominant && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>DOMINANT</div>}
+              {m === resistance && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>LOWEST ENERGY</div>}
             </div>
           ))}
-        </div>
-
-        <div style={{ height: 1, background: S.rule, margin: '32px 0' }} />
-
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24 }}>
-          <div>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>STRONGEST SIGNAL</div>
-            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, letterSpacing: '0.02em' }}>{MODE_LABELS[dominant]}</div>
-            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', marginTop: 4 }}>{strengths[dominant].name}</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>BIGGEST FRICTION</div>
-            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, letterSpacing: '0.02em' }}>{MODE_LABELS[resistance]}</div>
-            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', marginTop: 4 }}>{strengths[resistance].name} · {RESISTANCE_NARRATIVES[resistance].split('.')[0]}.</div>
-          </div>
         </div>
       </div>
 
