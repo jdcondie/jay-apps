@@ -40,9 +40,9 @@ const TOOL_CARDS = [
 ];
 
 const REPORT_GROUPS = [
-  { label: 'YOUR WIRING',                 keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
-  { label: 'HOW YOU OPERATE',             keys: ['danger','success','procrastination','reset','daily'] },
-  { label: 'WORKING WITH OTHERS / CAREER',keys: ['comms','stress','careers'] },
+  { id: 'wiring',  label: 'YOUR WIRING',                 keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
+  { id: 'operate', label: 'HOW YOU OPERATE',             keys: ['danger','success','procrastination','reset','daily'] },
+  { id: 'career',  label: 'WORKING WITH OTHERS / CAREER',keys: ['comms','stress','careers'] },
 ];
 
 export default function ResultsManual({ results, onBack, onTool }) {
@@ -53,6 +53,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const isMobile = useIsMobile();
 
   const [activeSection, setActiveSection] = useState(null);
+  const [homeFilter, setHomeFilter] = useState(null);
   const [careerFilter, setCareerFilter] = useState('all');
   const [stressSymptoms, setStressSymptoms] = useState([]);
   const [decisionAnswers, setDecisionAnswers] = useState({});
@@ -66,6 +67,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
 
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
   const goBack = () => { setActiveSection(null); window.scrollTo(0, 0); };
+
+  const getGroupId = (key) => {
+    for (const g of REPORT_GROUPS) {
+      if (g.keys.includes(key)) return g.id;
+    }
+    return 'tools';
+  };
 
   // ── Light-mode sub-components ────────────────────────────────────
 
@@ -103,6 +111,67 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const scoreColor = a => a >= 8.5 ? '#16a34a' : a >= 6.5 ? '#ca8a04' : '#dc2626';
   const fillColor  = v => v >= 75 ? '#16a34a' : v >= 50 ? '#ca8a04' : '#dc2626';
 
+  // ── Sidebar (desktop only) ───────────────────────────────────────
+
+  const Sidebar = ({ sectionKey: activeKey }) => (
+    <div style={{ width: 220, flexShrink: 0, position: 'sticky', top: 0, height: '100vh', overflowY: 'auto', background: '#fafafa', borderRight: `1px solid ${S.rule}` }}>
+      <button onClick={goBack} style={{ display: 'block', width: '100%', padding: '16px 20px', fontFamily: S.mono, fontSize: 9, letterSpacing: '0.12em', color: S.mid, background: 'transparent', border: 'none', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left' }}>
+        ← FULL REPORT
+      </button>
+      {REPORT_GROUPS.map(group => (
+        <div key={group.id}>
+          <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid, padding: '14px 20px 6px' }}>{group.label}</div>
+          {group.keys.map(key => {
+            const card = REPORT_CARDS.find(c => c.key === key);
+            if (!card) return null;
+            const isActive = activeKey === key;
+            return (
+              <button
+                key={key}
+                onClick={() => { setActiveSection(key); window.scrollTo(0, 0); }}
+                style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', padding: '9px 20px', background: isActive ? '#f0ede8' : 'transparent', border: 'none', borderLeft: isActive ? `2px solid ${S.black}` : '2px solid transparent', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
+                onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = '#f5f3ef'; }}
+                onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+              >
+                <span style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, width: 18, flexShrink: 0, textAlign: 'right' }}>{card.num}</span>
+                <span style={{ fontFamily: S.mono, fontSize: 9, color: isActive ? S.black : '#666', letterSpacing: '0.05em' }}>{card.label.toUpperCase()}</span>
+              </button>
+            );
+          })}
+        </div>
+      ))}
+    </div>
+  );
+
+  // ── Bottom tab bar (mobile only) ─────────────────────────────────
+
+  const BottomTabs = ({ activeKey }) => {
+    const tabs = [
+      { id: 'wiring',  label: 'WIRING' },
+      { id: 'operate', label: 'OPERATE' },
+      { id: 'career',  label: 'CAREER' },
+      { id: 'tools',   label: 'TOOLS' },
+    ];
+    const activeId = activeKey ? getGroupId(activeKey) : homeFilter;
+    return (
+      <div style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'rgba(245,243,239,0.95)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderTop: `1px solid ${S.rule}`, display: 'flex', zIndex: 100, paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}>
+        {tabs.map(tab => {
+          const isActive = activeId === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => { setActiveSection(null); setHomeFilter(tab.id); window.scrollTo(0, 0); }}
+              style={{ flex: 1, padding: '10px 4px 10px', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}
+            >
+              <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.08em', color: isActive ? S.black : S.mid, fontWeight: isActive ? 700 : 400 }}>{tab.label}</span>
+              <span style={{ width: 16, height: 2, background: isActive ? S.black : 'transparent', borderRadius: 1, display: 'block' }} />
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
   // ── Section page shell (always light) ───────────────────────────
 
   const SectionPage = ({ sectionKey, label, children }) => {
@@ -111,16 +180,22 @@ export default function ResultsManual({ results, onBack, onTool }) {
     const next = idx < REPORT_CARDS.length - 1 ? REPORT_CARDS[idx + 1] : null;
     const btnStyle = { fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer', whiteSpace: 'nowrap' };
     return (
-      <div style={{ minHeight: '100vh', background: S.white }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}`, position: 'sticky', top: 0, background: S.white, zIndex: 10, gap: 8 }}>
-          <button onClick={goBack} style={btnStyle}>← REPORT</button>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            {prev && <button onClick={() => { setActiveSection(prev.key); window.scrollTo(0,0); }} style={btnStyle}>← {isMobile ? prev.num : prev.label.toUpperCase()}</button>}
-            {next && <button onClick={() => { setActiveSection(next.key); window.scrollTo(0,0); }} style={{ ...btnStyle, background: '#f0ede8' }}>{isMobile ? next.num : next.label.toUpperCase()} →</button>}
+      <div style={{ minHeight: '100vh', background: S.white, display: 'flex' }}>
+        {!isMobile && <Sidebar sectionKey={sectionKey} />}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}`, position: 'sticky', top: 0, background: S.white, zIndex: 10, gap: 8 }}>
+            <button onClick={goBack} style={btnStyle}>← REPORT</button>
+            <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
+            <div style={{ display: 'flex', gap: 8 }}>
+              {prev && <button onClick={() => { setActiveSection(prev.key); window.scrollTo(0,0); }} style={btnStyle}>← {isMobile ? prev.num : prev.label.toUpperCase()}</button>}
+              {next && <button onClick={() => { setActiveSection(next.key); window.scrollTo(0,0); }} style={{ ...btnStyle, background: '#f0ede8' }}>{isMobile ? next.num : next.label.toUpperCase()} →</button>}
+            </div>
+          </div>
+          <div style={{ paddingBottom: isMobile ? 72 : 0 }}>
+            {children}
           </div>
         </div>
-        {children}
+        {isMobile && <BottomTabs activeKey={sectionKey} />}
       </div>
     );
   };
@@ -351,7 +426,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </div>
         );
         return (
-          <SectionPage label="Career Map">
+          <SectionPage sectionKey="careers" label="Career Map">
             <div style={{ background: '#f0ede8', padding: '32px 24px', textAlign: 'center', borderBottom: `1px solid ${S.rule}` }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 28, flexWrap: 'wrap' }}>
                 {[['#16a34a', fit1.length, 'STRONG FIT'], ['#ca8a04', fit2.length, 'POSSIBLE FIT'], ['#dc2626', fit3.length, 'POOR FIT']].map(([color, count, label]) => (
@@ -704,6 +779,14 @@ export default function ResultsManual({ results, onBack, onTool }) {
     </button>
   );
 
+  const visibleGroups = homeFilter && homeFilter !== 'tools'
+    ? REPORT_GROUPS.filter(g => g.id === homeFilter)
+    : homeFilter === 'tools'
+    ? []
+    : REPORT_GROUPS;
+
+  const showTools = !homeFilter || homeFilter === 'tools';
+
   return (
     <div style={{ minHeight: '100vh', background: S.white }}>
 
@@ -749,12 +832,36 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </div>
       </div>
 
+      {/* Tab pills */}
+      <div style={{ maxWidth: 680, margin: '0 auto', padding: '20px 24px 4px', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        {[
+          { id: null,      label: 'ALL' },
+          { id: 'wiring',  label: 'WIRING' },
+          { id: 'operate', label: 'OPERATE' },
+          { id: 'career',  label: 'CAREER' },
+          { id: 'tools',   label: 'TOOLS' },
+        ].map(pill => (
+          <button
+            key={pill.label}
+            onClick={() => setHomeFilter(pill.id)}
+            style={{
+              padding: '6px 14px', borderRadius: 100,
+              fontFamily: S.mono, fontSize: 9, letterSpacing: '0.1em',
+              border: `1px solid ${homeFilter === pill.id ? S.black : S.rule}`,
+              background: homeFilter === pill.id ? S.black : 'transparent',
+              color: homeFilter === pill.id ? S.white : S.mid,
+              cursor: 'pointer', transition: 'all 0.12s',
+            }}
+          >{pill.label}</button>
+        ))}
+      </div>
+
       {/* Report navigation — grouped list rows */}
-      <div style={{ maxWidth: 680, margin: '0 auto' }}>
-        {REPORT_GROUPS.map(group => {
+      <div style={{ maxWidth: 680, margin: '0 auto', paddingBottom: isMobile ? 72 : 0 }}>
+        {visibleGroups.map(group => {
           const cards = REPORT_CARDS.filter(c => group.keys.includes(c.key));
           return (
-            <div key={group.label} style={{ padding: isMobile ? '0 24px' : '0 24px' }}>
+            <div key={group.label} style={{ padding: '0 24px' }}>
               <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
                 {group.label}
               </div>
@@ -764,13 +871,17 @@ export default function ResultsManual({ results, onBack, onTool }) {
         })}
 
         {/* Tools */}
-        <div style={{ padding: isMobile ? '0 24px 64px' : '0 24px 80px' }}>
-          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
-            TOOLS
+        {showTools && (
+          <div style={{ padding: isMobile ? '0 24px 64px' : '0 24px 80px' }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
+              TOOLS
+            </div>
+            {TOOL_CARDS.map(card => <NavRow key={card.key} card={card} />)}
           </div>
-          {TOOL_CARDS.map(card => <NavRow key={card.key} card={card} />)}
-        </div>
+        )}
       </div>
+
+      {isMobile && <BottomTabs activeKey={null} />}
     </div>
   );
 }
