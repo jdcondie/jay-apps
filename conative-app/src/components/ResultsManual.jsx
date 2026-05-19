@@ -39,6 +39,12 @@ const TOOL_CARDS = [
   { key: 'explain-results',label: 'Explain My Results',  desc: 'For someone who hasn\'t taken the test' },
 ];
 
+const REPORT_GROUPS = [
+  { label: 'YOUR WIRING',                 keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
+  { label: 'HOW YOU OPERATE',             keys: ['danger','success','procrastination','reset','daily'] },
+  { label: 'WORKING WITH OTHERS / CAREER',keys: ['comms','stress','careers'] },
+];
+
 export default function ResultsManual({ results, onBack, onTool }) {
   const { scores, energy, zones, strengths, dominant, resistance, mo } = results;
   const domData = DOMINANT_NARRATIVES[dominant];
@@ -61,20 +67,20 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
   const goBack = () => { setActiveSection(null); window.scrollTo(0, 0); };
 
-  // ── Sub-components ──────────────────────────────────────────────────────
+  // ── Light-mode sub-components ────────────────────────────────────
 
-  const P = ({ children, dark, style: sx }) => (
-    <p style={{ fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.75, color: dark ? S.onDarkBody : '#1a1a1a', marginBottom: 16, maxWidth: 540, ...sx }}>{children}</p>
+  const P = ({ children, style: sx }) => (
+    <p style={{ fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.75, color: '#333', marginBottom: 16, maxWidth: 540, ...sx }}>{children}</p>
   );
-  const Pull = ({ children, dark }) => (
-    <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(20px, 3vw, 28px)', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.35, color: dark ? S.white : S.black, borderLeft: `3px solid ${dark ? '#555' : S.black}`, paddingLeft: 24, margin: '24px 0', maxWidth: 480 }}>{children}</div>
+  const Pull = ({ children }) => (
+    <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(20px, 3vw, 26px)', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.35, color: S.black, borderLeft: `3px solid ${S.black}`, paddingLeft: 24, margin: '24px 0', maxWidth: 480 }}>{children}</div>
   );
-  const Label = ({ children, dark }) => (
-    <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: dark ? S.onDarkDim : S.mid, margin: '28px 0 10px', paddingBottom: 8, borderBottom: `1px solid ${dark ? '#2a2a2a' : S.rule}` }}>{children}</div>
+  const Label = ({ children }) => (
+    <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: S.mid, margin: '28px 0 10px', paddingBottom: 8, borderBottom: `1px solid ${S.rule}` }}>{children}</div>
   );
-  const Item = ({ children, dark }) => (
-    <div style={{ padding: '12px 0', borderBottom: `1px solid ${dark ? '#2a2a2a' : S.rule}`, fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: dark ? S.onDarkBody : '#1a1a1a', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-      <span style={{ fontFamily: S.mono, fontSize: 12, color: dark ? '#555' : S.mid, flexShrink: 0, marginTop: 2 }}>&mdash;</span>
+  const Item = ({ children }) => (
+    <div style={{ padding: '12px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#333', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+      <span style={{ fontFamily: S.mono, fontSize: 12, color: S.mid, flexShrink: 0, marginTop: 2 }}>&mdash;</span>
       <span>{children}</span>
     </div>
   );
@@ -97,21 +103,21 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const scoreColor = a => a >= 8.5 ? '#16a34a' : a >= 6.5 ? '#ca8a04' : '#dc2626';
   const fillColor  = v => v >= 75 ? '#16a34a' : v >= 50 ? '#ca8a04' : '#dc2626';
 
-  // ── Section page shell ──────────────────────────────────────────────────
+  // ── Section page shell (always light) ───────────────────────────
 
-  const SectionPage = ({ sectionKey, label, dark = false, children }) => {
+  const SectionPage = ({ sectionKey, label, children }) => {
     const idx = REPORT_CARDS.findIndex(c => c.key === sectionKey);
     const prev = idx > 0 ? REPORT_CARDS[idx - 1] : null;
     const next = idx < REPORT_CARDS.length - 1 ? REPORT_CARDS[idx + 1] : null;
-    const btnStyle = (d) => ({ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${d ? '#2a2a2a' : S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer', whiteSpace: 'nowrap' });
+    const btnStyle = { fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer', whiteSpace: 'nowrap' };
     return (
-      <div style={{ minHeight: '100vh', background: dark ? S.black : S.white }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${dark ? '#1a1a1a' : S.rule}`, position: 'sticky', top: 0, background: dark ? S.black : S.white, zIndex: 10, gap: 8 }}>
-          <button onClick={goBack} style={btnStyle(dark)}>← REPORT</button>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: dark ? S.onDarkDim : S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
+      <div style={{ minHeight: '100vh', background: S.white }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}`, position: 'sticky', top: 0, background: S.white, zIndex: 10, gap: 8 }}>
+          <button onClick={goBack} style={btnStyle}>← REPORT</button>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
           <div style={{ display: 'flex', gap: 8 }}>
-            {prev && <button onClick={() => { setActiveSection(prev.key); window.scrollTo(0,0); }} style={btnStyle(dark)}>← {isMobile ? prev.num : prev.label.toUpperCase()}</button>}
-            {next && <button onClick={() => { setActiveSection(next.key); window.scrollTo(0,0); }} style={{ ...btnStyle(dark), background: dark ? '#1a1a1a' : '#f5f5f5' }}>{isMobile ? next.num : next.label.toUpperCase()} →</button>}
+            {prev && <button onClick={() => { setActiveSection(prev.key); window.scrollTo(0,0); }} style={btnStyle}>← {isMobile ? prev.num : prev.label.toUpperCase()}</button>}
+            {next && <button onClick={() => { setActiveSection(next.key); window.scrollTo(0,0); }} style={{ ...btnStyle, background: '#f0ede8' }}>{isMobile ? next.num : next.label.toUpperCase()} →</button>}
           </div>
         </div>
         {children}
@@ -119,56 +125,62 @@ export default function ResultsManual({ results, onBack, onTool }) {
     );
   };
 
-  // ── Section renderer ────────────────────────────────────────────────────
+  // ── Section renderer ─────────────────────────────────────────────
 
   const renderSection = (key) => {
-    const W = (label, dark, content) => <SectionPage sectionKey={key} label={label} dark={dark}><div style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '32px 16px 64px' : '56px 24px 80px' }}>{content}</div></SectionPage>;
-    const H = (text, dark) => <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 52px)', color: dark ? S.white : S.black, margin: '0 0 24px', lineHeight: 1 }}>{text}</h2>;
-    const Eye = (text, dark) => <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: dark ? S.onDarkDim : S.mid, marginBottom: 14 }}>{text}</div>;
+    const W = (label, content) => (
+      <SectionPage sectionKey={key} label={label}>
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '32px 16px 64px' : '56px 24px 80px' }}>
+          {content}
+        </div>
+      </SectionPage>
+    );
+    const H = (text) => <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 52px)', color: S.black, margin: '0 0 24px', lineHeight: 1 }}>{text}</h2>;
+    const Eye = (text) => <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: S.mid, marginBottom: 14 }}>{text}</div>;
 
     switch (key) {
 
-      case 'explain': return W('What This Means', true, <>
-        {Eye('IN PLAIN LANGUAGE', true)}{H('HOW YOU OPERATE', true)}
-        <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.5vw, 24px)', lineHeight: 1.65, color: S.onDarkBody, marginBottom: 20 }}>{domData.how}</p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.onDarkDim, marginBottom: 20 }}>Your strongest instinct is <strong style={{ color: S.white }}>{MODE_LABELS[dominant]}</strong> ({strengths[dominant].name}). {strengths[dominant].superpower}</p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.onDarkDim, marginBottom: 20 }}>Your lowest-energy dimension is <strong style={{ color: S.white }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
-        <div style={{ borderLeft: '3px solid #333', paddingLeft: 20, marginTop: 8 }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.onDarkDim, marginBottom: 6 }}>YOUR GAME</div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: S.white, margin: 0 }}><strong>{GAME_TYPE[dominant][zones[dominant]].title}.</strong> {GAME_TYPE[dominant][zones[dominant]].wins}</p>
+      case 'explain': return W('What This Means', <>
+        {Eye('IN PLAIN LANGUAGE')}{H('HOW YOU OPERATE')}
+        <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.5vw, 24px)', lineHeight: 1.65, color: '#222', marginBottom: 20 }}>{domData.how}</p>
+        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your strongest instinct is <strong style={{ color: S.black }}>{MODE_LABELS[dominant]}</strong> ({strengths[dominant].name}). {strengths[dominant].superpower}</p>
+        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your lowest-energy dimension is <strong style={{ color: S.black }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
+        <div style={{ borderLeft: `3px solid ${S.rule}`, paddingLeft: 20, marginTop: 8 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>YOUR GAME</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#333', margin: 0 }}><strong>{GAME_TYPE[dominant][zones[dominant]].title}.</strong> {GAME_TYPE[dominant][zones[dominant]].wins}</p>
         </div>
       </>);
 
-      case 'game': return W('Your Game', true, <>
-        {Eye('WHAT YOU\'RE WIRED TO WIN AT', true)}{H('KNOW WHAT GAME YOU\'RE PLAYING', true)}
-        <P dark>Your wiring predisposes you to thrive in certain environments and grind against others. This isn't about what you can do. It's about where you're set up to win.</P>
-        <Pull dark>{GAME_TYPE[dominant][zones[dominant]].wins}</Pull>
-        <Label dark>Your Game Type</Label>
-        <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
-        <Label dark>Your Loop</Label>
-        <P dark style={{ fontSize: 15, fontFamily: S.mono, letterSpacing: '0.04em' }}>{LOOP_DESCRIPTION[dominant][zones[dominant]]}</P>
-        <Label dark>Fatal Game</Label>
-        <P dark style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
-        <Label dark>All Four Dimensions</Label>
+      case 'game': return W('Your Game', <>
+        {Eye('WHAT YOU\'RE WIRED TO WIN AT')}{H('KNOW WHAT GAME YOU\'RE PLAYING')}
+        <P>Your wiring predisposes you to thrive in certain environments and grind against others. This isn't about what you can do. It's about where you're set up to win.</P>
+        <Pull>{GAME_TYPE[dominant][zones[dominant]].wins}</Pull>
+        <Label>Your Game Type</Label>
+        <P style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
+        <Label>Your Loop</Label>
+        <P style={{ fontSize: 15, fontFamily: S.mono, letterSpacing: '0.04em' }}>{LOOP_DESCRIPTION[dominant][zones[dominant]]}</P>
+        <Label>Fatal Game</Label>
+        <P style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
+        <Label>All Four Dimensions</Label>
         {modes.map(m => (
-          <div key={m} style={{ borderLeft: '4px solid #2a2a2a', padding: '12px 20px', margin: '10px 0' }}>
-            <div style={{ fontFamily: S.bebas, fontSize: 16, color: S.white, marginBottom: 4 }}>{MODE_LABELS[m]}: {GAME_TYPE[m][zones[m]].title}</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.onDarkDim, margin: 0, lineHeight: 1.6 }}>{GAME_TYPE[m][zones[m]].wins}</p>
+          <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '12px 20px', margin: '10px 0' }}>
+            <div style={{ fontFamily: S.bebas, fontSize: 16, color: S.black, marginBottom: 4 }}>{MODE_LABELS[m]}: {GAME_TYPE[m][zones[m]].title}</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#666', margin: 0, lineHeight: 1.6 }}>{GAME_TYPE[m][zones[m]].wins}</p>
           </div>
         ))}
       </>);
 
-      case 'scores': return W('Your Scores', true, <>
-        {Eye('YOUR SCORES', true)}{H('FOUR DIMENSIONS OF ACTION', true)}
-        <P dark>These four dimensions describe how you instinctively approach information, organization, change, and physical work. Position matters more than direction.</P>
+      case 'scores': return W('Your Scores', <>
+        {Eye('YOUR SCORES')}{H('FOUR DIMENSIONS OF ACTION')}
+        <P>These four dimensions describe how you instinctively approach information, organization, change, and physical work. Position matters more than direction.</P>
         <div style={{ marginTop: 8 }}>
-          {modes.map(m => <SpectrumBar key={m} mode={m} score={scores[m]} energy={energy[m]} name={strengths[m].name} dark />)}
+          {modes.map(m => <SpectrumBar key={m} mode={m} score={scores[m]} energy={energy[m]} name={strengths[m].name} />)}
         </div>
-        <Pull dark>When someone forces you into a pattern that violates your wiring, the friction you feel isn't you being difficult. It's real stress caused by working against your instincts.</Pull>
+        <Pull>When someone forces you into a pattern that violates your wiring, the friction you feel isn't you being difficult. It's real stress caused by working against your instincts.</Pull>
       </>);
 
-      case 'strengths': return W('Your Strengths', false, <>
-        {Eye('YOUR STRENGTHS', false)}{H('WHAT YOU NATURALLY DO BETTER THAN MOST', false)}
+      case 'strengths': return W('Your Strengths', <>
+        {Eye('YOUR STRENGTHS')}{H('WHAT YOU NATURALLY DO BETTER THAN MOST')}
         {modes.map(m => (
           <div key={m} style={{ border: `1px solid ${S.rule}`, padding: 24, marginBottom: -1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
@@ -182,65 +194,64 @@ export default function ResultsManual({ results, onBack, onTool }) {
         ))}
       </>);
 
-      case 'superpowers': return W('Top Strengths', true, <>
-        {Eye('TOP STRENGTHS', true)}{H('WHERE YOU HAVE THE MOST ENERGY', true)}
+      case 'superpowers': return W('Top Strengths', <>
+        {Eye('TOP STRENGTHS')}{H('WHERE YOU HAVE THE MOST ENERGY')}
         {[...modes].sort((a, b) => energy[b] - energy[a]).slice(0, 2).map(m => (
           <div key={m} style={{ marginBottom: 40 }}>
-            <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.white, marginBottom: 8 }}>{strengths[m].name}</div>
-            <P dark>{strengths[m].superpower}</P>
-            <Label dark>You at Your Best</Label>
-            <P dark style={{ fontSize: 15 }}>{strengths[m].atBest}</P>
+            <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, marginBottom: 8 }}>{strengths[m].name}</div>
+            <P>{strengths[m].superpower}</P>
+            <Label>You at Your Best</Label>
+            <P style={{ fontSize: 15 }}>{strengths[m].atBest}</P>
           </div>
         ))}
       </>);
 
       case 'ability': {
-        const strengthNames = modes.map(m => STRENGTH_DATA[m][zones[m]].name);
         const topTwo = [...modes].sort((a, b) => energy[b] - energy[a]).slice(0, 2).map(m => STRENGTH_DATA[m][zones[m]].name);
         const assembled = abilityDomain.trim()
           ? `${topTwo[0]} + ${topTwo[1]} applied to ${abilityDomain.trim()}.`
           : null;
-        return W('Unique Ability', true, <>
-          {Eye('YOUR UNIQUE ABILITY', true)}{H('NAME YOUR PROFESSIONAL SUPERPOWER', true)}
-          <P dark>Your unique ability is the combination of wirings that produces results others can't easily replicate. The assessment surfaces the raw material. Your job is to compress it into one sentence.</P>
-          <P dark>Template: <span style={{ color: S.white, fontFamily: S.mono, fontSize: 13 }}>[Wiring 1] + [Wiring 2] applied to [your domain/audience]</span></P>
-          <Label dark>Your Two Strongest Wirings</Label>
+        return W('Unique Ability', <>
+          {Eye('YOUR UNIQUE ABILITY')}{H('NAME YOUR PROFESSIONAL SUPERPOWER')}
+          <P>Your unique ability is the combination of wirings that produces results others can't easily replicate. The assessment surfaces the raw material. Your job is to compress it into one sentence.</P>
+          <P>Template: <span style={{ color: S.black, fontFamily: S.mono, fontSize: 13 }}>[Wiring 1] + [Wiring 2] applied to [your domain/audience]</span></P>
+          <Label>Your Two Strongest Wirings</Label>
           <div style={{ display: 'flex', gap: 12, margin: '4px 0 24px' }}>
             {topTwo.map(name => (
-              <div key={name} style={{ padding: '10px 20px', border: '1px solid #444', fontFamily: S.bebas, fontSize: 20, color: S.white, letterSpacing: '0.05em' }}>{name}</div>
+              <div key={name} style={{ padding: '10px 20px', border: `1px solid ${S.black}`, fontFamily: S.bebas, fontSize: 20, color: S.black, letterSpacing: '0.05em' }}>{name}</div>
             ))}
           </div>
-          <Label dark>All Four Wirings</Label>
+          <Label>All Four Wirings</Label>
           {modes.map(m => (
-            <div key={m} style={{ padding: '8px 0', borderBottom: '1px solid #1a1a1a', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, letterSpacing: '0.15em' }}>{MODE_LABELS[m]}</span>
-              <span style={{ fontFamily: S.bebas, fontSize: 18, color: energy[m] >= 50 ? S.white : '#555', letterSpacing: '0.05em' }}>{STRENGTH_DATA[m][zones[m]].name}</span>
+            <div key={m} style={{ padding: '8px 0', borderBottom: `1px solid ${S.rule}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, letterSpacing: '0.15em' }}>{MODE_LABELS[m]}</span>
+              <span style={{ fontFamily: S.bebas, fontSize: 18, color: energy[m] >= 50 ? S.black : S.mid, letterSpacing: '0.05em' }}>{STRENGTH_DATA[m][zones[m]].name}</span>
             </div>
           ))}
-          <Label dark>Your Domain / Audience</Label>
-          <P dark style={{ fontSize: 14, marginBottom: 8 }}>What field, industry, or type of person does your wiring run best in service of?</P>
+          <Label>Your Domain / Audience</Label>
+          <P style={{ fontSize: 14, marginBottom: 8 }}>What field, industry, or type of person does your wiring run best in service of?</P>
           <input
             value={abilityDomain}
             onChange={e => setAbilityDomain(e.target.value)}
             placeholder="e.g. early-stage founders, DTC brands, product teams..."
             style={{
-              width: '100%', padding: '14px 16px', background: '#111', border: '1px solid #2a2a2a',
-              color: S.white, fontFamily: S.cormorant, fontSize: 16, outline: 'none',
+              width: '100%', padding: '14px 16px', background: S.white, border: `1px solid ${S.rule}`,
+              color: S.black, fontFamily: S.cormorant, fontSize: 16, outline: 'none',
               boxSizing: 'border-box', letterSpacing: '0.02em',
             }}
           />
           {assembled && (
             <>
-              <Label dark>Your Unique Ability</Label>
-              <Pull dark>{assembled}</Pull>
-              <P dark style={{ fontSize: 13, color: S.onDarkDim }}>If it sounds generic, the domain is too broad. Sharpen the audience until the sentence has teeth.</P>
+              <Label>Your Unique Ability</Label>
+              <Pull>{assembled}</Pull>
+              <P style={{ fontSize: 13, color: S.mid }}>If it sounds generic, the domain is too broad. Sharpen the audience until the sentence has teeth.</P>
             </>
           )}
         </>);
       }
 
-      case 'shadows': return W('Watch For', false, <>
-        {Eye('WATCH FOR', false)}{H('WHERE YOUR WIRING CAN WORK AGAINST YOU', false)}
+      case 'shadows': return W('Watch For', <>
+        {Eye('WATCH FOR')}{H('WHERE YOUR WIRING CAN WORK AGAINST YOU')}
         {modes.map(m => (
           <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '14px 20px', margin: '12px 0' }}>
             <div style={{ fontFamily: S.bebas, fontSize: 18, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
@@ -249,34 +260,34 @@ export default function ResultsManual({ results, onBack, onTool }) {
         ))}
       </>);
 
-      case 'danger': return W('Friction Points', true, <>
-        {Eye('FRICTION POINTS', true)}{H('CONDITIONS THAT WORK AGAINST YOU', true)}
-        <P dark>Knowing these is intelligence, not weakness.</P>
+      case 'danger': return W('Friction Points', <>
+        {Eye('FRICTION POINTS')}{H('CONDITIONS THAT WORK AGAINST YOU')}
+        <P>Knowing these is intelligence, not weakness.</P>
         {modes.map(m => {
           const isHigh = zones[m] === 'initiate';
           return (
-            <div key={m} style={{ borderLeft: '4px solid #444', padding: '14px 20px', margin: '12px 0' }}>
-              <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.white, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#aaa', margin: 0, lineHeight: 1.65 }}>{isHigh ? DANGER_ZONES[m].high : DANGER_ZONES[m].low}</p>
+            <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '14px 20px', margin: '12px 0' }}>
+              <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
+              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', margin: 0, lineHeight: 1.65 }}>{isHigh ? DANGER_ZONES[m].high : DANGER_ZONES[m].low}</p>
             </div>
           );
         })}
       </>);
 
-      case 'success': return W('Your Success', false, <>
-        {Eye('WHAT SUCCESS LOOKS LIKE', false)}{H('YOUR VERSION.', false)}
+      case 'success': return W('Your Success', <>
+        {Eye('WHAT SUCCESS LOOKS LIKE')}{H('YOUR VERSION.')}
         <Pull>{domData.success}</Pull>
         <P>That's what your wiring optimizes for. Build toward it deliberately, not accidentally.</P>
       </>);
 
-      case 'procrastination': return W('Procrastination', true, <>
-        {Eye('WHY YOU PROCRASTINATE', true)}{H("IT'S NEVER LAZINESS", true)}
-        <P dark>{domData.procrastination}</P>
-        <Pull dark>Ask: what am I trying to avoid? Name it. Resistance dissolves once you see it clearly.</Pull>
+      case 'procrastination': return W('Procrastination', <>
+        {Eye('WHY YOU PROCRASTINATE')}{H("IT'S NEVER LAZINESS")}
+        <P>{domData.procrastination}</P>
+        <Pull>Ask: what am I trying to avoid? Name it. Resistance dissolves once you see it clearly.</Pull>
       </>);
 
-      case 'reset': return W('Reset Protocol', false, <>
-        {Eye('RESET PROTOCOL', false)}{H('HOW TO GET BACK ONLINE', false)}
+      case 'reset': return W('Reset Protocol', <>
+        {Eye('RESET PROTOCOL')}{H('HOW TO GET BACK ONLINE')}
         <div style={{ border: `1px solid ${S.rule}`, overflow: 'hidden', margin: '16px 0' }}>
           <div style={{ background: S.black, color: S.white, padding: '12px 20px', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em' }}>60-SECOND RESET</div>
           {['Stop everything completely.', 'One slow breath. Nose in, mouth out.', 'Notice: body tight? Scattered? Heavy?', domData.reset, 'Do just that one thing.'].map((s, i) => (
@@ -288,24 +299,24 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </div>
       </>);
 
-      case 'daily': return W('Daily Rules', true, <>
-        {Eye('DAILY OPERATING RULES', true)}{H('BASELINE CONDITIONS', true)}
-        <P dark>Treat these like maintenance, not motivation.</P>
-        <Label dark>Morning</Label>
-        <Item dark>Move before you open the phone. Even 10 minutes.</Item>
-        <Item dark>One clear intention. Not a list. One thing.</Item>
-        <Item dark>First 2 hours: deep creative or strategic work only.</Item>
-        <Label dark>During the Day</Label>
-        <Item dark>45-90 minute timed blocks. Real break after.</Item>
-        <Item dark>Stuck? Move your body. Walk. Stretch. It resets the chemistry.</Item>
-        <Item dark>Create something. Even small. Creation is fuel.</Item>
-        <Label dark>End of Day</Label>
-        <Item dark>What gave you energy? Do more of that.</Item>
-        <Item dark>What drained you? Reduce or eliminate tomorrow.</Item>
+      case 'daily': return W('Daily Rules', <>
+        {Eye('DAILY OPERATING RULES')}{H('BASELINE CONDITIONS')}
+        <P>Treat these like maintenance, not motivation.</P>
+        <Label>Morning</Label>
+        <Item>Move before you open the phone. Even 10 minutes.</Item>
+        <Item>One clear intention. Not a list. One thing.</Item>
+        <Item>First 2 hours: deep creative or strategic work only.</Item>
+        <Label>During the Day</Label>
+        <Item>45-90 minute timed blocks. Real break after.</Item>
+        <Item>Stuck? Move your body. Walk. Stretch. It resets the chemistry.</Item>
+        <Item>Create something. Even small. Creation is fuel.</Item>
+        <Label>End of Day</Label>
+        <Item>What gave you energy? Do more of that.</Item>
+        <Item>What drained you? Reduce or eliminate tomorrow.</Item>
       </>);
 
-      case 'comms': return W('Communication', false, <>
-        {Eye('COMMUNICATION GUIDE', false)}{H('WHAT OTHERS SHOULD KNOW ABOUT YOU', false)}
+      case 'comms': return W('Communication', <>
+        {Eye('COMMUNICATION GUIDE')}{H('WHAT OTHERS SHOULD KNOW ABOUT YOU')}
         {modes.map(m => (
           <div key={m} style={{ padding: '16px 0', borderBottom: `1px solid ${S.rule}` }}>
             <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em', color: S.mid, marginBottom: 6 }}>{MODE_LABELS[m]} ({strengths[m].name})</div>
@@ -314,13 +325,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
         ))}
       </>);
 
-      case 'stress': return W('Under Stress', true, <>
-        {Eye('UNDER STRESS', true)}{H('WHAT HAPPENS WHEN YOUR TANK IS LOW', true)}
-        <P dark>When you feel irritable, scattered, or emotionally reactive with no clear reason, check the environment before blaming yourself.</P>
+      case 'stress': return W('Under Stress', <>
+        {Eye('UNDER STRESS')}{H('WHAT HAPPENS WHEN YOUR TANK IS LOW')}
+        <P>When you feel irritable, scattered, or emotionally reactive with no clear reason, check the environment before blaming yourself.</P>
         {[...modes].sort((a, b) => energy[b] - energy[a]).slice(0, 2).map(m => (
           <div key={m} style={{ marginBottom: 20 }}>
-            <Label dark>{MODE_LABELS[m]}: Under Stress</Label>
-            <P dark style={{ fontSize: 15 }}>{strengths[m].underStress}</P>
+            <Label>{MODE_LABELS[m]}: Under Stress</Label>
+            <P style={{ fontSize: 15 }}>{strengths[m].underStress}</P>
           </div>
         ))}
       </>);
@@ -340,25 +351,25 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </div>
         );
         return (
-          <SectionPage label="Career Map" dark={false}>
-            <div style={{ background: S.black, padding: '40px 24px', textAlign: 'center' }}>
+          <SectionPage label="Career Map">
+            <div style={{ background: '#f0ede8', padding: '32px 24px', textAlign: 'center', borderBottom: `1px solid ${S.rule}` }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: 28, flexWrap: 'wrap' }}>
                 {[['#16a34a', fit1.length, 'STRONG FIT'], ['#ca8a04', fit2.length, 'POSSIBLE FIT'], ['#dc2626', fit3.length, 'POOR FIT']].map(([color, count, label]) => (
-                  <div key={label} style={{ textAlign: 'center' }}><div style={{ fontFamily: S.bebas, fontSize: 32, color }}>{count}</div><div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim }}>{label}</div></div>
+                  <div key={label} style={{ textAlign: 'center' }}><div style={{ fontFamily: S.bebas, fontSize: 32, color }}>{count}</div><div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid }}>{label}</div></div>
                 ))}
               </div>
             </div>
             <div style={{ padding: '32px 24px', maxWidth: 1100, margin: '0 auto' }}>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 24 }}>
                 {[['all','All '+scored.length],['t1','Strong Fit'],['t2','Possible Fit'],['t3','Poor Fit'],['owner','Owner / Founder'],['creative','Creative'],['teaching','Teaching'],['consulting','Consulting'],['analytical','Analytical'],['hands-on','Hands-On']].map(([k, label]) => (
-                  <button key={k} onClick={() => setCareerFilter(k)} style={{ padding: '6px 14px', borderRadius: 100, fontFamily: S.mono, fontSize: 12, fontWeight: 600, border: `1.5px solid ${careerFilter === k ? '#E8541A' : S.rule}`, background: careerFilter === k ? '#E8541A' : '#fff', color: careerFilter === k ? '#fff' : '#3d3d3d', cursor: 'pointer', transition: 'all 0.15s' }}>{label}</button>
+                  <button key={k} onClick={() => setCareerFilter(k)} style={{ padding: '6px 14px', borderRadius: 100, fontFamily: S.mono, fontSize: 12, fontWeight: 600, border: `1.5px solid ${careerFilter === k ? '#E8541A' : S.rule}`, background: careerFilter === k ? '#E8541A' : S.white, color: careerFilter === k ? '#fff' : '#3d3d3d', cursor: 'pointer', transition: 'all 0.15s' }}>{label}</button>
                 ))}
               </div>
               {[{key:'t1',label:'Strong Fit Careers',items:filtered.filter(c=>c.fit===1)},{key:'t2',label:'Possible Fit Careers',items:filtered.filter(c=>c.fit===2)},{key:'t3',label:'Poor Fit / Caution',items:filtered.filter(c=>c.fit===3)}].filter(g=>g.items.length>0).map(group => (
                 <Collapsible key={group.key} sectionKey={`career-${group.key}`} label={`${group.label} (${group.items.length})`} defaultOpen={group.key === 't1'}>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14, marginTop: 8 }}>
                     {group.items.map(c => (
-                      <div key={c.id} style={{ background: '#fff', border: `1.5px solid ${S.rule}`, borderRadius: 10, padding: 20, display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                      <div key={c.id} style={{ background: S.white, border: `1.5px solid ${S.rule}`, borderRadius: 10, padding: 20, display: 'flex', flexDirection: 'column', position: 'relative' }}>
                         <div style={{ position: 'absolute', top: 14, right: 14, fontSize: 9, fontFamily: S.mono, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: fitBg(c.fit), color: fitColor(c.fit) }}>{fitLabel(c.fit)}</div>
                         <div style={{ fontSize: 20, marginBottom: 10 }}>{c.icon}</div>
                         <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: S.mid, marginBottom: 3 }}>{c.category}</div>
@@ -393,7 +404,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
         );
       }
 
-      // ── Tools ────────────────────────────────────────────────────────────
+      // ── Tools ─────────────────────────────────────────────────────
 
       case 'stress-check': {
         const symptomMap = [
@@ -417,8 +428,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
           QS: { cause: "Your Change dimension is being violated. You're either trapped in too much routine or being forced into too much chaos.", fix: "If you're a Stabilizer: identify one thing you can keep the same. If you're an Innovator: start something new, even tiny." },
           IMP: { cause: "Your Execution dimension is being violated. You're stuck in abstract thinking when you need to build, or forced into physical work when you think best in your head.", fix: "If you're an Envisioner: ask for time to conceptualize. If you're a Builder: go make something with your hands." },
         };
-        return W('Stress Detector', false, <>
-          {Eye('STRESS DETECTOR', false)}{H("WHAT'S DRAINING YOU?", false)}
+        return W('Stress Detector', <>
+          {Eye('STRESS DETECTOR')}{H("WHAT'S DRAINING YOU?")}
           <P>Select symptoms you're experiencing. The tool identifies which dimension is being violated.</P>
           <div style={{ marginTop: 12 }}>
             {symptomMap.map(s => (
@@ -429,12 +440,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
             ))}
           </div>
           {topViolated.length > 0 && (
-            <div style={{ marginTop: 24, padding: 20, background: S.black, borderRadius: 10, color: S.white }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim, marginBottom: 8 }}>DIAGNOSIS</div>
+            <div style={{ marginTop: 24, padding: 20, background: '#f0ede8', border: `1px solid ${S.rule}` }}>
+              <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 8 }}>DIAGNOSIS</div>
               <div style={{ fontFamily: S.bebas, fontSize: 22, marginBottom: 10 }}>{MODE_LABELS[topViolated[0][0]]} Stress</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.onDarkBody, lineHeight: 1.65, marginBottom: 12, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].cause}</p>
-              <div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim, marginBottom: 6 }}>YOUR FIX</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.onDarkBody, lineHeight: 1.65, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].fix}</p>
+              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.65, marginBottom: 12, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].cause}</p>
+              <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>YOUR FIX</div>
+              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.65, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].fix}</p>
             </div>
           )}
         </>);
@@ -466,15 +477,15 @@ export default function ResultsManual({ results, onBack, onTool }) {
           return Math.round((ms / tot) * 100) / 10;
         };
         const sc = calcResult();
-        return W('Decision Filter', false, <>
-          {Eye('DECISION FILTER', false)}{H('SHOULD YOU TAKE THIS?', false)}
+        return W('Decision Filter', <>
+          {Eye('DECISION FILTER')}{H('SHOULD YOU TAKE THIS?')}
           <P>Evaluating a job, project, or life change? Answer 6 questions to score it against your wiring.</P>
           {dqs.map(q => (
             <div key={q.id} style={{ marginTop: 16 }}>
               <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 6 }}>{q.label}</div>
               <div style={{ display: 'flex', gap: 6 }}>
                 {q.options.map((opt, oi) => (
-                  <button key={oi} onClick={() => setDecisionAnswers(prev => ({ ...prev, [q.id]: oi }))} style={{ flex: 1, padding: '8px 6px', borderRadius: 6, fontFamily: S.cormorant, fontSize: 13, border: `1.5px solid ${decisionAnswers[q.id] === oi ? S.black : S.rule}`, background: decisionAnswers[q.id] === oi ? S.black : '#fff', color: decisionAnswers[q.id] === oi ? S.white : S.black, cursor: 'pointer' }}>{opt}</button>
+                  <button key={oi} onClick={() => setDecisionAnswers(prev => ({ ...prev, [q.id]: oi }))} style={{ flex: 1, padding: '8px 6px', borderRadius: 6, fontFamily: S.cormorant, fontSize: 13, border: `1.5px solid ${decisionAnswers[q.id] === oi ? S.black : S.rule}`, background: decisionAnswers[q.id] === oi ? S.black : S.white, color: decisionAnswers[q.id] === oi ? S.white : S.black, cursor: 'pointer' }}>{opt}</button>
                 ))}
               </div>
             </div>
@@ -509,8 +520,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
         const typeLabels = { same: 'SAME APPROACH', balance: 'NATURAL BALANCE', tension: 'TENSION POINT' };
         const typeColors = { same: '#16a34a', balance: '#ca8a04', tension: '#dc2626' };
         const typeBgs   = { same: '#dcfce7', balance: '#fef9c3', tension: '#fee2e2' };
-        return W('Compatibility', false, <>
-          {Eye('COMPATIBILITY', false)}{H('HOW DO YOUR WIRINGS INTERACT?', false)}
+        return W('Compatibility', <>
+          {Eye('COMPATIBILITY')}{H('HOW DO YOUR WIRINGS INTERACT?')}
           <P>Select where the other person sits on each spectrum to see where you'll sync, balance, or clash.</P>
           <div style={{ marginTop: 16 }}>
             {modes.map(m => (
@@ -518,18 +529,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
                 <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 8 }}>{MODE_LABELS[m]}</div>
                 <div style={{ display: 'flex', gap: 6 }}>
                   {(['counteract', 'accommodate', 'initiate']).map(zone => (
-                    <button key={zone} onClick={() => setPartnerZones(prev => ({ ...prev, [m]: zone }))} style={{
-                      flex: 1, padding: '10px 6px', borderRadius: 6, cursor: 'pointer', textAlign: 'center',
-                      border: `1.5px solid ${partnerZones[m] === zone ? S.black : S.rule}`,
-                      background: partnerZones[m] === zone ? S.black : '#fff',
-                      color: partnerZones[m] === zone ? S.white : S.black,
-                    }}>
+                    <button key={zone} onClick={() => setPartnerZones(prev => ({ ...prev, [m]: zone }))} style={{ flex: 1, padding: '10px 6px', borderRadius: 6, cursor: 'pointer', textAlign: 'center', border: `1.5px solid ${partnerZones[m] === zone ? S.black : S.rule}`, background: partnerZones[m] === zone ? S.black : S.white, color: partnerZones[m] === zone ? S.white : S.black }}>
                       <div style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', marginBottom: 2 }}>{ZONE_LABELS[zone]}</div>
                       <div style={{ fontFamily: S.cormorant, fontSize: 12, fontStyle: 'italic', color: partnerZones[m] === zone ? '#aaa' : S.mid }}>{ZONE_DESCS[zone]}</div>
                     </button>
                   ))}
                 </div>
-                <div style={{ fontFamily: S.mono, fontSize: 9, color: '#aaa', marginTop: 4 }}>You: {ZONE_LABELS[zones[m]]}</div>
+                <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginTop: 4 }}>You: {ZONE_LABELS[zones[m]]}</div>
               </div>
             ))}
           </div>
@@ -547,12 +553,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </>);
       }
 
-      case 'share': return W('Share Card', false, <>
-        {Eye('HOW TO WORK WITH ME', false)}{H('SEND THIS TO YOUR TEAM', false)}
+      case 'share': return W('Share Card', <>
+        {Eye('HOW TO WORK WITH ME')}{H('SEND THIS TO YOUR TEAM')}
         <div style={{ marginTop: 16, border: `2px solid ${S.black}`, borderRadius: 10, overflow: 'hidden' }}>
           <div style={{ background: S.black, padding: '20px', color: S.white }}>
             <div style={{ fontFamily: S.bebas, fontSize: 24 }}>HOW TO WORK WITH ME</div>
-            <div style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, marginTop: 4 }}>Profile: {mo}</div>
+            <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', marginTop: 4 }}>Profile: {mo}</div>
           </div>
           <div style={{ padding: 20 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 10 }}>MY STRENGTHS</div>
@@ -563,8 +569,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </div>
       </>);
 
-      case 'checkin': return W('Weekly Check-In', false, <>
-        {Eye('WEEKLY CHECK-IN', false)}{H('HOW ALIGNED WAS YOUR WEEK?', false)}
+      case 'checkin': return W('Weekly Check-In', <>
+        {Eye('WEEKLY CHECK-IN')}{H('HOW ALIGNED WAS YOUR WEEK?')}
         {!weeklySubmitted ? (<>
           {modes.map(m => (
             <div key={m} style={{ marginTop: 16 }}>
@@ -573,7 +579,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
                 <span style={{ fontFamily: S.bebas, fontSize: 20 }}>{weeklyRatings[m]}/5</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                {[1,2,3,4,5].map(v => <button key={v} onClick={() => setWeeklyRatings(prev => ({ ...prev, [m]: v }))} style={{ flex: 1, padding: '8px 0', borderRadius: 4, fontFamily: S.bebas, fontSize: 16, border: `1.5px solid ${weeklyRatings[m] === v ? S.black : S.rule}`, background: weeklyRatings[m] === v ? S.black : '#fff', color: weeklyRatings[m] === v ? S.white : S.black, cursor: 'pointer' }}>{v}</button>)}
+                {[1,2,3,4,5].map(v => <button key={v} onClick={() => setWeeklyRatings(prev => ({ ...prev, [m]: v }))} style={{ flex: 1, padding: '8px 0', borderRadius: 4, fontFamily: S.bebas, fontSize: 16, border: `1.5px solid ${weeklyRatings[m] === v ? S.black : S.rule}`, background: weeklyRatings[m] === v ? S.black : S.white, color: weeklyRatings[m] === v ? S.white : S.black, cursor: 'pointer' }}>{v}</button>)}
               </div>
             </div>
           ))}
@@ -596,15 +602,15 @@ export default function ResultsManual({ results, onBack, onTool }) {
         })()}
       </>);
 
-      case 'prompt': return W('Daily Prompt', false, <>
-        {Eye('DAILY PROMPT', false)}{H('YOUR WIRING, APPLIED TODAY', false)}
+      case 'prompt': return W('Daily Prompt', <>
+        {Eye('DAILY PROMPT')}{H('YOUR WIRING, APPLIED TODAY')}
         {!dailyDismissed ? (
-          <div style={{ marginTop: 16, padding: 28, background: S.black, borderRadius: 10, textAlign: 'center' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim, marginBottom: 12 }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
-            <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 3vw, 24px)', fontStyle: 'italic', color: S.white, lineHeight: 1.4, maxWidth: 380, margin: '0 auto' }}>
+          <div style={{ marginTop: 16, padding: 28, background: '#f0ede8', border: `1px solid ${S.rule}`, textAlign: 'center' }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 12 }}>{new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</div>
+            <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 3vw, 24px)', fontStyle: 'italic', color: S.black, lineHeight: 1.4, maxWidth: 380, margin: '0 auto' }}>
               {dominant === 'FF' ? "Your brain runs on information. What's one thing worth researching today?" : dominant === 'FT' ? "Your brain runs on order. What's one open loop you can close today?" : dominant === 'QS' ? "Your brain runs on novelty. What's one new thing you can start today?" : "Your brain runs on making. What's one thing you can build with your hands today?"}
             </div>
-            <button onClick={() => setDailyDismissed(true)} style={{ marginTop: 16, padding: '6px 20px', fontFamily: S.mono, fontSize: 10, background: 'transparent', border: '1px solid #444', color: '#999', borderRadius: 4, cursor: 'pointer' }}>GOT IT</button>
+            <button onClick={() => setDailyDismissed(true)} style={{ marginTop: 16, padding: '6px 20px', fontFamily: S.mono, fontSize: 10, background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, borderRadius: 4, cursor: 'pointer' }}>GOT IT</button>
           </div>
         ) : (
           <div style={{ marginTop: 16, textAlign: 'center' }}>
@@ -617,15 +623,15 @@ export default function ResultsManual({ results, onBack, onTool }) {
       case 'career-detail': {
         const scored = CAREER_ARCHETYPES.map(c => ({ ...c, ...scoreCareerFit(c, zones, energy, dominant) })).sort((a, b) => b.alignment - a.alignment);
         const top5 = scored.filter(c => !c.deadIf).slice(0, 5);
-        return W('Career Deep-Dive', false, <>
-          {Eye('CAREER DEEP-DIVE', false)}{H('YOUR TOP 5, EXPANDED', false)}
+        return W('Career Deep-Dive', <>
+          {Eye('CAREER DEEP-DIVE')}{H('YOUR TOP 5, EXPANDED')}
           {top5.map((c, ci) => {
             const modeMatches = modes.filter(m => c.idealZones[m].includes(zones[m]));
             const modeClashes = modes.filter(m => !c.idealZones[m].includes(zones[m]) && zones[m] !== 'accommodate');
             return (
               <div key={c.id} style={{ marginTop: ci > 0 ? 20 : 12, border: `1.5px solid ${S.rule}`, borderRadius: 10, overflow: 'hidden' }}>
-                <div style={{ background: S.black, padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div><div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim }}>{c.category}</div><div style={{ fontFamily: S.bebas, fontSize: 20, color: S.white, marginTop: 2 }}>{c.icon} {c.title}</div></div>
+                <div style={{ background: '#f0ede8', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1px solid ${S.rule}` }}>
+                  <div><div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid }}>{c.category}</div><div style={{ fontFamily: S.bebas, fontSize: 20, color: S.black, marginTop: 2 }}>{c.icon} {c.title}</div></div>
                   <div style={{ fontFamily: S.bebas, fontSize: 24, color: '#16a34a' }}>{Math.round(c.alignment * 10)}%</div>
                 </div>
                 <div style={{ padding: 20 }}>
@@ -645,11 +651,11 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </>);
       }
 
-      case 'explain-results': return W('Explain My Results', false, <>
-        {Eye('EXPLAIN MY RESULTS', false)}{H('FOR SOMEONE WHO HASN\'T TAKEN THE TEST', false)}
+      case 'explain-results': return W('Explain My Results', <>
+        {Eye('EXPLAIN MY RESULTS')}{H('FOR SOMEONE WHO HASN\'T TAKEN THE TEST')}
         <div style={{ marginTop: 16, border: `2px solid ${S.black}`, borderRadius: 10, overflow: 'hidden' }}>
           <div style={{ background: S.black, padding: '24px 20px', color: S.white, textAlign: 'center' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 9, color: S.onDarkDim }}>BEHAVIORAL PROFILE</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, color: '#888' }}>BEHAVIORAL PROFILE</div>
             <div style={{ fontFamily: S.bebas, fontSize: 40, marginTop: 6, letterSpacing: 3 }}>{mo}</div>
           </div>
           <div style={{ padding: 20 }}>
@@ -667,7 +673,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
     }
   };
 
-  // ── Card click handler ──────────────────────────────────────────────────
+  // ── Card click handler ───────────────────────────────────────────
 
   const handleCard = (card) => {
     if (card.external && onTool) { onTool(card.key); return; }
@@ -675,97 +681,94 @@ export default function ResultsManual({ results, onBack, onTool }) {
     window.scrollTo(0, 0);
   };
 
-  // ── Active section view ─────────────────────────────────────────────────
-
   if (activeSection) return renderSection(activeSection);
 
-  // ── Home dashboard ──────────────────────────────────────────────────────
+  // ── Home dashboard ───────────────────────────────────────────────
 
-  const CardBtn = ({ card }) => (
-    <button onClick={() => handleCard(card)} style={{ background: 'transparent', border: 'none', borderRight: '1px solid #1a1a1a', borderBottom: '1px solid #1a1a1a', padding: '22px 20px', textAlign: 'left', cursor: 'pointer', transition: 'background 0.12s', position: 'relative' }}
-      onMouseEnter={e => e.currentTarget.style.background = '#111'}
+  const NavRow = ({ card }) => (
+    <button
+      onClick={() => handleCard(card)}
+      style={{ display: 'flex', alignItems: 'center', gap: 16, width: '100%', padding: '16px 0', background: 'transparent', border: 'none', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
+      onMouseEnter={e => e.currentTarget.style.background = '#f0ede8'}
       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
     >
-      {card.num && <div style={{ fontFamily: S.bebas, fontSize: 11, color: '#2a2a2a', letterSpacing: '0.1em', marginBottom: 8 }}>{card.num}</div>}
-      {card.external && <div style={{ position: 'absolute', top: 12, right: 12, fontFamily: S.mono, fontSize: 9, color: '#2a2a2a' }}>↗</div>}
-      <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.white, letterSpacing: '0.04em', marginBottom: 5, lineHeight: 1.1 }}>{card.label}</div>
-      <div style={{ fontFamily: S.cormorant, fontSize: 13, color: '#444', fontStyle: 'italic', lineHeight: 1.5 }}>{card.desc}</div>
+      {card.num && (
+        <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, width: 28, textAlign: 'right', flexShrink: 0 }}>{card.num}</span>
+      )}
+      {!card.num && <span style={{ width: 28, flexShrink: 0 }} />}
+      <div style={{ flex: 1 }}>
+        <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.03em', lineHeight: 1.1, marginBottom: 2 }}>{card.label}</div>
+        <div style={{ fontFamily: S.cormorant, fontSize: 13, color: S.mid, fontStyle: 'italic' }}>{card.desc}</div>
+      </div>
+      <span style={{ fontFamily: S.mono, fontSize: 12, color: S.mid, flexShrink: 0 }}>{card.external ? '↗' : '→'}</span>
     </button>
   );
 
   return (
-    <div style={{ minHeight: '100vh', background: S.black }}>
+    <div style={{ minHeight: '100vh', background: S.white }}>
+
       {/* Nav */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: '1px solid #1a1a1a' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}` }}>
         {onBack
-          ? <button onClick={onBack} style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>← DASHBOARD</button>
+          ? <button onClick={onBack} style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>← DASHBOARD</button>
           : <div />}
-        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.onDarkDim }}>PERSONAL OPERATING MANUAL</div>
+        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid }}>PERSONAL OPERATING MANUAL</div>
         <div style={{ width: 80 }} />
       </div>
 
-      {/* Hero — brain profile */}
-      <div style={{ maxWidth: 640, margin: '0 auto', width: '100%', padding: isMobile ? '32px 16px 32px' : '56px 24px 48px', borderBottom: '1px solid #1a1a1a' }}>
+      {/* Hero */}
+      <div style={{ maxWidth: 680, margin: '0 auto', width: '100%', padding: isMobile ? '32px 24px 32px' : '56px 24px 48px', borderBottom: `1px solid ${S.rule}` }}>
+        <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.3em', color: S.mid, marginBottom: 16 }}>YOUR BRAIN RUNS ON</div>
+        <div style={{ fontFamily: S.bebas, fontSize: 'clamp(44px, 9vw, 80px)', color: S.black, lineHeight: 0.9, marginBottom: 24 }}>{MODE_LABELS[dominant].toUpperCase()}</div>
+        <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 2vw, 19px)', lineHeight: 1.7, color: '#333', maxWidth: 520, marginBottom: 0 }}>{domData.how}</p>
 
-        {/* Lead */}
-        <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.3em', color: S.white, marginBottom: 16 }}>YOUR BRAIN RUNS ON</div>
-        <div style={{ fontFamily: S.bebas, fontSize: 'clamp(44px, 9vw, 80px)', color: S.white, lineHeight: 0.9, marginBottom: 24 }}>{MODE_LABELS[dominant].toUpperCase()}</div>
-        <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 2vw, 19px)', lineHeight: 1.7, color: S.white, maxWidth: 520, marginBottom: 0 }}>{domData.how}</p>
+        <div style={{ height: 1, background: S.rule, margin: '36px 0' }} />
 
-        {/* Divider */}
-        <div style={{ height: 1, background: '#1a1a1a', margin: '36px 0' }} />
-
-        {/* 4 behavioral rows */}
         <div>
           {modes.map(m => (
-            <div key={m} style={{ display: 'flex', gap: 20, padding: '14px 0', borderBottom: '1px solid #111', alignItems: 'flex-start' }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.white, width: 88, flexShrink: 0, paddingTop: 3 }}>{MODE_LABELS[m].toUpperCase()}</div>
-              <div style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: S.white }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
+            <div key={m} style={{ display: 'flex', gap: 20, padding: '14px 0', borderBottom: `1px solid ${S.rule}`, alignItems: 'flex-start' }}>
+              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, width: 88, flexShrink: 0, paddingTop: 3 }}>{MODE_LABELS[m].toUpperCase()}</div>
+              <div style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#333' }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
             </div>
           ))}
         </div>
 
-        {/* Divider */}
-        <div style={{ height: 1, background: '#1a1a1a', margin: '32px 0' }} />
+        <div style={{ height: 1, background: S.rule, margin: '32px 0' }} />
 
-        {/* Two poles */}
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 24 }}>
           <div>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.white, marginBottom: 10 }}>STRONGEST SIGNAL</div>
-            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.white, letterSpacing: '0.02em' }}>{MODE_LABELS[dominant]}</div>
-            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: S.white, marginTop: 4 }}>{strengths[dominant].name}</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>STRONGEST SIGNAL</div>
+            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, letterSpacing: '0.02em' }}>{MODE_LABELS[dominant]}</div>
+            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', marginTop: 4 }}>{strengths[dominant].name}</div>
           </div>
           <div>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.white, marginBottom: 10 }}>BIGGEST FRICTION</div>
-            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.white, letterSpacing: '0.02em' }}>{MODE_LABELS[resistance]}</div>
-            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: S.white, marginTop: 4 }}>{strengths[resistance].name} · {RESISTANCE_NARRATIVES[resistance].split('.')[0]}.</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>BIGGEST FRICTION</div>
+            <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, letterSpacing: '0.02em' }}>{MODE_LABELS[resistance]}</div>
+            <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', marginTop: 4 }}>{strengths[resistance].name} · {RESISTANCE_NARRATIVES[resistance].split('.')[0]}.</div>
           </div>
         </div>
-
       </div>
 
-      {/* Report grid — grouped */}
-      {[
-        { label: 'YOUR WIRING',                keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
-        { label: 'HOW YOU OPERATE',            keys: ['danger','success','procrastination','reset','daily'] },
-        { label: 'WORKING WITH OTHERS / CAREER', keys: ['comms','stress','careers'] },
-      ].map(group => {
-        const cards = REPORT_CARDS.filter(c => group.keys.includes(c.key));
-        return (
-          <div key={group.label} style={{ maxWidth: 900, margin: '0 auto', padding: isMobile ? '32px 16px 0' : '48px 24px 0' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.onDarkDim, marginBottom: 16 }}>{group.label}</div>
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fill, minmax(220px, 1fr))', border: '1px solid #1a1a1a' }}>
-              {cards.map(card => <CardBtn key={card.key} card={card} />)}
+      {/* Report navigation — grouped list rows */}
+      <div style={{ maxWidth: 680, margin: '0 auto' }}>
+        {REPORT_GROUPS.map(group => {
+          const cards = REPORT_CARDS.filter(c => group.keys.includes(c.key));
+          return (
+            <div key={group.label} style={{ padding: isMobile ? '0 24px' : '0 24px' }}>
+              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
+                {group.label}
+              </div>
+              {cards.map(card => <NavRow key={card.key} card={card} />)}
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
 
-      {/* Tools grid */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: isMobile ? '32px 16px 64px' : '48px 24px 80px' }}>
-        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.onDarkDim, marginBottom: 16 }}>TOOLS</div>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(auto-fill, minmax(220px, 1fr))', border: '1px solid #1a1a1a' }}>
-          {TOOL_CARDS.map(card => <CardBtn key={card.key} card={card} />)}
+        {/* Tools */}
+        <div style={{ padding: isMobile ? '0 24px 64px' : '0 24px 80px' }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, padding: '28px 0 12px', borderBottom: `1px solid ${S.rule}` }}>
+            TOOLS
+          </div>
+          {TOOL_CARDS.map(card => <NavRow key={card.key} card={card} />)}
         </div>
       </div>
     </div>
