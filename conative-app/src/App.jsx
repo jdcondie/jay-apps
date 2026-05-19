@@ -160,15 +160,28 @@ export default function App() {
     );
   }
 
-  // ── Not authenticated ──────────────────────────────────────
+  // ── Not authenticated — guest quiz allowed, results just don't save to DB ──
   if (!user) {
     return (
       <>
         <style>{fonts}</style>
-        {phase === 'auth'
-          ? <AuthScreen />
-          : <IntroScreen onStart={() => setPhase('auth')} onSignIn={() => setPhase('auth')} />
-        }
+        {phase === 'auth' && <AuthScreen />}
+        {phase === 'intro' && <IntroScreen onStart={() => setPhase('quiz')} onSignIn={() => setPhase('auth')} />}
+        {phase === 'quiz' && (
+          <QuizFlow
+            question={QUESTIONS[qIndex]}
+            index={qIndex}
+            total={QUESTIONS.length}
+            response={responses[QUESTIONS[qIndex].id]}
+            onSelect={handleSelect}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        )}
+        {phase === 'processing' && <ProcessingScreen onDone={handleProcessingDone} />}
+        {phase === 'results' && currentResults && (
+          <ResultsManual results={currentResults} onBack={null} onTool={setPhase} />
+        )}
       </>
     );
   }
