@@ -10,10 +10,10 @@ export default function ProcessingScreen({ onDone }) {
     return () => { timers.forEach(clearTimeout); clearTimeout(done); };
   }, []);
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: S.black, padding: 48 }}>
-      <div style={{ fontFamily: S.bebas, fontSize: "clamp(36px, 6vw, 64px)", color: S.white, marginBottom: 48, textAlign: "center" }}>ANALYZING YOUR WIRING</div>
+    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: S.white, padding: 48 }}>
+      <div style={{ fontFamily: S.bebas, fontSize: "clamp(36px, 6vw, 64px)", color: S.black, marginBottom: 48, textAlign: "center" }}>ANALYZING YOUR WIRING</div>
       {steps.map((s, i) => (
-        <div key={i} style={{ fontFamily: S.mono, fontSize: 12, letterSpacing: "0.1em", color: step > i ? S.white : "#333", marginBottom: 12, transition: "color 0.4s" }}>
+        <div key={i} style={{ fontFamily: S.mono, fontSize: 12, letterSpacing: "0.1em", color: step > i ? S.black : S.mid, marginBottom: 12, transition: "color 0.4s" }}>
           {step > i ? "✓" : "○"} {s}
         </div>
       ))}
