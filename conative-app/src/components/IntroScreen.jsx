@@ -10,37 +10,66 @@ const SAMPLE_DOM    = 'QS';
 const SAMPLE_RES    = 'FT';
 
 const SECTIONS = [
-  { num: '01', group: 'WIRING',  label: 'What This Means',  reveals: 'Your behavioral profile in plain language — no jargon.', sample: '"Your brain runs on novelty. Starting things is where your energy lives."' },
-  { num: '02', group: 'WIRING',  label: 'Your Scores',      reveals: 'Your exact position on all four behavioral dimensions.', sample: 'Change 72%  ·  Info 38%  ·  Execution 25%  ·  Org 18%' },
-  { num: '03', group: 'WIRING',  label: 'Your Game',        reveals: 'The specific environment you\'re wired to win in.', sample: '"You win in markets moving fast enough that speed beats polish."' },
-  { num: '04', group: 'WIRING',  label: 'Your Strengths',   reveals: 'What you naturally do better than most people.', sample: 'Four dimensions. Four distinct strengths — each with a shadow side.' },
-  { num: '05', group: 'WIRING',  label: 'Top Strengths',    reveals: 'Your two highest-energy abilities, fully expanded.', sample: 'Innovate + Explain — the combination that makes your output hard to replicate.' },
-  { num: '06', group: 'WIRING',  label: 'Unique Ability',   reveals: 'A one-sentence statement of your professional superpower.', sample: '[Top wiring] + [second wiring] applied to [your specific domain].' },
+  { num: '01', group: 'WIRING',  label: 'What This Means',  reveals: 'Your behavioral profile in plain language.', sample: '"Your brain runs on novelty. Starting things is where your energy lives."' },
+  { num: '02', group: 'WIRING',  label: 'Your Scores',      reveals: 'Your exact position on all four dimensions.', sample: 'Change 72%  ·  Info 38%  ·  Execution 25%  ·  Org 18%' },
+  { num: '03', group: 'WIRING',  label: 'Your Game',        reveals: 'The environment you\'re wired to win in.', sample: '"You win in markets moving fast enough that speed beats polish."' },
+  { num: '04', group: 'WIRING',  label: 'Your Strengths',   reveals: 'What you naturally do better than most.', sample: 'Four dimensions. Four distinct strengths — each with a shadow side.' },
+  { num: '05', group: 'WIRING',  label: 'Top Strengths',    reveals: 'Your two highest-energy abilities, expanded.', sample: 'Innovate + Explain — the combination that makes your output hard to replicate.' },
+  { num: '06', group: 'WIRING',  label: 'Unique Ability',   reveals: 'A one-sentence statement of your superpower.', sample: '[Top wiring] + [second wiring] applied to [your specific domain].' },
   { num: '07', group: 'WIRING',  label: 'Watch For',        reveals: 'Where your strengths flip into liabilities.', sample: '"You start 10 things and finish 3. The other 7 drain the people around you."' },
   { num: '08', group: 'OPERATE', label: 'Friction Points',  reveals: 'The conditions that quietly drain your energy.', sample: '"Being forced to maintain something you\'ve already solved in your head."' },
-  { num: '09', group: 'OPERATE', label: 'Your Success',     reveals: 'What your wiring is actually built to optimize for.', sample: '"You are wired to launch, iterate, and improve — not to maintain."' },
+  { num: '09', group: 'OPERATE', label: 'Your Success',     reveals: 'What your wiring is actually built to optimize.', sample: '"You are wired to launch, iterate, and improve — not to maintain."' },
   { num: '10', group: 'OPERATE', label: 'Procrastination',  reveals: 'Why you really stall — and what breaks it.', sample: '"You\'re not lazy. You\'re bored. The task is already solved in your head."' },
-  { num: '11', group: 'OPERATE', label: 'Reset Protocol',   reveals: 'A 5-step sequence personalized to your dominant mode.', sample: 'Not generic advice. Built specifically for how your brain restarts.' },
-  { num: '12', group: 'OPERATE', label: 'Daily Rules',      reveals: 'Baseline conditions that keep you consistently at your best.', sample: 'Three rules for morning, mid-day, and wind-down.' },
+  { num: '11', group: 'OPERATE', label: 'Reset Protocol',   reveals: 'A 5-step sequence for your dominant mode.', sample: 'Not generic advice. Built for how your brain specifically restarts.' },
+  { num: '12', group: 'OPERATE', label: 'Daily Rules',      reveals: 'Baseline conditions to stay consistently sharp.', sample: 'Three rules for morning, mid-day, and wind-down.' },
   { num: '13', group: 'CAREER',  label: 'Communication',    reveals: 'What people who work with you need to know.', sample: '"Give me the problem, not the process. I\'ll figure out the path."' },
   { num: '14', group: 'CAREER',  label: 'Under Stress',     reveals: 'How your behavior shifts when your tank is empty.', sample: '"You scatter. Seven new ideas surface and none of them get finished."' },
   { num: '15', group: 'CAREER',  label: 'Career Map',       reveals: '78 roles scored and ranked by wiring alignment.', sample: 'Startup Founder 94%  ·  Project Manager 31%  ·  Researcher 48%' },
-  { num: '16', group: 'CAREER',  label: 'Money Patterns',   reveals: 'How your wiring shapes financial decisions and risk tolerance.', sample: '"Wired for risk. Early mover. Watch: over-concentration in speculative bets."' },
+  { num: '16', group: 'CAREER',  label: 'Money Patterns',   reveals: 'How your wiring shapes financial decisions.', sample: '"Wired for risk. Early mover. Watch: over-concentration in speculative bets."' },
 ];
 
-const GROUP_LABELS = {
-  WIRING:  'YOUR WIRING',
-  OPERATE: 'HOW YOU OPERATE',
-  CAREER:  'WORKING WITH OTHERS / CAREER',
-};
+function BrainDiagram({ color = '#0a0a0a', size = 360 }) {
+  const h = Math.round(size * 220 / 280);
+  return (
+    <svg width={size} height={h} viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* LEFT HEMISPHERE outer */}
+      <path
+        d="M140 30 C125 24,98 20,74 26 C50 32,28 50,20 76 C12 102,16 132,28 156 C40 178,62 192,86 200 C108 207,128 208,140 206"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+      {/* LEFT gyri */}
+      <path d="M68 46 C56 60,50 78,58 95" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M44 88 C38 104,40 122,50 136" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M98 36 C88 52,86 70,95 86" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M72 140 C66 152,68 166,78 174" stroke={color} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.45"/>
+      <path d="M32 140 C30 152,34 164,44 172" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+      <path d="M114 132 C108 144,110 156,120 163" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+
+      {/* RIGHT HEMISPHERE outer */}
+      <path
+        d="M140 30 C155 24,182 20,206 26 C230 32,252 50,260 76 C268 102,264 132,252 156 C240 178,218 192,194 200 C172 207,152 208,140 206"
+        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+      {/* RIGHT gyri */}
+      <path d="M212 46 C224 60,230 78,222 95" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M236 88 C242 104,240 122,230 136" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M182 36 C192 52,194 70,185 86" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
+      <path d="M208 140 C214 152,212 166,202 174" stroke={color} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.45"/>
+      <path d="M248 140 C250 152,246 164,236 172" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+      <path d="M166 132 C172 144,170 156,160 163" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+
+      {/* Center divide */}
+      <line x1="140" y1="10" x2="140" y2="30" stroke={color} strokeWidth="1.0" opacity="0.35"/>
+      <line x1="140" y1="30" x2="140" y2="206" stroke={color} strokeWidth="0.75" strokeDasharray="4 3" opacity="0.3"/>
+    </svg>
+  );
+}
 
 export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, onStartFresh, onTestFill }) {
   const isMobile = useIsMobile();
   const total = 36;
   const pct = resumeData ? Math.round((resumeData.qIndex / total) * 100) : 0;
 
-  const previewRef   = useRef(null);
-  const [previewVisible, setPreviewVisible] = useState(false);
+  const profileRef  = useRef(null);
+  const [profileVisible, setProfileVisible] = useState(false);
   const [displayEnergy, setDisplayEnergy]   = useState({ FF: 0, FT: 0, QS: 0, IMP: 0 });
   const [cardsVisible, setCardsVisible]     = useState(0);
   const [scrolled, setScrolled]             = useState(false);
@@ -53,15 +82,15 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setPreviewVisible(true); },
+      ([entry]) => { if (entry.isIntersecting) setProfileVisible(true); },
       { threshold: 0.05 }
     );
-    if (previewRef.current) observer.observe(previewRef.current);
+    if (profileRef.current) observer.observe(profileRef.current);
     return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!previewVisible) return;
+    if (!profileVisible) return;
     const duration = 1400;
     const start = Date.now();
     const tick = () => {
@@ -76,10 +105,10 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
       if (p < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
-  }, [previewVisible]);
+  }, [profileVisible]);
 
   useEffect(() => {
-    if (!previewVisible) return;
+    if (!profileVisible) return;
     let i = 0;
     const interval = setInterval(() => {
       i++;
@@ -87,196 +116,352 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
       if (i >= SECTIONS.length) clearInterval(interval);
     }, 55);
     return () => clearInterval(interval);
-  }, [previewVisible]);
+  }, [profileVisible]);
 
-  const scrollToPreview = () => {
-    previewRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollToProfile = () => profileRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+  const pad = isMobile ? '72px 24px' : '96px 8%';
 
   return (
     <div style={{ background: S.white, minHeight: '100vh' }}>
 
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '48px 24px', textAlign: 'center', position: 'relative' }}>
+      {onSignIn && (
+        <button onClick={onSignIn} style={{ position: 'fixed', top: 20, right: 24, zIndex: 100, fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>
+          SIGN IN
+        </button>
+      )}
 
-        {onSignIn && (
-          <button onClick={onSignIn} style={{ position: 'absolute', top: 20, right: 24, fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>
-            SIGN IN
-          </button>
-        )}
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <div style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: isMobile ? '88px 24px 72px' : '80px 8% 60px',
+        gap: isMobile ? 48 : 64,
+        position: 'relative',
+      }}>
 
-        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: S.mid, marginBottom: 32 }}>
-          BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
-        </div>
-        <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(60px, 14vw, 140px)', lineHeight: 0.9, color: S.black, letterSpacing: -1, margin: 0 }}>
-          HOW ARE<br />YOU WIRED?
-        </h1>
-        <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2.5vw, 22px)', fontStyle: 'italic', color: '#333', maxWidth: 480, marginTop: 24, lineHeight: 1.55 }}>
-          No right answers. Discover how you instinctively take action, where your energy goes, and how to use your wiring instead of fighting it.
-        </p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.mid, maxWidth: 420, marginTop: 16, lineHeight: 1.6 }}>
-          Four options per question. Pick the one you'd most likely take, then the one you'd least likely take. Go with your gut.
-        </p>
+        {/* Left: text + CTA */}
+        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 480, textAlign: isMobile ? 'center' : 'left' }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: S.mid, marginBottom: 28 }}>
+            BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
+          </div>
+          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 112px)', lineHeight: 0.88, color: S.black, letterSpacing: -1, margin: '0 0 28px' }}>
+            HOW ARE<br />YOU WIRED?
+          </h1>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 21px)', fontStyle: 'italic', color: '#444', lineHeight: 1.65, margin: '0 0 12px', maxWidth: 420 }}>
+            No right answers. Discover how you instinctively take action, where your energy goes, and how to use your wiring instead of fighting it.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.mid, lineHeight: 1.6, margin: '0 0 40px', maxWidth: 380 }}>
+            Four options per question. Pick the one you'd most likely take, then the one you'd least likely take. Go with your gut.
+          </p>
 
-        {resumeData ? (
-          <div style={{ marginTop: 48, width: '100%', maxWidth: 360 }}>
-            <div style={{ border: `1px solid ${S.rule}`, padding: '20px 24px', marginBottom: 12, textAlign: 'left' }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
-              <div style={{ height: 2, background: S.rule, marginBottom: 10 }}>
-                <div style={{ height: '100%', background: S.black, width: `${pct}%` }} />
+          {resumeData ? (
+            <div style={{ maxWidth: 340 }}>
+              <div style={{ border: `1px solid ${S.rule}`, padding: '20px 24px', marginBottom: 12 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
+                <div style={{ height: 2, background: S.rule, marginBottom: 10 }}>
+                  <div style={{ height: '100%', background: S.black, width: `${pct}%` }} />
+                </div>
+                <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 16 }}>
+                  QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
+                </div>
+                <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '14px', cursor: 'pointer' }}>
+                  RESUME
+                </button>
               </div>
-              <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 16 }}>
-                QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
-              </div>
-              <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '14px', cursor: 'pointer' }}>
-                RESUME
+              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '12px', cursor: 'pointer' }}>
+                START OVER INSTEAD
               </button>
             </div>
-            <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '12px', cursor: 'pointer' }}>
-              START OVER INSTEAD
-            </button>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'center' : 'flex-start', gap: 12 }}>
+              <button
+                onClick={onStart}
+                style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '16px 56px', cursor: 'pointer', transition: 'transform 0.15s' }}
+                onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
+                onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+              >
+                BEGIN ASSESSMENT
+              </button>
+              <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
+            </div>
+          )}
+        </div>
+
+        {/* Right: brain diagram */}
+        {!isMobile && (
+          <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32 }}>
+            <BrainDiagram color={S.black} size={320} />
+            {/* 4-dimension mini legend */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 40px' }}>
+              {MODES.map(m => (
+                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <div style={{ width: 20, height: 1, background: S.rule, flexShrink: 0 }} />
+                  <div>
+                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid }}>{LABELS[m].toUpperCase()}</div>
+                    <div style={{ fontFamily: S.cormorant, fontSize: 11, fontStyle: 'italic', color: '#888' }}>{SAMPLE_NAMES[m]}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        ) : (
-          <>
-            <button onClick={onStart} style={{ marginTop: 48, fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '16px 56px', cursor: 'pointer', transition: 'transform 0.15s' }}
-              onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
-              onMouseLeave={e => e.target.style.transform = 'scale(1)'}
-            >
-              BEGIN ASSESSMENT
-            </button>
-            <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginTop: 16, letterSpacing: '0.15em' }}>~8 MINUTES</div>
-          </>
         )}
 
-        {/* Scroll prompt */}
+        {/* Scroll indicator */}
         <button
-          onClick={scrollToPreview}
+          onClick={scrollToProfile}
           style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
         >
           <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: S.mid }}>SEE WHAT YOU'LL DISCOVER</span>
-          <span style={{ display: 'block', width: 1, height: 32, background: S.rule, animation: 'none', position: 'relative', overflow: 'hidden' }}>
+          <span style={{ display: 'block', width: 1, height: 32, background: S.rule, position: 'relative', overflow: 'hidden' }}>
             <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: S.mid, animation: 'scrollLine 1.6s ease-in-out infinite' }} />
           </span>
         </button>
-        <style>{`
-          @keyframes scrollLine {
-            0%   { height: 0; top: 0; }
-            50%  { height: 100%; top: 0; }
-            100% { height: 0; top: 100%; }
-          }
-        `}</style>
       </div>
 
-      {/* ── Report Preview ──────────────────────────────────────── */}
-      <div ref={previewRef} style={{ borderTop: `1px solid ${S.rule}`, background: S.white }}>
-
-        {/* Preview header */}
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: isMobile ? '56px 24px 40px' : '72px 40px 48px' }}>
-          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 12 }}>SAMPLE REPORT</div>
-          <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 52px)', color: S.black, margin: '0 0 12px', lineHeight: 1 }}>
-            HERE'S WHAT YOU'LL GET
-          </h2>
-          <p style={{ fontFamily: S.cormorant, fontSize: 17, color: '#555', lineHeight: 1.65, maxWidth: 480, margin: 0, fontStyle: 'italic' }}>
-            16 sections built from your four behavioral dimensions. Below is a real example for a Quick Start–dominant profile.
-          </p>
+      {/* ── STATS STRIP ─────────────────────────────────────── */}
+      <div style={{ background: S.black, padding: '28px 8%' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: isMobile ? 'space-between' : 'space-around', gap: 0, flexWrap: 'wrap' }}>
+          {[
+            { num: '36', label: 'QUESTIONS' },
+            { num: '16', label: 'REPORT SECTIONS' },
+            { num: '4', label: 'DIMENSIONS' },
+            { num: '~8', label: 'MINUTES' },
+          ].map(({ num, label }) => (
+            <div key={label} style={{ textAlign: 'center', padding: '4px 12px' }}>
+              <div style={{ fontFamily: S.bebas, fontSize: isMobile ? 28 : 38, color: S.white, lineHeight: 1 }}>{num}</div>
+              <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.22em', color: '#555' }}>{label}</div>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* Sample dimension grid */}
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: isMobile ? '0 24px 48px' : '0 40px 56px' }}>
-          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 20 }}>SAMPLE BEHAVIORAL PROFILE</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: S.rule, border: `1px solid ${S.rule}`, maxWidth: 680 }}>
+      {/* ── DARK: Animated profile visualization ─────────────── */}
+      <div ref={profileRef} style={{ background: S.black, padding: pad, borderTop: '1px solid #111' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
+          <div style={{ marginBottom: isMobile ? 48 : 0 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 16 }}>YOUR BEHAVIORAL FINGERPRINT</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(36px, 5vw, 58px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
+              FOUR NUMBERS.<br />ONE COMPLETE<br />PICTURE.
+            </h2>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 340 }}>
+              Each dimension reveals a different way your mind works under pressure. Together, they explain why you thrive in some environments and drain fast in others.
+            </p>
+          </div>
+          <div>
             {MODES.map(m => {
               const isDom = m === SAMPLE_DOM;
-              const isRes = m === SAMPLE_RES;
               return (
-                <div key={m} style={{ background: isDom ? '#f0ede8' : S.white, padding: isMobile ? '20px 16px' : '24px 28px', position: 'relative' }}>
+                <div key={m} style={{ marginBottom: 28 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid }}>{LABELS[m].toUpperCase()}</div>
-                    <div style={{ fontFamily: S.bebas, fontSize: 32, color: SAMPLE_ENERGY[m] >= 55 ? S.black : S.mid, lineHeight: 1, transition: 'color 0.3s' }}>
-                      {displayEnergy[m]}%
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
+                      <span style={{ fontFamily: S.bebas, fontSize: 17, color: isDom ? S.white : S.onDarkDim, letterSpacing: '0.04em' }}>{LABELS[m]}</span>
+                      {isDom && <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.16em', color: '#555' }}>DOMINANT</span>}
                     </div>
+                    <span style={{ fontFamily: S.bebas, fontSize: 26, color: isDom ? S.white : '#555', lineHeight: 1 }}>{displayEnergy[m]}%</span>
                   </div>
-                  <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, letterSpacing: '0.02em', marginBottom: 10 }}>{SAMPLE_NAMES[m]}</div>
-                  <div style={{ height: 3, background: S.rule, borderRadius: 2, overflow: 'hidden' }}>
+                  <div style={{ height: 2, background: '#1a1a1a', borderRadius: 1 }}>
                     <div style={{
-                      height: '100%', borderRadius: 2,
-                      background: isDom ? S.black : S.mid,
-                      width: previewVisible ? `${SAMPLE_ENERGY[m]}%` : '0%',
+                      height: '100%', borderRadius: 1,
+                      background: isDom ? S.white : '#3a3a3a',
+                      width: profileVisible ? `${SAMPLE_ENERGY[m]}%` : '0%',
                       transition: 'width 1.4s cubic-bezier(0.4, 0, 0.2, 1)',
                     }} />
                   </div>
-                  {isDom && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>DOMINANT</div>}
-                  {isRes && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>LOWEST ENERGY</div>}
                 </div>
               );
             })}
+            <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.2em', color: '#333', marginTop: 20, borderTop: '1px solid #1a1a1a', paddingTop: 14 }}>
+              SAMPLE PROFILE — QUICK START DOMINANT
+            </div>
           </div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: S.mid, marginTop: 16, maxWidth: 500 }}>
-            Your four numbers generate everything below. All 16 sections are personalized to your exact profile.
-          </p>
         </div>
+      </div>
 
-        {/* Section cards by group */}
-        {['WIRING', 'OPERATE', 'CAREER'].map(group => {
-          const groupSections = SECTIONS.filter(s => s.group === group);
-          return (
-            <div key={group} style={{ borderTop: `1px solid ${S.rule}`, padding: isMobile ? '40px 24px' : '48px 40px', maxWidth: 900, margin: '0 auto' }}>
-              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 28 }}>
-                {GROUP_LABELS[group]}
+      {/* ── FEATURE 1: Wiring (light) ─────────────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          {/* Mock report card */}
+          <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>01 — WHAT THIS MEANS</div>
+            <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
+            <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, letterSpacing: '0.03em', marginBottom: 14, lineHeight: 1.05 }}>QUICK START — DOMINANT</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', color: '#444', lineHeight: 1.75, margin: '0 0 18px' }}>
+              "Your brain runs on novelty. Starting things is where your energy lives. You don't avoid finishing because you're lazy — you avoid it because your brain has already moved to the next problem."
+            </p>
+            <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 14, display: 'flex', gap: 16 }}>
+              {['QS — Innovate', 'FF — Explain'].map(tag => (
+                <div key={tag} style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.14em', color: S.mid, background: '#f0ede8', padding: '5px 9px' }}>{tag}</div>
+              ))}
+            </div>
+          </div>
+          {/* Text */}
+          <div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 16 }}>SECTION 01</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
+              FINALLY, AN<br />EXPLANATION<br />THAT FITS.
+            </h2>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 340 }}>
+              Not a personality type. Not a horoscope. A plain-language breakdown of how your brain actually works — and why certain environments bring out your best.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── FEATURE 2: Career Map (dark) ──────────────────────── */}
+      <div style={{ background: '#0f0f0f', padding: pad, borderTop: '1px solid #111' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          {/* Text */}
+          <div style={{ marginBottom: isMobile ? 48 : 0 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 16 }}>SECTION 15</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
+              78 ROLES.<br />RANKED BY<br />YOUR WIRING.
+            </h2>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 340 }}>
+              Every role scored against your exact behavioral profile. See which careers are built for how you work — and which ones will quietly drain you by Wednesday.
+            </p>
+          </div>
+          {/* Mock career card */}
+          <div style={{ border: '1px solid #1e1e1e', padding: isMobile ? '24px 20px' : '32px 36px', background: '#111' }}>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: '#444', marginBottom: 6 }}>15 — CAREER MAP</div>
+            <div style={{ height: 1, background: '#1e1e1e', marginBottom: 20 }} />
+            {[
+              { role: 'Startup Founder', pct: 94, hot: true },
+              { role: 'Creative Director', pct: 82, hot: true },
+              { role: 'Product Manager', pct: 71, hot: false },
+              { role: 'Researcher', pct: 48, hot: false },
+              { role: 'Project Manager', pct: 31, hot: false },
+              { role: 'Accountant', pct: 18, hot: false },
+            ].map(({ role, pct: p, hot }) => (
+              <div key={role} style={{ marginBottom: 14 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+                  <span style={{ fontFamily: S.bebas, fontSize: 15, color: hot ? S.white : '#555', letterSpacing: '0.04em' }}>{role}</span>
+                  <span style={{ fontFamily: S.mono, fontSize: 9, color: hot ? S.onDarkBody : '#333' }}>{p}%</span>
+                </div>
+                <div style={{ height: 2, background: '#1e1e1e' }}>
+                  <div style={{ height: '100%', background: hot ? '#f5f3ef' : '#2a2a2a', width: `${p}%` }} />
+                </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 0 : 1, background: isMobile ? 'transparent' : S.rule, border: isMobile ? 'none' : `1px solid ${S.rule}` }}>
-                {groupSections.map((section, i) => {
-                  const globalIndex = SECTIONS.indexOf(section);
-                  const visible = globalIndex < cardsVisible;
-                  return (
-                    <div
-                      key={section.num}
-                      style={{
-                        background: S.white,
-                        padding: isMobile ? '20px 0' : '22px 24px',
-                        borderBottom: isMobile ? `1px solid ${S.rule}` : 'none',
-                        opacity: visible ? 1 : 0,
-                        transform: visible ? 'translateY(0)' : 'translateY(14px)',
-                        transition: 'opacity 0.4s ease, transform 0.4s ease',
-                      }}
-                    >
-                      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                        <div style={{ fontFamily: S.mono, fontSize: 10, color: S.rule, flexShrink: 0, marginTop: 3, minWidth: 22, textAlign: 'right' }}>{section.num}</div>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.02em', marginBottom: 3, lineHeight: 1.1 }}>{section.label}</div>
-                          <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.12em', color: S.mid, marginBottom: 8 }}>{section.reveals}</div>
-                          <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#666', lineHeight: 1.55 }}>{section.sample}</div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── FEATURE 3: Reset Protocol (light) ────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+          {/* Mock protocol card */}
+          <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>11 — RESET PROTOCOL</div>
+            <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
+            <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, marginBottom: 18, lineHeight: 1.1 }}>WHEN YOU'RE STUCK, DO THIS.</div>
+            {[
+              'Stop adding inputs. You have enough information.',
+              'Pick one decision — not the biggest, just the next.',
+              'Set a 25-minute window. Ship something small inside it.',
+              'Capture the 3 ideas that surfaced while you were stuck.',
+              'Move the body for 10 minutes. Your brain resets on motion.',
+            ].map((step, i) => (
+              <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 13, alignItems: 'flex-start' }}>
+                <div style={{ fontFamily: S.mono, fontSize: 9, color: S.rule, flexShrink: 0, paddingTop: 1, minWidth: 16 }}>0{i + 1}</div>
+                <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#444', lineHeight: 1.55 }}>{step}</div>
+              </div>
+            ))}
+          </div>
+          {/* Text */}
+          <div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 16 }}>SECTION 11</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
+              BUILT FOR HOW<br />YOUR BRAIN<br />RESTARTS.
+            </h2>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 340 }}>
+              Generic productivity advice doesn't account for wiring. Your reset protocol is built specifically for your dominant mode — steps that actually work for the way your mind moves.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* ── ALL 16 SECTIONS overview (dark) ───────────────────── */}
+      <div style={{ background: S.black, padding: pad, borderTop: '1px solid #111' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? 48 : 64 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 14 }}>THE COMPLETE REPORT</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(28px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>16 SECTIONS. ALL PERSONALIZED.</h2>
+          </div>
+
+          {['WIRING', 'OPERATE', 'CAREER'].map(group => {
+            const groupSections = SECTIONS.filter(s => s.group === group);
+            const groupLabel = { WIRING: 'YOUR WIRING', OPERATE: 'HOW YOU OPERATE', CAREER: 'WORKING WITH OTHERS / CAREER' }[group];
+            return (
+              <div key={group} style={{ marginBottom: 40 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.25em', color: '#333', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #1a1a1a' }}>
+                  {groupLabel}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 0 }}>
+                  {groupSections.map((section, i) => {
+                    const globalIndex = SECTIONS.indexOf(section);
+                    const visible = globalIndex < cardsVisible;
+                    return (
+                      <div
+                        key={section.num}
+                        style={{
+                          padding: '14px 0',
+                          borderBottom: '1px solid #1a1a1a',
+                          paddingRight: (!isMobile && i % 2 === 0) ? 32 : 0,
+                          paddingLeft: (!isMobile && i % 2 === 1) ? 32 : 0,
+                          borderRight: (!isMobile && i % 2 === 0) ? '1px solid #1a1a1a' : 'none',
+                          opacity: visible ? 1 : 0,
+                          transform: visible ? 'translateY(0)' : 'translateY(10px)',
+                          transition: 'opacity 0.4s ease, transform 0.4s ease',
+                        }}
+                      >
+                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                          <div style={{ fontFamily: S.mono, fontSize: 9, color: '#2e2e2e', flexShrink: 0, minWidth: 22, textAlign: 'right', paddingTop: 2 }}>{section.num}</div>
+                          <div style={{ flex: 1 }}>
+                            <div style={{ fontFamily: S.bebas, fontSize: 15, color: S.white, letterSpacing: '0.03em', marginBottom: 3 }}>{section.label}</div>
+                            <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.12em', color: '#3a3a3a' }}>{section.reveals}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          );
-        })}
-
-        {/* Bottom CTA */}
-        <div style={{ borderTop: `1px solid ${S.rule}`, padding: isMobile ? '56px 24px 80px' : '72px 40px 96px', textAlign: 'center' }}>
-          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 20 }}>READY TO SEE YOURS?</div>
-          <h3 style={{ fontFamily: S.bebas, fontSize: 'clamp(28px, 4vw, 44px)', color: S.black, margin: '0 0 20px', lineHeight: 1 }}>
-            FIND OUT HOW YOU'RE WIRED
-          </h3>
-          <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', color: '#555', maxWidth: 400, margin: '0 auto 36px', lineHeight: 1.6 }}>
-            Eight minutes. 36 questions. A complete behavioral profile you'll actually use.
-          </p>
-          <button
-            onClick={onStart}
-            style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '16px 56px', cursor: 'pointer', transition: 'transform 0.15s' }}
-            onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
-            onMouseLeave={e => e.target.style.transform = 'scale(1)'}
-          >
-            BEGIN ASSESSMENT
-          </button>
-          <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginTop: 16, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
+            );
+          })}
         </div>
-
       </div>
+
+      {/* ── BOTTOM CTA ──────────────────────────────────────── */}
+      <div style={{ background: S.white, borderTop: `1px solid ${S.rule}`, padding: isMobile ? '72px 24px 96px' : '96px 40px 120px', textAlign: 'center' }}>
+        <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 20 }}>READY TO SEE YOURS?</div>
+        <h3 style={{ fontFamily: S.bebas, fontSize: 'clamp(40px, 6vw, 68px)', color: S.black, margin: '0 0 20px', lineHeight: 0.92 }}>
+          FIND OUT HOW<br />YOU'RE WIRED
+        </h3>
+        <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', maxWidth: 400, margin: '0 auto 40px', lineHeight: 1.65 }}>
+          Eight minutes. 36 questions. A complete behavioral profile you'll actually use.
+        </p>
+        <button
+          onClick={onStart}
+          style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '18px 64px', cursor: 'pointer', transition: 'transform 0.15s' }}
+          onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
+          onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+        >
+          BEGIN ASSESSMENT
+        </button>
+        <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginTop: 16, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
+      </div>
+
+      <style>{`
+        @keyframes scrollLine {
+          0%   { height: 0; top: 0; }
+          50%  { height: 100%; top: 0; }
+          100% { height: 0; top: 100%; }
+        }
+      `}</style>
 
       {onTestFill && (
         <button onClick={onTestFill} style={{ position: 'fixed', bottom: 20, right: 24, fontFamily: S.mono, fontSize: 9, letterSpacing: '0.12em', background: 'transparent', border: 'none', color: S.rule, cursor: 'pointer', padding: '8px 12px' }}>
