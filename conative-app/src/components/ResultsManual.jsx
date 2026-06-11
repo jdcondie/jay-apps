@@ -22,6 +22,7 @@ const REPORT_CARDS = [
   { key: 'comms',          num: '13', label: 'Communication',     desc: 'What others should know' },
   { key: 'stress',         num: '14', label: 'Under Stress',      desc: 'What happens when your tank is low' },
   { key: 'careers',        num: '15', label: 'Career Map',        desc: '78 roles ranked by wiring fit' },
+  { key: 'money',          num: '16', label: 'Money Patterns',    desc: 'How your wiring shapes financial decisions' },
 ];
 
 const TOOL_CARDS = [
@@ -37,12 +38,13 @@ const TOOL_CARDS = [
   { key: 'prompt',         label: 'Daily Prompt',        desc: 'Your wiring applied today' },
   { key: 'career-detail',  label: 'Career Deep-Dive',    desc: 'Your top 5 roles expanded' },
   { key: 'explain-results',label: 'Explain My Results',  desc: 'For someone who hasn\'t taken the test' },
+  { key: 'role-check',     label: 'Role Strain Check',   desc: 'See where your job fights your wiring' },
 ];
 
 const REPORT_GROUPS = [
   { id: 'wiring',  label: 'YOUR WIRING',                 keys: ['explain','scores','game','strengths','superpowers','ability','shadows'] },
   { id: 'operate', label: 'HOW YOU OPERATE',             keys: ['danger','success','procrastination','reset','daily'] },
-  { id: 'career',  label: 'WORKING WITH OTHERS / CAREER',keys: ['comms','stress','careers'] },
+  { id: 'career',  label: 'WORKING WITH OTHERS / CAREER',keys: ['comms','stress','careers','money'] },
 ];
 
 export default function ResultsManual({ results, onBack, onTool }) {
@@ -64,6 +66,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const [dailyDismissed, setDailyDismissed] = useState(false);
   const [expandedSections, setExpandedSections] = useState({});
   const [abilityDomain, setAbilityDomain] = useState('');
+  const [roleSliders, setRoleSliders] = useState({ FF: null, FT: null, QS: null, IMP: null });
 
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
   const goBack = () => { setActiveSection(null); window.scrollTo(0, 0); };
@@ -479,6 +482,133 @@ export default function ResultsManual({ results, onBack, onTool }) {
         );
       }
 
+      case 'money': {
+        const moneyData = {
+          FF: {
+            initiate: {
+              title: 'The Deep Researcher',
+              pattern: "You gather serious information before committing money. Deep due diligence before buying, investing, or starting anything significant.",
+              strength: "You rarely get caught off guard. You know what you're buying and why.",
+              watch: "Analysis paralysis. You can research yourself out of good opportunities while waiting for perfect information.",
+              rule: "Set a research deadline. When it hits, decide with what you have."
+            },
+            accommodate: {
+              title: 'The Balanced Analyst',
+              pattern: "You gather enough information to feel confident without over-researching. Reasonable depth, reasonable timing.",
+              strength: "Good balance between informed decisions and speed.",
+              watch: "You might not dig deep enough when the stakes are genuinely high.",
+              rule: "For high-stakes decisions, push your research one layer deeper than feels necessary."
+            },
+            counteract: {
+              title: 'The Fast Mover',
+              pattern: "You act on headlines and instinct. You don't need deep data to make a financial decision. You trust your read.",
+              strength: "You catch opportunities before others have finished researching.",
+              watch: "Underresearching before big bets. A little more digging saves expensive mistakes.",
+              rule: "Before any large commitment, force yourself to read one negative case first."
+            }
+          },
+          FT: {
+            initiate: {
+              title: 'The Systems Builder',
+              pattern: "You're a natural budgeter. Automatic transfers, detailed tracking, financial systems. If it isn't structured, it bothers you.",
+              strength: "Consistent. Disciplined. Doesn't leak money through inattention.",
+              watch: "Your love of systems can make you rigid. You might stick to a financial structure past its usefulness.",
+              rule: "Build the system, then audit the system every 90 days. Systems should evolve."
+            },
+            accommodate: {
+              title: 'The Flexible Planner',
+              pattern: "You use structure where it helps but adapt when circumstances change. Neither a strict budgeter nor totally improvising.",
+              strength: "Adjusts well when conditions shift. Not locked into a plan that no longer fits.",
+              watch: "Without intentional structure, things can get fuzzy and money can drift.",
+              rule: "A simple monthly review — even 15 minutes — keeps your finances from going sideways."
+            },
+            counteract: {
+              title: 'The Improviser',
+              pattern: "You resist tracking, budgets, and financial structure. You work better with simple rules than complex systems.",
+              strength: "Flexible. Not constrained by prior financial commitments. Adapts fast.",
+              watch: "Financial disorganization. Money leaks quietly when nothing is tracked.",
+              rule: "One simple rule beats a budget you'll abandon. Try: save the first 10%, spend the rest without guilt."
+            }
+          },
+          QS: {
+            initiate: {
+              title: 'The Risk Taker',
+              pattern: "Wired for financial risk. Comfortable with volatility, drawdowns, and uncertainty. You're often an early mover on new opportunities.",
+              strength: "Can tolerate the variance that produces outsized returns. Sees opportunity where others see chaos.",
+              watch: "Moving too fast before validating. Over-concentration in speculative bets that haven't been stress-tested.",
+              rule: "For every high-risk bet, define the maximum you can lose before you enter. Then honor it."
+            },
+            accommodate: {
+              title: 'The Calculated Bettor',
+              pattern: "You take calculated risks. Not reckless, not timid. You evaluate upside against downside before committing.",
+              strength: "Balanced risk/reward thinking. You can move when conditions are right.",
+              watch: "Occasional indecision when the risk/reward isn't clean. Analysis can stall momentum.",
+              rule: "If you can't explain why an opportunity is worth the risk in one sentence, pass."
+            },
+            counteract: {
+              title: 'The Stability Seeker',
+              pattern: "You value certainty in financial decisions. Guaranteed outcomes over potential upside. Volatility costs you sleep.",
+              strength: "You avoid speculative losses that wipe out others. Capital preservation is real wealth.",
+              watch: "Too conservative. Staying in cash or low-yield assets when compounding is the only path to real long-term wealth.",
+              rule: "Automate index fund contributions so you don't have to decide each time. Remove the emotion from the compounding."
+            }
+          },
+          IMP: {
+            initiate: {
+              title: 'The Tangibles Investor',
+              pattern: "You think in physical assets. Real estate, equipment, inventory, things you can touch and evaluate. Abstract financial products feel disconnected.",
+              strength: "Understands asset quality in ways abstract investors miss. Tends toward durable, real-world value.",
+              watch: "Illiquid assets and concentrated bets. Hard to rebalance when everything is in real estate or physical goods.",
+              rule: "Keep a cash reserve completely separate from your tangible assets. Real assets don't pay rent when you need fast liquidity."
+            },
+            accommodate: {
+              title: 'The Mixed Portfolio',
+              pattern: "You mix tangible and abstract assets without strong preference either way. Diversification comes naturally.",
+              strength: "Natural diversification instinct. Not over-concentrated in any one type.",
+              watch: "No strong anchor. Can drift without a clear financial identity or framework.",
+              rule: "Define which asset type you understand best and weight toward it intentionally."
+            },
+            counteract: {
+              title: 'The Abstract Investor',
+              pattern: "You're comfortable with financial instruments you can't touch. Stocks, funds, digital assets. Physical assets feel like too much overhead.",
+              strength: "High liquidity. Easy to diversify. Low friction to invest and rebalance.",
+              watch: "No tangible anchor can leave you exposed to correlated systemic risk.",
+              rule: "Consider one real-world asset — even a small REIT position — as a portfolio anchor."
+            }
+          }
+        };
+        return W('Money Patterns', <>
+          {Eye('MONEY PATTERNS')}{H('HOW YOUR WIRING SHAPES FINANCIAL DECISIONS')}
+          <P>Your four dimensions predict how you naturally handle money, risk, and financial decisions. These patterns run whether you're aware of them or not.</P>
+          {modes.map(m => {
+            const data = moneyData[m][zones[m]];
+            return (
+              <div key={m} style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '16px' : '20px 24px', marginBottom: -1 }}>
+                <div style={{ marginBottom: 10 }}>
+                  <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>{MODE_LABELS[m]} — {energy[m]}% energy</div>
+                  <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black }}>{data.title}</div>
+                </div>
+                <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#333', marginBottom: 14, maxWidth: 'none' }}>{data.pattern}</p>
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10, marginBottom: 12 }}>
+                  <div style={{ padding: '12px 14px', background: '#dcfce7', border: '1px solid #bbf7d0' }}>
+                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: '#15803d', marginBottom: 4 }}>STRENGTH</div>
+                    <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#166534', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.strength}</p>
+                  </div>
+                  <div style={{ padding: '12px 14px', background: '#fee2e2', border: '1px solid #fecaca' }}>
+                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: '#dc2626', marginBottom: 4 }}>WATCH FOR</div>
+                    <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#991b1b', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.watch}</p>
+                  </div>
+                </div>
+                <div style={{ padding: '10px 14px', background: '#f0ede8', borderLeft: `3px solid ${S.black}` }}>
+                  <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>YOUR RULE</div>
+                  <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.black, lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.rule}</p>
+                </div>
+              </div>
+            );
+          })}
+        </>);
+      }
+
       // ── Tools ─────────────────────────────────────────────────────
 
       case 'stress-check': {
@@ -743,6 +873,105 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </div>
         </div>
       </>);
+
+      case 'role-check': {
+        const demandMap = [10, 30, 50, 70, 90];
+        const options = ['Very Low', 'Low', 'Moderate', 'High', 'Very High'];
+        const allAnswered = modes.every(m => roleSliders[m] !== null);
+
+        const getGap = (m) => roleSliders[m] === null ? null : Math.abs(energy[m] - demandMap[roleSliders[m]]);
+        const getStrainInfo = (gap) => {
+          if (gap === null) return null;
+          if (gap >= 40) return { label: 'HIGH STRAIN', color: '#dc2626', bg: '#fee2e2' };
+          if (gap >= 20) return { label: 'FRICTION', color: '#ca8a04', bg: '#fef9c3' };
+          return { label: 'ALIGNED', color: '#16a34a', bg: '#dcfce7' };
+        };
+        const strainMsg = (m) => {
+          if (roleSliders[m] === null) return null;
+          const roleEnergy = demandMap[roleSliders[m]];
+          const gap = getGap(m);
+          if (gap < 20) return "Role demands match your natural energy. No meaningful friction here.";
+          const over = roleEnergy > energy[m];
+          const msgs = {
+            FF: {
+              over: "The role needs more research and documentation than you naturally want to do. You'll push through, but it costs energy.",
+              under: "You want to dig deeper than the role rewards. You'll feel like you're working with incomplete information."
+            },
+            FT: {
+              over: "The role's structure and process are more rigid than you work best in. You'll feel constrained.",
+              under: "The role needs more structure than you're wired to impose. Disorganization will creep in."
+            },
+            QS: {
+              over: "The role demands more change and novelty than your wiring is built for. Constant pivoting drains you.",
+              under: "The role is more stable and routine than your instinct for novelty. Boredom will set in."
+            },
+            IMP: {
+              over: "The role requires more physical or hands-on work than your wiring prefers. You'll tire of it faster than peers who are built for it.",
+              under: "The role is more abstract than you work best in. You need to build something tangible and the role won't give you that."
+            }
+          };
+          return msgs[m][over ? 'over' : 'under'];
+        };
+
+        return W('Role Strain Check', <>
+          {Eye('ROLE STRAIN CHECK')}{H('WHERE YOUR JOB FIGHTS YOUR WIRING')}
+          <P>Rate how much each dimension your current role demands. The gap between your natural energy and the role's demands is where conative strain lives — the invisible reason you feel drained in a job you're objectively good at.</P>
+          {modes.map(m => {
+            const gap = getGap(m);
+            const strainInfo = getStrainInfo(gap);
+            const msg = strainMsg(m);
+            return (
+              <div key={m} style={{ marginTop: 16, padding: isMobile ? '14px' : '18px 20px', border: `1px solid ${S.rule}` }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+                  <div>
+                    <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 2 }}>{MODE_LABELS[m]}</div>
+                    <div style={{ fontFamily: S.bebas, fontSize: 20, color: S.black }}>{strengths[m].name}</div>
+                  </div>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontFamily: S.mono, fontSize: 8, color: S.mid, marginBottom: 2 }}>YOUR ENERGY</div>
+                    <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black }}>{energy[m]}%</div>
+                  </div>
+                </div>
+                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.1em', color: S.mid, marginBottom: 8 }}>HOW MUCH DOES THIS ROLE DEMAND IT?</div>
+                <div style={{ display: 'flex', gap: 4 }}>
+                  {options.map((opt, oi) => (
+                    <button key={oi} onClick={() => setRoleSliders(prev => ({ ...prev, [m]: oi }))}
+                      style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.04em',
+                        border: `1.5px solid ${roleSliders[m] === oi ? S.black : S.rule}`,
+                        background: roleSliders[m] === oi ? S.black : 'transparent',
+                        color: roleSliders[m] === oi ? S.white : S.mid,
+                        cursor: 'pointer', textAlign: 'center' }}
+                    >{opt}</button>
+                  ))}
+                </div>
+                {strainInfo && (
+                  <div style={{ marginTop: 12, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                    <span style={{ fontFamily: S.mono, fontSize: 8, fontWeight: 700, padding: '3px 8px', background: strainInfo.bg, color: strainInfo.color, flexShrink: 0, whiteSpace: 'nowrap' }}>{strainInfo.label}</span>
+                    <span style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', lineHeight: 1.55 }}>{msg}</span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+          {allAnswered && (() => {
+            const avgGap = modes.reduce((sum, m) => sum + getGap(m), 0) / 4;
+            const overallColor = avgGap >= 35 ? '#dc2626' : avgGap >= 20 ? '#ca8a04' : '#16a34a';
+            const overallLabel = avgGap >= 35 ? 'HIGH CONATIVE STRAIN' : avgGap >= 20 ? 'MODERATE FRICTION' : 'STRONG ALIGNMENT';
+            const overallMsg = avgGap >= 35
+              ? "This role is fighting your wiring in multiple dimensions. That's not sustainable. The energy you spend compensating is energy you don't have for actual output."
+              : avgGap >= 20
+              ? "Some friction. You can manage it, but it's costing you. See if you can negotiate the role to play more to your strengths."
+              : "Your wiring fits this role reasonably well. If you feel drained, it's coming from something other than fundamental misalignment.";
+            return (
+              <div style={{ marginTop: 24, padding: '18px 20px', border: `2px solid ${overallColor}` }}>
+                <div style={{ fontFamily: S.mono, fontSize: 9, color: overallColor, marginBottom: 6 }}>OVERALL ASSESSMENT</div>
+                <div style={{ fontFamily: S.bebas, fontSize: 28, color: overallColor, marginBottom: 10 }}>{overallLabel}</div>
+                <p style={{ fontFamily: S.cormorant, fontSize: 15, lineHeight: 1.65, color: '#333', margin: 0, maxWidth: 'none' }}>{overallMsg}</p>
+              </div>
+            );
+          })()}
+        </>);
+      }
 
       default: return <SectionPage label="Not Found"><div style={{ padding: 40 }} /></SectionPage>;
     }
