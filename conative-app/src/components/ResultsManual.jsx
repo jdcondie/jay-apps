@@ -48,9 +48,7 @@ const REPORT_GROUPS = [
 ];
 
 export default function ResultsManual({ results, onBack, onTool }) {
-  const { scores, energy, zones, strengths, dominant, resistance, mo } = results;
-  const domData = DOMINANT_NARRATIVES[dominant];
-  const resData = RESISTANCE_NARRATIVES[resistance];
+  const { scores, energy: rawEnergy, zones: rawZones, mo } = results;
   const modes = ['FF', 'FT', 'QS', 'IMP'];
   const isMobile = useIsMobile();
 
@@ -67,9 +65,188 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const [expandedSections, setExpandedSections] = useState({});
   const [abilityDomain, setAbilityDomain] = useState('');
   const [roleSliders, setRoleSliders] = useState({ FF: null, FT: null, QS: null, IMP: null });
+  const [zoneOverrides, setZoneOverrides] = useState({});
+  const [feedback, setFeedback] = useState({ open: false, step: 'select', mode: null, answers: {} });
+
+  const zones = { ...rawZones, ...zoneOverrides };
+  const energy = { ...rawEnergy, ...Object.fromEntries(Object.entries(zoneOverrides).map(([m, z]) => [m, z === 'initiate' ? 75 : z === 'accommodate' ? 50 : 25])) };
+  const dominant = modes.reduce((a, b) => energy[a] >= energy[b] ? a : b);
+  const resistance = modes.reduce((a, b) => energy[a] <= energy[b] ? a : b);
+  const strengths = Object.fromEntries(modes.map(m => [m, STRENGTH_DATA[m][zones[m]]]));
+  const domData = DOMINANT_NARRATIVES[dominant];
+  const resData = RESISTANCE_NARRATIVES[resistance];
 
   const toggleSection = (key) => setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
-  const goBack = () => { setActiveSection(null); window.scrollTo(0, 0); };
+  const goBack = () => { setActiveSection(null); setFeedback({ open: false, step: 'select', mode: null, answers: {} }); window.scrollTo(0, 0); };
+
+  const RECAL_QS = {
+    FF: [
+      { id: 'ff1', text: "I need to fully understand something before I can act on it.", toward: 'initiate' },
+      { id: 'ff2', text: "I prefer to get the headline and move rather than dig into all the details.", toward: 'counteract' },
+      { id: 'ff3', text: "I research topics more deeply than most people think is necessary.", toward: 'initiate' },
+      { id: 'ff4', text: "Too much background information before a decision slows me down.", toward: 'counteract' },
+    ],
+    FT: [
+      { id: 'ft1', text: "I naturally build systems and routines for things I do repeatedly.", toward: 'initiate' },
+      { id: 'ft2', text: "I adapt my approach easily rather than sticking to one method.", toward: 'counteract' },
+      { id: 'ft3', text: "Incomplete or inconsistent workflows bother me more than most people.", toward: 'initiate' },
+      { id: 'ft4', text: "I'd rather find my own path to a result than follow a set process.", toward: 'counteract' },
+    ],
+    QS: [
+      { id: 'qs1', text: "Starting new things energizes me, even when old ones aren't finished.", toward: 'initiate' },
+      { id: 'qs2', text: "I work best in stable, predictable environments.", toward: 'counteract' },
+      { id: 'qs3', text: "I often act before having all the answers.", toward: 'initiate' },
+      { id: 'qs4', text: "Too much change or uncertainty drains me more than it energizes me.", toward: 'counteract' },
+    ],
+    IMP: [
+      { id: 'imp1', text: "I think more clearly when I can work with something tangible.", toward: 'initiate' },
+      { id: 'imp2', text: "I prefer to work with ideas and concepts rather than physical materials.", toward: 'counteract' },
+      { id: 'imp3', text: "I notice physical quality and craftsmanship more than most people do.", toward: 'initiate' },
+      { id: 'imp4', text: "I'm more energized by planning and thinking than by hands-on execution.", toward: 'counteract' },
+    ],
+  };
+
+  const calcNewZone = (mode, answers) => {
+    let i = 0, c = 0;
+    RECAL_QS[mode].forEach(q => {
+      const a = answers[q.id];
+      if (!a) return;
+      if (q.toward === 'initiate') i += a; else c += a;
+    });
+    const net = i - c;
+    return net >= 4 ? 'initiate' : net <= -4 ? 'counteract' : 'accommodate';
+  };
+
+  const TOOL_SECTION_KEYS = new Set(['stress-check', 'decision', 'compat', 'share', 'checkin', 'prompt', 'career-detail', 'explain-results', 'role-check']);
+
+  const FeedbackPanel = ({ sectionKey }) => {
+    if (TOOL_SECTION_KEYS.has(sectionKey)) return null;
+
+    if (!feedback.open) {
+      return (
+        <div style={{ borderTop: `1px solid ${S.rule}`, padding: '28px 0 8px', textAlign: 'center' }}>
+          <button
+            onClick={() => setFeedback({ open: true, step: 'select', mode: null, answers: {} })}
+            style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.12em', color: S.mid, background: 'transparent', border: `1px solid ${S.rule}`, padding: '8px 18px', cursor: 'pointer' }}
+          >
+            DOESN'T FEEL RIGHT?
+          </button>
+        </div>
+      );
+    }
+
+    if (feedback.step === 'select') {
+      return (
+        <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 28 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: S.mid, marginBottom: 16 }}>WHICH DIMENSION FEELS OFF?</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 16 }}>
+            {modes.map(m => (
+              <button key={m}
+                onClick={() => setFeedback(f => ({ ...f, step: 'questions', mode: m }))}
+                style={{ padding: '14px', border: `1px solid ${S.rule}`, background: 'transparent', cursor: 'pointer', textAlign: 'left', transition: 'background 0.1s' }}
+                onMouseEnter={e => e.currentTarget.style.background = '#f0ede8'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <div style={{ fontFamily: S.mono, fontSize: 8, color: S.mid, letterSpacing: '0.12em', marginBottom: 4 }}>{MODE_LABELS[m]}</div>
+                <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black }}>{strengths[m].name}</div>
+                {zoneOverrides[m] && <div style={{ fontFamily: S.mono, fontSize: 8, color: '#16a34a', marginTop: 4 }}>RECALIBRATED</div>}
+              </button>
+            ))}
+          </div>
+          <button
+            onClick={() => setFeedback({ open: false, step: 'select', mode: null, answers: {} })}
+            style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, background: 'transparent', border: 'none', cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            CANCEL
+          </button>
+        </div>
+      );
+    }
+
+    if (feedback.step === 'questions') {
+      const qs = RECAL_QS[feedback.mode];
+      const allAnswered = qs.every(q => feedback.answers[q.id] !== undefined);
+      return (
+        <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 28 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>{MODE_LABELS[feedback.mode]} — RECALIBRATION</div>
+          <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, marginBottom: 20 }}>4 QUESTIONS</div>
+          {qs.map((q, qi) => (
+            <div key={q.id} style={{ marginBottom: 20 }}>
+              <p style={{ fontFamily: S.cormorant, fontSize: 16, color: '#333', lineHeight: 1.55, marginBottom: 10, maxWidth: 'none' }}>{qi + 1}. {q.text}</p>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {[{ v: 1, label: 'NOT ME' }, { v: 2, label: '2' }, { v: 3, label: '3' }, { v: 4, label: '4' }, { v: 5, label: 'VERY ME' }].map(({ v, label }) => (
+                  <button key={v}
+                    onClick={() => setFeedback(f => ({ ...f, answers: { ...f.answers, [q.id]: v } }))}
+                    style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.04em',
+                      border: `1.5px solid ${feedback.answers[q.id] === v ? S.black : S.rule}`,
+                      background: feedback.answers[q.id] === v ? S.black : 'transparent',
+                      color: feedback.answers[q.id] === v ? S.white : S.mid,
+                      cursor: 'pointer', textAlign: 'center' }}
+                  >{label}</button>
+                ))}
+              </div>
+            </div>
+          ))}
+          <button
+            disabled={!allAnswered}
+            onClick={() => {
+              const newZone = calcNewZone(feedback.mode, feedback.answers);
+              if (newZone !== rawZones[feedback.mode]) {
+                setZoneOverrides(prev => ({ ...prev, [feedback.mode]: newZone }));
+              }
+              setFeedback(f => ({ ...f, step: 'done' }));
+            }}
+            style={{ width: '100%', padding: 12, fontFamily: S.bebas, fontSize: 16, letterSpacing: '0.05em', marginBottom: 8,
+              background: allAnswered ? S.black : '#eee', color: allAnswered ? S.white : '#aaa',
+              border: 'none', cursor: allAnswered ? 'pointer' : 'default' }}
+          >
+            UPDATE MY RESULTS
+          </button>
+          <button
+            onClick={() => setFeedback(f => ({ ...f, step: 'select', mode: null, answers: {} }))}
+            style={{ width: '100%', padding: '8px', fontFamily: S.mono, fontSize: 9, color: S.mid, background: 'transparent', border: `1px solid ${S.rule}`, cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            BACK
+          </button>
+        </div>
+      );
+    }
+
+    const appliedZone = zoneOverrides[feedback.mode] || rawZones[feedback.mode];
+    const changed = zoneOverrides[feedback.mode] !== undefined && zoneOverrides[feedback.mode] !== rawZones[feedback.mode];
+    return (
+      <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 28 }}>
+        {changed ? (<>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: '#16a34a', marginBottom: 6 }}>UPDATED</div>
+          <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, marginBottom: 10 }}>
+            {STRENGTH_DATA[feedback.mode][rawZones[feedback.mode]].name} → {STRENGTH_DATA[feedback.mode][appliedZone].name}
+          </div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
+            Your {MODE_LABELS[feedback.mode].toLowerCase()} dimension has been recalibrated. Content on this page now reflects your adjusted wiring.
+          </p>
+        </>) : (<>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 6 }}>CONFIRMED</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
+            Your answers confirm the original result for {MODE_LABELS[feedback.mode]}. If something still doesn't feel right, the friction may be in a different dimension.
+          </p>
+        </>)}
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={() => setFeedback(f => ({ ...f, step: 'select', mode: null, answers: {} }))}
+            style={{ flex: 1, padding: '8px', fontFamily: S.mono, fontSize: 9, color: S.mid, background: 'transparent', border: `1px solid ${S.rule}`, cursor: 'pointer', letterSpacing: '0.1em' }}
+          >
+            CHECK ANOTHER
+          </button>
+          <button
+            onClick={() => setFeedback({ open: false, step: 'select', mode: null, answers: {} })}
+            style={{ flex: 1, padding: '8px', fontFamily: S.bebas, fontSize: 14, background: S.black, color: S.white, border: 'none', cursor: 'pointer' }}
+          >
+            DONE
+          </button>
+        </div>
+      </div>
+    );
+  };
 
   const getGroupId = (key) => {
     for (const g of REPORT_GROUPS) {
@@ -196,6 +373,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </div>
           <div style={{ paddingBottom: isMobile ? 72 : 0 }}>
             {children}
+            <div style={{ maxWidth: 720, margin: '0 auto', padding: isMobile ? '0 16px 48px' : '0 24px 64px' }}>
+              <FeedbackPanel sectionKey={sectionKey} />
+            </div>
           </div>
         </div>
         {isMobile && <BottomTabs activeKey={sectionKey} />}
