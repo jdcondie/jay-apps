@@ -28,82 +28,22 @@ const SECTIONS = [
   { num: '16', group: 'CAREER',  label: 'Money Patterns',   reveals: 'How your wiring shapes financial decisions.', sample: '"Wired for risk. Early mover. Watch: over-concentration in speculative bets."' },
 ];
 
-// Head & shoulders profile silhouette, facing right (viewBox 0 0 380 480)
-const HEAD_PATH = "M165 64 C120 64 90 100 88 148 C87 176 99 196 103 214 C107 232 101 246 84 258 C58 277 34 302 20 342 C12 366 9 384 8 414 L8 480 L372 480 L372 392 C372 348 344 318 305 304 C277 294 261 286 258 262 C256 250 257 242 262 234 C268 230 277 230 284 224 C289 220 287 216 291 211 C297 207 301 209 303 204 C305 200 301 197 303 193 C309 189 320 191 322 183 C323 177 314 175 308 173 C303 171 301 167 300 161 C299 155 305 153 306 147 C307 141 300 139 298 133 C297 125 300 114 296 104 C290 84 205 64 165 64 Z";
-
-// Synapse nodes that sit on the brain network and pulse
-const NODES = [
-  { x: 74, y: 26 }, { x: 58, y: 95 }, { x: 50, y: 136 }, { x: 95, y: 86 },
-  { x: 78, y: 174 }, { x: 44, y: 172 }, { x: 120, y: 163 }, { x: 86, y: 200 },
-  { x: 206, y: 26 }, { x: 222, y: 95 }, { x: 230, y: 136 }, { x: 185, y: 86 },
-  { x: 202, y: 174 }, { x: 236, y: 172 }, { x: 160, y: 163 }, { x: 194, y: 200 },
-  { x: 140, y: 30 }, { x: 140, y: 118 }, { x: 140, y: 190 },
+// Hero benefit callouts (point to the brain)
+const CALLOUTS = [
+  { label: 'ENERGY SOURCES',    icon: 'bolt',   desc: 'Discover what naturally drives and recharges you.' },
+  { label: 'PEAK CONDITIONS',   icon: 'target', desc: 'Identify the conditions that make you sharpest.' },
+  { label: 'NATURAL STRENGTHS', icon: 'star',   desc: 'Understand your innate advantages and how to leverage them.' },
+  { label: 'WORK ALIGNMENT',    icon: 'trophy', desc: "See the work you're built to excel at, and enjoy doing." },
 ];
 
-function BrainDiagram({ color = '#0a0a0a', size = 360, glow = false }) {
-  const h = Math.round(size * 220 / 280);
-  const line = glow ? '#f5f3ef' : color;
-  const node = glow ? '#ffffff' : color;
+function CalloutIcon({ name, size = 18, color = '#f5f3ef' }) {
+  const p = { fill: 'none', stroke: color, strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round' };
   return (
-    <svg width={size} height={h} viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-      {glow && (
-        <defs>
-          <radialGradient id="brainGlow" cx="50%" cy="48%" r="55%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.16" />
-            <stop offset="45%" stopColor="#ffffff" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
-          </radialGradient>
-          <filter id="nodeBlur" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="2.4" />
-          </filter>
-        </defs>
-      )}
-      {glow && <ellipse cx="140" cy="112" rx="150" ry="120" fill="url(#brainGlow)" />}
-
-      {/* LEFT HEMISPHERE outer */}
-      <path
-        d="M140 30 C125 24,98 20,74 26 C50 32,28 50,20 76 C12 102,16 132,28 156 C40 178,62 192,86 200 C108 207,128 208,140 206"
-        stroke={line} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
-      {/* LEFT gyri */}
-      <path d="M68 46 C56 60,50 78,58 95" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M44 88 C38 104,40 122,50 136" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M98 36 C88 52,86 70,95 86" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M72 140 C66 152,68 166,78 174" stroke={line} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.5"/>
-      <path d="M32 140 C30 152,34 164,44 172" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
-      <path d="M114 132 C108 144,110 156,120 163" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
-
-      {/* RIGHT HEMISPHERE outer */}
-      <path
-        d="M140 30 C155 24,182 20,206 26 C230 32,252 50,260 76 C268 102,264 132,252 156 C240 178,218 192,194 200 C172 207,152 208,140 206"
-        stroke={line} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
-      {/* RIGHT gyri */}
-      <path d="M212 46 C224 60,230 78,222 95" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M236 88 C242 104,240 122,230 136" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M182 36 C192 52,194 70,185 86" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
-      <path d="M208 140 C214 152,212 166,202 174" stroke={line} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.5"/>
-      <path d="M248 140 C250 152,246 164,236 172" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
-      <path d="M166 132 C172 144,170 156,160 163" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
-
-      {/* Center divide */}
-      <line x1="140" y1="10" x2="140" y2="30" stroke={line} strokeWidth="1.0" opacity="0.4"/>
-      <line x1="140" y1="30" x2="140" y2="206" stroke={line} strokeWidth="0.75" strokeDasharray="4 3" opacity="0.35"/>
-
-      {/* Synapse nodes — only when glowing */}
-      {glow && NODES.map((n, i) => (
-        <g key={i} style={{ animation: `synapse 3.2s ease-in-out ${(i % 7) * 0.45}s infinite` }}>
-          <circle cx={n.x} cy={n.y} r="4.5" fill={node} filter="url(#nodeBlur)" opacity="0.7" />
-          <circle cx={n.x} cy={n.y} r="1.7" fill={node} />
-        </g>
-      ))}
-
-      {glow && (
-        <style>{`
-          @keyframes synapse {
-            0%, 100% { opacity: 0.25; }
-            50%      { opacity: 1; }
-          }
-        `}</style>
-      )}
+    <svg width={size} height={size} viewBox="0 0 24 24">
+      {name === 'bolt'   && <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" {...p} />}
+      {name === 'target' && <><circle cx="12" cy="12" r="9" {...p} /><circle cx="12" cy="12" r="4" {...p} /><circle cx="12" cy="12" r="0.7" fill={color} stroke="none" /></>}
+      {name === 'star'   && <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" {...p} />}
+      {name === 'trophy' && <><path d="M8 4 h8 v4 a4 4 0 0 1 -8 0 z" {...p} /><path d="M8 6 H5 v1.2 a3 3 0 0 0 3 2.8" {...p} /><path d="M16 6 h3 v1.2 a3 3 0 0 1 -3 2.8" {...p} /><path d="M12 12 v4 M9 20 h6 M10.2 20 l0.8-4 M13.8 20 l-0.8-4" {...p} /></>}
     </svg>
   );
 }
@@ -176,72 +116,48 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         </button>
       )}
 
-      {/* ── HERO (silhouette against the sun) ────────────────── */}
+      {/* ── HERO (3D brain scene + benefit callouts) ─────────── */}
       <div style={{
         minHeight: '100vh',
         background: S.black,
         display: 'flex',
-        alignItems: 'center',
-        padding: isMobile ? '120px 24px 90px' : '80px 8% 60px',
+        flexDirection: isMobile ? 'column' : 'row',
+        alignItems: isMobile ? 'flex-start' : 'center',
+        justifyContent: isMobile ? 'flex-start' : 'flex-start',
+        padding: isMobile ? '110px 24px 64px' : '80px 6% 60px',
         position: 'relative',
         overflow: 'hidden',
       }}>
 
-        {/* SUN — radial amber glow */}
+        {/* Full-bleed brain scene */}
         <div style={{
-          position: 'absolute', top: isMobile ? '16%' : '50%',
-          right: isMobile ? '50%' : '24%',
-          transform: isMobile ? 'translate(50%,-30%)' : 'translate(50%,-50%)',
-          width: isMobile ? 380 : 720, height: isMobile ? 380 : 720, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,206,138,0.60) 0%, rgba(255,158,72,0.34) 30%, rgba(255,120,44,0.12) 50%, rgba(255,100,40,0) 70%)',
-          zIndex: 1, pointerEvents: 'none',
-        }} />
-        {/* SUN bright core */}
-        <div style={{
-          position: 'absolute', top: isMobile ? '16%' : '50%',
-          right: isMobile ? '50%' : '24%',
-          transform: isMobile ? 'translate(50%,-30%)' : 'translate(50%,-50%)',
-          width: isMobile ? 150 : 300, height: isMobile ? 150 : 300, borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(255,232,196,0.85) 0%, rgba(255,196,128,0.4) 45%, rgba(255,170,90,0) 75%)',
-          zIndex: 1, pointerEvents: 'none',
+          position: 'absolute', inset: 0, zIndex: 0,
+          backgroundImage: 'url(/brain.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: isMobile ? 'center 8%' : 'center center',
+          backgroundRepeat: 'no-repeat',
         }} />
 
-        {/* SILHOUETTE — head & shoulders profile (desktop) */}
-        {!isMobile && (
-          <div style={{ position: 'absolute', top: '50%', right: '17%', transform: 'translateY(-26%)', zIndex: 2, pointerEvents: 'none' }}>
-            <svg width="440" height="566" viewBox="0 0 380 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d={HEAD_PATH} fill="#050403" />
-              {/* warm rim light — face side only */}
-              <path d={HEAD_PATH} fill="none" stroke="rgba(255,190,120,0.5)" strokeWidth="1.5" strokeDasharray="640 460" strokeDashoffset="20" />
-              {/* faint synapse glints inside the head */}
-              {[[150,150],[178,196],[132,170],[200,150],[164,224]].map(([x,y],i)=>(
-                <circle key={i} cx={x} cy={y} r="2.4" fill="rgba(255,210,150,0.5)" style={{ animation:`synapse 3.4s ease-in-out ${i*0.5}s infinite` }} />
-              ))}
-            </svg>
-          </div>
-        )}
+        {/* Scrim — dark left for headline, slightly dark right for callouts */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+          background: isMobile
+            ? 'linear-gradient(180deg, rgba(10,10,10,0.45) 0%, rgba(10,10,10,0.1) 28%, rgba(10,10,10,0.7) 62%, #0a0a0a 100%)'
+            : 'linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.9) 22%, rgba(10,10,10,0.3) 42%, rgba(10,10,10,0.15) 60%, rgba(10,10,10,0.5) 86%, rgba(10,10,10,0.62) 100%)',
+        }} />
 
-        {/* dark scrim for text legibility */}
-        <div style={{ position: 'absolute', inset: 0, background: isMobile ? 'linear-gradient(180deg, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.75) 60%, #0a0a0a 100%)' : 'linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.85) 28%, rgba(10,10,10,0.1) 55%, rgba(10,10,10,0) 70%)', zIndex: 2, pointerEvents: 'none' }} />
-
-        {/* grain overlay */}
-        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.09, mixBlendMode: 'overlay', zIndex: 3, pointerEvents: 'none' }}>
-          <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" /></filter>
-          <rect width="100%" height="100%" filter="url(#grain)" />
-        </svg>
-
-        {/* Content */}
-        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 560, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 4 }}>
+        {/* Content (headline + CTA) */}
+        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 460, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 3 }}>
           <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: '#999', marginBottom: 28 }}>
             BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
           </div>
-          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 120px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
+          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(60px, 8.5vw, 112px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
             YOUR MIND,<br />DECODED.
           </h1>
-          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 25px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 460 }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 24px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 420 }}>
             The instruction manual you were never handed for your own mind.
           </p>
-          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 40px', maxWidth: 420 }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 36px', maxWidth: 400 }}>
             See where your energy comes from, the conditions that make you sharp, and the work you're built to win at. Then build your life around how you actually operate.
           </p>
 
@@ -278,16 +194,53 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           )}
         </div>
 
-        {/* Scroll indicator */}
-        <button
-          onClick={scrollToProfile}
-          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
-        >
-          <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#999' }}>SEE WHAT YOU'LL DISCOVER</span>
-          <span style={{ display: 'block', width: 1, height: 32, background: '#3a3a3a', position: 'relative', overflow: 'hidden' }}>
-            <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: '#aaa', animation: 'scrollLine 1.6s ease-in-out infinite' }} />
-          </span>
-        </button>
+        {/* Callouts — desktop: absolute right with leader lines */}
+        {!isMobile && (
+          <div style={{ position: 'absolute', zIndex: 3, right: '6%', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 30, width: 256 }}>
+            {CALLOUTS.map(c => (
+              <div key={c.label} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ flexShrink: 0, width: 44, height: 1, background: 'linear-gradient(90deg, rgba(245,243,239,0) 0%, rgba(245,243,239,0.45) 100%)' }} />
+                <div style={{ flexShrink: 0, width: 44, height: 44, borderRadius: '50%', border: '1px solid #4a4744', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CalloutIcon name={c.icon} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.12em', color: S.white, marginBottom: 5 }}>{c.label}</div>
+                  <div style={{ fontFamily: S.cormorant, fontSize: 14, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Callouts — mobile: stacked list below content */}
+        {isMobile && (
+          <div style={{ position: 'relative', zIndex: 3, width: 'calc(100% + 48px)', marginLeft: -24, marginTop: 44, padding: '28px 24px 4px', borderTop: '1px solid #1f1f1f', background: S.black, display: 'flex', flexDirection: 'column', gap: 22 }}>
+            {CALLOUTS.map(c => (
+              <div key={c.label} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                <div style={{ flexShrink: 0, width: 42, height: 42, borderRadius: '50%', border: '1px solid #4a4744', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CalloutIcon name={c.icon} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.12em', color: S.white, marginBottom: 4 }}>{c.label}</div>
+                  <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Scroll indicator (desktop) */}
+        {!isMobile && (
+          <button
+            onClick={scrollToProfile}
+            style={{ position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)', zIndex: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
+          >
+            <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#999' }}>SEE WHAT YOU'LL DISCOVER</span>
+            <span style={{ display: 'block', width: 1, height: 32, background: '#3a3a3a', position: 'relative', overflow: 'hidden' }}>
+              <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: '#aaa', animation: 'scrollLine 1.6s ease-in-out infinite' }} />
+            </span>
+          </button>
+        )}
       </div>
 
       {/* ── STATS STRIP ─────────────────────────────────────── */}
