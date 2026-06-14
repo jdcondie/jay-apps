@@ -523,34 +523,33 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             const groupSections = SECTIONS.filter(s => s.group === group);
             const groupLabel = { WIRING: 'YOUR WIRING', OPERATE: 'HOW YOU OPERATE', CAREER: 'WORK & RELATIONSHIPS' }[group];
             return (
-              <div key={group} style={{ marginBottom: 40 }}>
-                <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.25em', color: '#333', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #1a1a1a' }}>
-                  {groupLabel}
+              <div key={group} style={{ marginBottom: 30 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
+                  <span style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.22em', color: '#9a958c', whiteSpace: 'nowrap' }}>{groupLabel}</span>
+                  <span style={{ flex: 1, height: 1, background: '#1c1c1c' }} />
+                  <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#444', whiteSpace: 'nowrap' }}>{groupSections.length} SECTIONS</span>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 0 }}>
-                  {groupSections.map((section, i) => {
+                <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(210px, 1fr))', gap: 12 }}>
+                  {groupSections.map((section) => {
                     const globalIndex = SECTIONS.indexOf(section);
                     const visible = globalIndex < cardsVisible;
                     return (
                       <div
                         key={section.num}
+                        className="opm-card"
                         style={{
-                          padding: '14px 0',
-                          borderBottom: '1px solid #1a1a1a',
-                          paddingRight: (!isMobile && i % 2 === 0) ? 32 : 0,
-                          paddingLeft: (!isMobile && i % 2 === 1) ? 32 : 0,
-                          borderRight: (!isMobile && i % 2 === 0) ? '1px solid #1a1a1a' : 'none',
+                          position: 'relative', overflow: 'hidden',
+                          background: '#0d0d0d', border: '1px solid #1d1d1d',
+                          padding: '18px 18px 20px',
                           opacity: visible ? 1 : 0,
                           transform: visible ? 'translateY(0)' : 'translateY(10px)',
-                          transition: 'opacity 0.4s ease, transform 0.4s ease',
+                          transition: 'opacity 0.4s ease, transform 0.4s ease, border-color 0.25s ease, background 0.25s ease',
                         }}
                       >
-                        <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                          <div style={{ fontFamily: S.mono, fontSize: 9, color: '#2e2e2e', flexShrink: 0, minWidth: 22, textAlign: 'right', paddingTop: 2 }}>{section.num}</div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ fontFamily: S.bebas, fontSize: 15, color: S.white, letterSpacing: '0.03em', marginBottom: 3 }}>{section.label}</div>
-                            <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.12em', color: '#3a3a3a' }}>{section.reveals}</div>
-                          </div>
+                        <span style={{ position: 'absolute', top: 6, right: 12, fontFamily: S.bebas, fontSize: 46, lineHeight: 1, color: '#171717', pointerEvents: 'none' }}>{section.num}</span>
+                        <div style={{ position: 'relative' }}>
+                          <div style={{ fontFamily: S.bebas, fontSize: 19, color: S.white, letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.05 }}>{section.label}</div>
+                          <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#9b968d', lineHeight: 1.5 }}>{section.reveals}</div>
                         </div>
                       </div>
                     );
@@ -601,6 +600,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           50%  { height: 100%; top: 0; }
           100% { height: 0; top: 100%; }
         }
+        .opm-card:hover { border-color: #3a3a3a !important; background: #141414 !important; }
       `}</style>
 
       {onTestFill && (
