@@ -30,20 +30,20 @@ const SECTIONS = [
 
 // Hero benefit callouts (point to the brain)
 const CALLOUTS = [
-  { label: 'ENERGY SOURCES',    icon: 'bolt',   desc: 'Discover what naturally drives and recharges you.' },
-  { label: 'PEAK CONDITIONS',   icon: 'target', desc: 'Identify the conditions that make you sharpest.' },
-  { label: 'NATURAL STRENGTHS', icon: 'star',   desc: 'Understand your innate advantages and how to leverage them.' },
-  { label: 'WORK ALIGNMENT',    icon: 'trophy', desc: "See the work you're built to excel at, and enjoy doing." },
+  { label: 'WHAT DRAINS YOU',       icon: 'drain',  desc: 'The situations that quietly burn your energy.' },
+  { label: 'WHAT UNLOCKS YOU',      icon: 'key',    desc: 'The conditions where focus and momentum come naturally.' },
+  { label: "WHAT YOU'RE BUILT FOR", icon: 'target', desc: "The work and roles that fit how you're wired." },
+  { label: 'WHY YOU GET STUCK',     icon: 'alert',  desc: 'The patterns behind procrastination and overwhelm.' },
 ];
 
 function CalloutIcon({ name, size = 18, color = '#f5f3ef' }) {
   const p = { fill: 'none', stroke: color, strokeWidth: 1.4, strokeLinecap: 'round', strokeLinejoin: 'round' };
   return (
     <svg width={size} height={size} viewBox="0 0 24 24">
-      {name === 'bolt'   && <path d="M13 2 L4 14 h6 l-1 8 9-12 h-6 z" {...p} />}
+      {name === 'drain'  && <><path d="M12 3 v11" {...p} /><path d="M7 10 l5 5 5-5" {...p} /><path d="M5 20 h14" {...p} /></>}
+      {name === 'key'    && <><circle cx="8" cy="9" r="4.5" {...p} /><path d="M11.2 12.2 L20 21" {...p} /><path d="M17 18 l2.2 -2.2" {...p} /></>}
       {name === 'target' && <><circle cx="12" cy="12" r="9" {...p} /><circle cx="12" cy="12" r="4" {...p} /><circle cx="12" cy="12" r="0.7" fill={color} stroke="none" /></>}
-      {name === 'star'   && <path d="M12 2 L14 10 L22 12 L14 14 L12 22 L10 14 L2 12 L10 10 Z" {...p} />}
-      {name === 'trophy' && <><path d="M8 4 h8 v4 a4 4 0 0 1 -8 0 z" {...p} /><path d="M8 6 H5 v1.2 a3 3 0 0 0 3 2.8" {...p} /><path d="M16 6 h3 v1.2 a3 3 0 0 1 -3 2.8" {...p} /><path d="M12 12 v4 M9 20 h6 M10.2 20 l0.8-4 M13.8 20 l-0.8-4" {...p} /></>}
+      {name === 'alert'  && <><path d="M12 3 L22 20 H2 Z" {...p} /><path d="M12 10 v4.5" {...p} /><circle cx="12" cy="17.5" r="0.85" fill={color} stroke="none" /></>}
     </svg>
   );
 }
@@ -287,29 +287,6 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#999', lineHeight: 1.65, margin: '28px 0 0', textAlign: 'center' }}>
             Every one of these is a clue. The assessment surfaces the pattern underneath.
           </p>
-        </div>
-      </div>
-
-      {/* ── WHAT YOU'LL DISCOVER (light) ──────────────────────── */}
-      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
-        <div style={{ maxWidth: 900, margin: '0 auto' }}>
-          <div style={{ marginBottom: isMobile ? 32 : 52 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 14 }}>WHAT YOU'LL DISCOVER</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 56px)', color: S.black, lineHeight: 0.95, margin: 0 }}>FOUR THINGS YOU'LL FINALLY SEE CLEARLY</h2>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 0 : 1, background: isMobile ? 'transparent' : S.rule, border: isMobile ? 'none' : `1px solid ${S.rule}` }}>
-            {[
-              { t: 'What Drains You', d: 'The environments, expectations, and situations that quietly burn your energy.' },
-              { t: 'What Unlocks You', d: 'The conditions where focus, momentum, and clarity show up on their own.' },
-              { t: "What You're Built For", d: "The work, roles, and challenges that fit how you're wired." },
-              { t: 'Why You Get Stuck', d: 'The hidden patterns behind procrastination, overwhelm, and inconsistency.' },
-            ].map(({ t, d }) => (
-              <div key={t} style={{ background: S.white, padding: isMobile ? '22px 0' : '32px 36px', borderBottom: isMobile ? `1px solid ${S.rule}` : 'none' }}>
-                <div style={{ fontFamily: S.bebas, fontSize: 24, color: S.black, letterSpacing: '0.02em', marginBottom: 10, lineHeight: 1.05 }}>{t}</div>
-                <p style={{ fontFamily: S.cormorant, fontSize: 17, color: '#555', lineHeight: 1.6, margin: 0 }}>{d}</p>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
 
