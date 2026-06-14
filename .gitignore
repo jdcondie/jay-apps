@@ -1,0 +1,43 @@
+# OS
+.DS_Store
+**/.DS_Store
+Thumbs.db
+
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Build output
+dist/
+build/
+**/dist/
+**/build/
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+
+# Vercel
+.vercel
+**/.vercel
+
+# Python
+__pycache__/
+**/__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Editor / tooling local state
+.claude/
+**/.claude/
+.idea/
+.vscode/
+
+# Embedded git repos (tracked in their own repositories)
+jay-apps/
+jay-os/
+skills-reference/
