@@ -236,7 +236,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
           </div>
           <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 120px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
-            HOW ARE<br />YOU WIRED?
+            YOUR MIND,<br />DECODED.
           </h1>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 25px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 460 }}>
             The instruction manual you were never handed for your own mind.
