@@ -242,7 +242,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             The instruction manual you were never handed for your own mind.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 40px', maxWidth: 420 }}>
-            Stop fighting how you work. See exactly where your energy goes, the environments that bring out your best, and how to build your life around your wiring instead of against it.
+            See where your energy comes from, the conditions that make you sharp, and the work you're built to win at. Then build your life around how you actually operate.
           </p>
 
           {resumeData ? (
