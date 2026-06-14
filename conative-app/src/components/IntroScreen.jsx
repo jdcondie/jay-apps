@@ -13,13 +13,13 @@ const SECTIONS = [
   { num: '01', group: 'WIRING',  label: 'What This Means',  reveals: 'Your behavioral profile in plain language.', sample: '"Your brain runs on novelty. Starting things is where your energy lives."' },
   { num: '02', group: 'WIRING',  label: 'Your Scores',      reveals: 'Your exact position on all four dimensions.', sample: 'Change 72%  ·  Info 38%  ·  Execution 25%  ·  Org 18%' },
   { num: '03', group: 'WIRING',  label: 'Your Game',        reveals: 'The environment you\'re wired to win in.', sample: '"You win in markets moving fast enough that speed beats polish."' },
-  { num: '04', group: 'WIRING',  label: 'Your Strengths',   reveals: 'What you naturally do better than most.', sample: 'Four dimensions. Four distinct strengths — each with a shadow side.' },
-  { num: '05', group: 'WIRING',  label: 'Top Strengths',    reveals: 'Your two highest-energy abilities, expanded.', sample: 'Innovate + Explain — the combination that makes your output hard to replicate.' },
+  { num: '04', group: 'WIRING',  label: 'Your Strengths',   reveals: 'What you naturally do better than most.', sample: 'Four dimensions. Four distinct strengths · each with a shadow side.' },
+  { num: '05', group: 'WIRING',  label: 'Top Strengths',    reveals: 'Your two highest-energy abilities, expanded.', sample: 'Innovate + Explain · the combination that makes your output hard to replicate.' },
   { num: '06', group: 'WIRING',  label: 'Unique Ability',   reveals: 'A one-sentence statement of your superpower.', sample: '[Top wiring] + [second wiring] applied to [your specific domain].' },
   { num: '07', group: 'WIRING',  label: 'Watch For',        reveals: 'Where your strengths flip into liabilities.', sample: '"You start 10 things and finish 3. The other 7 drain the people around you."' },
   { num: '08', group: 'OPERATE', label: 'Friction Points',  reveals: 'The conditions that quietly drain your energy.', sample: '"Being forced to maintain something you\'ve already solved in your head."' },
-  { num: '09', group: 'OPERATE', label: 'Your Success',     reveals: 'What your wiring is actually built to optimize.', sample: '"You are wired to launch, iterate, and improve — not to maintain."' },
-  { num: '10', group: 'OPERATE', label: 'Procrastination',  reveals: 'Why you really stall — and what breaks it.', sample: '"You\'re not lazy. You\'re bored. The task is already solved in your head."' },
+  { num: '09', group: 'OPERATE', label: 'Your Success',     reveals: 'What your wiring is actually built to optimize.', sample: '"You are wired to launch, iterate, and improve · not to maintain."' },
+  { num: '10', group: 'OPERATE', label: 'Procrastination',  reveals: 'Why you really stall · and what breaks it.', sample: '"You\'re not lazy. You\'re bored. The task is already solved in your head."' },
   { num: '11', group: 'OPERATE', label: 'Reset Protocol',   reveals: 'A 5-step sequence for your dominant mode.', sample: 'Not generic advice. Built for how your brain specifically restarts.' },
   { num: '12', group: 'OPERATE', label: 'Daily Rules',      reveals: 'Baseline conditions to stay consistently sharp.', sample: 'Three rules for morning, mid-day, and wind-down.' },
   { num: '13', group: 'CAREER',  label: 'Communication',    reveals: 'What people who work with you need to know.', sample: '"Give me the problem, not the process. I\'ll figure out the path."' },
@@ -138,7 +138,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           backgroundRepeat: 'no-repeat',
         }} />
 
-        {/* Scrim — dark left for headline, slightly dark right for callouts */}
+        {/* Scrim · dark left for headline, slightly dark right for callouts */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
           background: isMobile
@@ -169,7 +169,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                   <div style={{ height: '100%', background: S.white, width: `${pct}%` }} />
                 </div>
                 <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', marginBottom: 16 }}>
-                  QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
+                  QUESTION {resumeData.qIndex + 1} OF {total} · {pct}% COMPLETE
                 </div>
                 <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.white, color: S.black, border: 'none', padding: '14px', cursor: 'pointer' }}>
                   RESUME
@@ -194,7 +194,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           )}
         </div>
 
-        {/* Callouts — desktop: absolute right with leader lines */}
+        {/* Callouts · desktop: absolute right with leader lines */}
         {!isMobile && (
           <div style={{ position: 'absolute', zIndex: 3, right: '6%', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', gap: 30, width: 256 }}>
             {CALLOUTS.map(c => (
@@ -212,7 +212,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           </div>
         )}
 
-        {/* Callouts — mobile: stacked list below content */}
+        {/* Callouts · mobile: stacked list below content */}
         {isMobile && (
           <div style={{ position: 'relative', zIndex: 3, width: 'calc(100% + 48px)', marginLeft: -24, marginTop: 44, padding: '28px 24px 4px', borderTop: '1px solid #1f1f1f', background: S.black, display: 'flex', flexDirection: 'column', gap: 22 }}>
             {CALLOUTS.map(c => (
@@ -243,6 +243,76 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         )}
       </div>
 
+      {/* ── PROBLEM NARRATIVE (light) ─────────────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
+        <div style={{ maxWidth: 680, margin: '0 auto' }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 24 }}>WHY THE USUAL ADVICE FAILS</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(20px, 2.4vw, 26px)', color: '#2a2a2a', lineHeight: 1.55, margin: '0 0 24px' }}>
+            Most people spend years trying to improve themselves. They read the productivity books, download the new systems, try to white-knuckle their way to more discipline.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 2vw, 21px)', color: '#555', lineHeight: 1.7, margin: '0 0 28px' }}>
+            The same patterns keep showing up anyway. You procrastinate on the things you care about. You're sharp in some environments and flat in others. Some work feels effortless, some feels impossible, and you can't always say why.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(22px, 2.8vw, 32px)', fontStyle: 'italic', color: S.black, lineHeight: 1.4, margin: '0 0 28px' }}>
+            Maybe the problem was never effort. Maybe you've been following instructions written for someone else's brain.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: '#555', lineHeight: 1.7, margin: 0 }}>
+            This assessment shows how your mind actually creates energy, handles change, processes information, and performs at its best. So you can stop fighting your wiring and start building around it.
+          </p>
+        </div>
+      </div>
+
+      {/* ── OBJECTIONS (dark) ─────────────────────────────────── */}
+      <div style={{ background: S.black, padding: pad, borderTop: '1px solid #111' }}>
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 48 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 14 }}>SOUND FAMILIAR?</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>YOU'VE PROBABLY SAID THESE THINGS</h2>
+          </div>
+          <div>
+            {[
+              "I know exactly what I need to do. I just can't make myself do it.",
+              "I do incredible work when I'm interested, and struggle when I'm not.",
+              "I start a lot of things and lose momentum.",
+              "I've tried every productivity system.",
+              "I feel like I'm capable of more.",
+              "I don't get why some things come easy for other people.",
+            ].map((q, i) => (
+              <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'baseline', padding: '18px 0', borderBottom: '1px solid #1a1a1a' }}>
+                <span style={{ fontFamily: S.mono, fontSize: 10, color: '#3a3a3a', flexShrink: 0 }}>0{i + 1}</span>
+                <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 21px)', fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.5, margin: 0 }}>"{q}"</p>
+              </div>
+            ))}
+          </div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#999', lineHeight: 1.65, margin: '28px 0 0', textAlign: 'center' }}>
+            Every one of these is a clue. The assessment surfaces the pattern underneath.
+          </p>
+        </div>
+      </div>
+
+      {/* ── WHAT YOU'LL DISCOVER (light) ──────────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ marginBottom: isMobile ? 32 : 52 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 14 }}>WHAT YOU'LL DISCOVER</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 56px)', color: S.black, lineHeight: 0.95, margin: 0 }}>FOUR THINGS YOU'LL FINALLY SEE CLEARLY</h2>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 0 : 1, background: isMobile ? 'transparent' : S.rule, border: isMobile ? 'none' : `1px solid ${S.rule}` }}>
+            {[
+              { t: 'What Drains You', d: 'The environments, expectations, and situations that quietly burn your energy.' },
+              { t: 'What Unlocks You', d: 'The conditions where focus, momentum, and clarity show up on their own.' },
+              { t: "What You're Built For", d: "The work, roles, and challenges that fit how you're wired." },
+              { t: 'Why You Get Stuck', d: 'The hidden patterns behind procrastination, overwhelm, and inconsistency.' },
+            ].map(({ t, d }) => (
+              <div key={t} style={{ background: S.white, padding: isMobile ? '22px 0' : '32px 36px', borderBottom: isMobile ? `1px solid ${S.rule}` : 'none' }}>
+                <div style={{ fontFamily: S.bebas, fontSize: 24, color: S.black, letterSpacing: '0.02em', marginBottom: 10, lineHeight: 1.05 }}>{t}</div>
+                <p style={{ fontFamily: S.cormorant, fontSize: 17, color: '#555', lineHeight: 1.6, margin: 0 }}>{d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* ── STATS STRIP ─────────────────────────────────────── */}
       <div style={{ background: S.black, padding: '28px 8%', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: isMobile ? 'space-between' : 'space-around', gap: 0, flexWrap: 'wrap' }}>
@@ -265,11 +335,11 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
           <div style={{ marginBottom: isMobile ? 48 : 0 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 16 }}>YOUR BEHAVIORAL FINGERPRINT</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(36px, 5vw, 58px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
-              FOUR NUMBERS.<br />ONE COMPLETE<br />PICTURE.
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(34px, 4.6vw, 54px)', color: S.white, lineHeight: 0.95, margin: '0 0 20px' }}>
+              WHY SOME THINGS<br />FEEL EFFORTLESS,<br />AND OTHERS NEVER DO.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 340 }}>
-              Each dimension reveals a different way your mind works under pressure. Together, they explain why you thrive in some environments and drain fast in others.
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
+              Most advice assumes everyone works the same way. Your results are built on four behavioral dimensions that show how your mind operates under pressure, uncertainty, structure, and change. Together they explain why some environments light you up and others wear you down.
             </p>
           </div>
           <div>
@@ -296,7 +366,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               );
             })}
             <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.2em', color: '#333', marginTop: 20, borderTop: '1px solid #1a1a1a', paddingTop: 14 }}>
-              SAMPLE PROFILE — QUICK START DOMINANT
+              SAMPLE PROFILE · QUICK START DOMINANT
             </div>
           </div>
         </div>
@@ -307,14 +377,14 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           {/* Mock report card */}
           <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>01 — WHAT THIS MEANS</div>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>01 · WHAT THIS MEANS</div>
             <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
-            <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, letterSpacing: '0.03em', marginBottom: 14, lineHeight: 1.05 }}>QUICK START — DOMINANT</div>
+            <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, letterSpacing: '0.03em', marginBottom: 14, lineHeight: 1.05 }}>QUICK START · DOMINANT</div>
             <p style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', color: '#444', lineHeight: 1.75, margin: '0 0 18px' }}>
-              "Your brain runs on novelty. Starting things is where your energy lives. You don't avoid finishing because you're lazy — you avoid it because your brain has already moved to the next problem."
+              "Your brain runs on novelty. Starting things is where your energy lives. You don't stall because you're lazy. You stall because your brain already moved to the next problem."
             </p>
             <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 14, display: 'flex', gap: 16 }}>
-              {['QS — Innovate', 'FF — Explain'].map(tag => (
+              {['QS · Innovate', 'FF · Explain'].map(tag => (
                 <div key={tag} style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.14em', color: S.mid, background: '#f0ede8', padding: '5px 9px' }}>{tag}</div>
               ))}
             </div>
@@ -325,8 +395,8 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
               FINALLY, AN<br />EXPLANATION<br />THAT FITS.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 340 }}>
-              Not a personality type. Not a horoscope. A plain-language breakdown of how your brain actually works — and why certain environments bring out your best.
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
+              You've called yourself lazy. Inconsistent. Undisciplined. Maybe you were just operating outside the conditions your brain was built for. The point is simple: understand who you already are, then work with it.
             </p>
           </div>
         </div>
@@ -339,15 +409,15 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           <div style={{ marginBottom: isMobile ? 48 : 0 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 16 }}>SECTION 15</div>
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
-              78 ROLES.<br />RANKED BY<br />YOUR WIRING.
+              FIND WORK THAT<br />FEELS LIKE<br />CHEATING.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 340 }}>
-              Every role scored against your exact behavioral profile. See which careers are built for how you work — and which ones will quietly drain you by Wednesday.
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
+              Skills tell you what you can do. Wiring tells you what you'll actually enjoy doing. Every role is scored against your behavioral profile, so you can see which careers fit how you operate and which ones cost you energy just to stay engaged.
             </p>
           </div>
           {/* Mock career card */}
           <div style={{ border: '1px solid #1e1e1e', padding: isMobile ? '24px 20px' : '32px 36px', background: '#111' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: '#444', marginBottom: 6 }}>15 — CAREER MAP</div>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: '#444', marginBottom: 6 }}>15 · CAREER MAP</div>
             <div style={{ height: 1, background: '#1e1e1e', marginBottom: 20 }} />
             {[
               { role: 'Startup Founder', pct: 94, hot: true },
@@ -376,12 +446,12 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           {/* Mock protocol card */}
           <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>11 — RESET PROTOCOL</div>
+            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>11 · RESET PROTOCOL</div>
             <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
             <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, marginBottom: 18, lineHeight: 1.1 }}>WHEN YOU'RE STUCK, DO THIS.</div>
             {[
               'Stop adding inputs. You have enough information.',
-              'Pick one decision — not the biggest, just the next.',
+              'Pick one decision. Not the biggest, just the next.',
               'Set a 25-minute window. Ship something small inside it.',
               'Capture the 3 ideas that surfaced while you were stuck.',
               'Move the body for 10 minutes. Your brain resets on motion.',
@@ -395,11 +465,11 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           {/* Text */}
           <div>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 16 }}>SECTION 11</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
-              BUILT FOR HOW<br />YOUR BRAIN<br />RESTARTS.
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 3.8vw, 46px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
+              WHEN YOUR BRAIN<br />STALLS, THIS IS<br />THE WAY OUT.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 340 }}>
-              Generic productivity advice doesn't account for wiring. Your reset protocol is built specifically for your dominant mode — steps that actually work for the way your mind moves.
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
+              Your report includes a reset protocol built around your dominant mode, made for how your brain actually restarts. A specific sequence that gets you moving when you're stuck.
             </p>
           </div>
         </div>
@@ -410,12 +480,13 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: isMobile ? 48 : 64 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 14 }}>THE COMPLETE REPORT</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(28px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>16 SECTIONS. ALL PERSONALIZED.</h2>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(28px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>YOUR PERSONAL OPERATING MANUAL</h2>
+            <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', color: '#888', lineHeight: 1.6, margin: '14px auto 0', maxWidth: 440 }}>16 sections. All personalized. Every one generated from your profile and built to use today.</p>
           </div>
 
           {['WIRING', 'OPERATE', 'CAREER'].map(group => {
             const groupSections = SECTIONS.filter(s => s.group === group);
-            const groupLabel = { WIRING: 'YOUR WIRING', OPERATE: 'HOW YOU OPERATE', CAREER: 'WORKING WITH OTHERS / CAREER' }[group];
+            const groupLabel = { WIRING: 'YOUR WIRING', OPERATE: 'HOW YOU OPERATE', CAREER: 'WORK & RELATIONSHIPS' }[group];
             return (
               <div key={group} style={{ marginBottom: 40 }}>
                 <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.25em', color: '#333', marginBottom: 16, paddingBottom: 12, borderBottom: '1px solid #1a1a1a' }}>
@@ -456,14 +527,27 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         </div>
       </div>
 
+      {/* ── THE REAL GOAL (dark) ──────────────────────────────── */}
+      <div style={{ background: '#0f0f0f', padding: pad, borderTop: '1px solid #111' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 20 }}>THE REAL GOAL</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(24px, 3vw, 34px)', fontStyle: 'italic', color: S.white, lineHeight: 1.4, margin: '0 0 24px' }}>
+            Self-awareness is just the start. Alignment is the point.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.9vw, 19px)', color: S.onDarkBody, lineHeight: 1.7, margin: 0 }}>
+            Understanding why you've felt on fire in some seasons and burned out in others. Why certain jobs fit and others grind. Why a system that works for your friend never worked for you. And what changes when you stop fighting your wiring and start building around it.
+          </p>
+        </div>
+      </div>
+
       {/* ── BOTTOM CTA ──────────────────────────────────────── */}
       <div style={{ background: S.white, borderTop: `1px solid ${S.rule}`, padding: isMobile ? '72px 24px 96px' : '96px 40px 120px', textAlign: 'center' }}>
         <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 20 }}>READY TO SEE YOURS?</div>
-        <h3 style={{ fontFamily: S.bebas, fontSize: 'clamp(40px, 6vw, 68px)', color: S.black, margin: '0 0 20px', lineHeight: 0.92 }}>
-          FIND OUT HOW<br />YOU'RE WIRED
+        <h3 style={{ fontFamily: S.bebas, fontSize: 'clamp(38px, 5.5vw, 64px)', color: S.black, margin: '0 0 20px', lineHeight: 0.92 }}>
+          DISCOVER HOW YOUR<br />MIND ACTUALLY WORKS
         </h3>
-        <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', maxWidth: 400, margin: '0 auto 40px', lineHeight: 1.65 }}>
-          Eight minutes. 36 questions. A complete behavioral profile you'll actually use.
+        <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65 }}>
+          Eight minutes. Thirty-six questions. One complete behavioral fingerprint, and the operating manual that comes with it.
         </p>
         <button
           onClick={onStart}
