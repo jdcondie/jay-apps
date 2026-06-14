@@ -28,37 +28,79 @@ const SECTIONS = [
   { num: '16', group: 'CAREER',  label: 'Money Patterns',   reveals: 'How your wiring shapes financial decisions.', sample: '"Wired for risk. Early mover. Watch: over-concentration in speculative bets."' },
 ];
 
-function BrainDiagram({ color = '#0a0a0a', size = 360 }) {
+// Synapse nodes that sit on the brain network and pulse
+const NODES = [
+  { x: 74, y: 26 }, { x: 58, y: 95 }, { x: 50, y: 136 }, { x: 95, y: 86 },
+  { x: 78, y: 174 }, { x: 44, y: 172 }, { x: 120, y: 163 }, { x: 86, y: 200 },
+  { x: 206, y: 26 }, { x: 222, y: 95 }, { x: 230, y: 136 }, { x: 185, y: 86 },
+  { x: 202, y: 174 }, { x: 236, y: 172 }, { x: 160, y: 163 }, { x: 194, y: 200 },
+  { x: 140, y: 30 }, { x: 140, y: 118 }, { x: 140, y: 190 },
+];
+
+function BrainDiagram({ color = '#0a0a0a', size = 360, glow = false }) {
   const h = Math.round(size * 220 / 280);
+  const line = glow ? '#f5f3ef' : color;
+  const node = glow ? '#ffffff' : color;
   return (
     <svg width={size} height={h} viewBox="0 0 280 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {glow && (
+        <defs>
+          <radialGradient id="brainGlow" cx="50%" cy="48%" r="55%">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.16" />
+            <stop offset="45%" stopColor="#ffffff" stopOpacity="0.05" />
+            <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+          </radialGradient>
+          <filter id="nodeBlur" x="-200%" y="-200%" width="500%" height="500%">
+            <feGaussianBlur stdDeviation="2.4" />
+          </filter>
+        </defs>
+      )}
+      {glow && <ellipse cx="140" cy="112" rx="150" ry="120" fill="url(#brainGlow)" />}
+
       {/* LEFT HEMISPHERE outer */}
       <path
         d="M140 30 C125 24,98 20,74 26 C50 32,28 50,20 76 C12 102,16 132,28 156 C40 178,62 192,86 200 C108 207,128 208,140 206"
-        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+        stroke={line} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
       {/* LEFT gyri */}
-      <path d="M68 46 C56 60,50 78,58 95" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M44 88 C38 104,40 122,50 136" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M98 36 C88 52,86 70,95 86" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M72 140 C66 152,68 166,78 174" stroke={color} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.45"/>
-      <path d="M32 140 C30 152,34 164,44 172" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
-      <path d="M114 132 C108 144,110 156,120 163" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+      <path d="M68 46 C56 60,50 78,58 95" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M44 88 C38 104,40 122,50 136" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M98 36 C88 52,86 70,95 86" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M72 140 C66 152,68 166,78 174" stroke={line} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <path d="M32 140 C30 152,34 164,44 172" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
+      <path d="M114 132 C108 144,110 156,120 163" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
 
       {/* RIGHT HEMISPHERE outer */}
       <path
         d="M140 30 C155 24,182 20,206 26 C230 32,252 50,260 76 C268 102,264 132,252 156 C240 178,218 192,194 200 C172 207,152 208,140 206"
-        stroke={color} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
+        stroke={line} strokeWidth="1.8" strokeLinecap="round" fill="none"/>
       {/* RIGHT gyri */}
-      <path d="M212 46 C224 60,230 78,222 95" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M236 88 C242 104,240 122,230 136" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M182 36 C192 52,194 70,185 86" stroke={color} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.55"/>
-      <path d="M208 140 C214 152,212 166,202 174" stroke={color} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.45"/>
-      <path d="M248 140 C250 152,246 164,236 172" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
-      <path d="M166 132 C172 144,170 156,160 163" stroke={color} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.4"/>
+      <path d="M212 46 C224 60,230 78,222 95" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M236 88 C242 104,240 122,230 136" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M182 36 C192 52,194 70,185 86" stroke={line} strokeWidth="1.0" strokeLinecap="round" fill="none" opacity="0.6"/>
+      <path d="M208 140 C214 152,212 166,202 174" stroke={line} strokeWidth="0.9" strokeLinecap="round" fill="none" opacity="0.5"/>
+      <path d="M248 140 C250 152,246 164,236 172" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
+      <path d="M166 132 C172 144,170 156,160 163" stroke={line} strokeWidth="0.85" strokeLinecap="round" fill="none" opacity="0.45"/>
 
       {/* Center divide */}
-      <line x1="140" y1="10" x2="140" y2="30" stroke={color} strokeWidth="1.0" opacity="0.35"/>
-      <line x1="140" y1="30" x2="140" y2="206" stroke={color} strokeWidth="0.75" strokeDasharray="4 3" opacity="0.3"/>
+      <line x1="140" y1="10" x2="140" y2="30" stroke={line} strokeWidth="1.0" opacity="0.4"/>
+      <line x1="140" y1="30" x2="140" y2="206" stroke={line} strokeWidth="0.75" strokeDasharray="4 3" opacity="0.35"/>
+
+      {/* Synapse nodes — only when glowing */}
+      {glow && NODES.map((n, i) => (
+        <g key={i} style={{ animation: `synapse 3.2s ease-in-out ${(i % 7) * 0.45}s infinite` }}>
+          <circle cx={n.x} cy={n.y} r="4.5" fill={node} filter="url(#nodeBlur)" opacity="0.7" />
+          <circle cx={n.x} cy={n.y} r="1.7" fill={node} />
+        </g>
+      ))}
+
+      {glow && (
+        <style>{`
+          @keyframes synapse {
+            0%, 100% { opacity: 0.25; }
+            50%      { opacity: 1; }
+          }
+        `}</style>
+      )}
     </svg>
   );
 }
@@ -126,53 +168,55 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
     <div style={{ background: S.white, minHeight: '100vh' }}>
 
       {onSignIn && (
-        <button onClick={onSignIn} style={{ position: 'fixed', top: 20, right: 24, zIndex: 100, fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>
+        <button onClick={onSignIn} style={{ position: 'fixed', top: 20, right: 24, zIndex: 100, fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#888', padding: '10px 14px', cursor: 'pointer' }}>
           SIGN IN
         </button>
       )}
 
-      {/* ── HERO ─────────────────────────────────────────────── */}
+      {/* ── HERO (dark) ──────────────────────────────────────── */}
       <div style={{
         minHeight: '100vh',
+        background: S.black,
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
         alignItems: 'center',
         justifyContent: 'center',
         padding: isMobile ? '88px 24px 72px' : '80px 8% 60px',
-        gap: isMobile ? 48 : 64,
+        gap: isMobile ? 40 : 64,
         position: 'relative',
+        overflow: 'hidden',
       }}>
 
         {/* Left: text + CTA */}
-        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 480, textAlign: isMobile ? 'center' : 'left' }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: S.mid, marginBottom: 28 }}>
+        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 500, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 2 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: '#777', marginBottom: 28 }}>
             BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
           </div>
-          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 112px)', lineHeight: 0.88, color: S.black, letterSpacing: -1, margin: '0 0 28px' }}>
+          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 116px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
             HOW ARE<br />YOU WIRED?
           </h1>
-          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 21px)', fontStyle: 'italic', color: '#444', lineHeight: 1.65, margin: '0 0 12px', maxWidth: 420 }}>
-            No right answers. Discover how you instinctively take action, where your energy goes, and how to use your wiring instead of fighting it.
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 24px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 440 }}>
+            The instruction manual you were never handed for your own mind.
           </p>
-          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.mid, lineHeight: 1.6, margin: '0 0 40px', maxWidth: 380 }}>
-            Four options per question. Pick the one you'd most likely take, then the one you'd least likely take. Go with your gut.
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 40px', maxWidth: 400 }}>
+            Stop fighting how you work. See exactly where your energy goes, the environments that bring out your best, and how to build your life around your wiring instead of against it.
           </p>
 
           {resumeData ? (
             <div style={{ maxWidth: 340 }}>
-              <div style={{ border: `1px solid ${S.rule}`, padding: '20px 24px', marginBottom: 12 }}>
-                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
-                <div style={{ height: 2, background: S.rule, marginBottom: 10 }}>
-                  <div style={{ height: '100%', background: S.black, width: `${pct}%` }} />
+              <div style={{ border: '1px solid #2a2a2a', padding: '20px 24px', marginBottom: 12 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: '#888', marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
+                <div style={{ height: 2, background: '#2a2a2a', marginBottom: 10 }}>
+                  <div style={{ height: '100%', background: S.white, width: `${pct}%` }} />
                 </div>
-                <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 16 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 10, color: '#888', marginBottom: 16 }}>
                   QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
                 </div>
-                <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '14px', cursor: 'pointer' }}>
+                <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.white, color: S.black, border: 'none', padding: '14px', cursor: 'pointer' }}>
                   RESUME
                 </button>
               </div>
-              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '12px', cursor: 'pointer' }}>
+              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#888', padding: '12px', cursor: 'pointer' }}>
                 START OVER INSTEAD
               </button>
             </div>
@@ -180,29 +224,29 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: isMobile ? 'center' : 'flex-start', gap: 12 }}>
               <button
                 onClick={onStart}
-                style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.black, color: S.white, border: 'none', padding: '16px 56px', cursor: 'pointer', transition: 'transform 0.15s' }}
+                style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.08em', background: S.white, color: S.black, border: 'none', padding: '16px 56px', cursor: 'pointer', transition: 'transform 0.15s' }}
                 onMouseEnter={e => e.target.style.transform = 'scale(1.04)'}
                 onMouseLeave={e => e.target.style.transform = 'scale(1)'}
               >
                 BEGIN ASSESSMENT
               </button>
-              <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
+              <div style={{ fontFamily: S.mono, fontSize: 10, color: '#777', letterSpacing: '0.15em' }}>~8 MINUTES · FREE · NO SIGNUP TO START</div>
             </div>
           )}
         </div>
 
-        {/* Right: brain diagram */}
+        {/* Right: glowing brain diagram */}
         {!isMobile && (
-          <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 32 }}>
-            <BrainDiagram color={S.black} size={320} />
+          <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36, position: 'relative', zIndex: 2 }}>
+            <BrainDiagram glow size={360} />
             {/* 4-dimension mini legend */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px 40px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 44px' }}>
               {MODES.map(m => (
                 <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 20, height: 1, background: S.rule, flexShrink: 0 }} />
+                  <div style={{ width: 20, height: 1, background: '#3a3a3a', flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid }}>{LABELS[m].toUpperCase()}</div>
-                    <div style={{ fontFamily: S.cormorant, fontSize: 11, fontStyle: 'italic', color: '#888' }}>{SAMPLE_NAMES[m]}</div>
+                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: '#888' }}>{LABELS[m].toUpperCase()}</div>
+                    <div style={{ fontFamily: S.cormorant, fontSize: 12, fontStyle: 'italic', color: '#aaa' }}>{SAMPLE_NAMES[m]}</div>
                   </div>
                 </div>
               ))}
@@ -213,17 +257,17 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         {/* Scroll indicator */}
         <button
           onClick={scrollToProfile}
-          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
+          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 3, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
         >
-          <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: S.mid }}>SEE WHAT YOU'LL DISCOVER</span>
-          <span style={{ display: 'block', width: 1, height: 32, background: S.rule, position: 'relative', overflow: 'hidden' }}>
-            <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: S.mid, animation: 'scrollLine 1.6s ease-in-out infinite' }} />
+          <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#777' }}>SEE WHAT YOU'LL DISCOVER</span>
+          <span style={{ display: 'block', width: 1, height: 32, background: '#2a2a2a', position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: '#888', animation: 'scrollLine 1.6s ease-in-out infinite' }} />
           </span>
         </button>
       </div>
 
       {/* ── STATS STRIP ─────────────────────────────────────── */}
-      <div style={{ background: S.black, padding: '28px 8%' }}>
+      <div style={{ background: S.black, padding: '28px 8%', borderTop: '1px solid #1a1a1a' }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: isMobile ? 'space-between' : 'space-around', gap: 0, flexWrap: 'wrap' }}>
           {[
             { num: '36', label: 'QUESTIONS' },
