@@ -28,6 +28,9 @@ const SECTIONS = [
   { num: '16', group: 'CAREER',  label: 'Money Patterns',   reveals: 'How your wiring shapes financial decisions.', sample: '"Wired for risk. Early mover. Watch: over-concentration in speculative bets."' },
 ];
 
+// Head & shoulders profile silhouette, facing right (viewBox 0 0 380 480)
+const HEAD_PATH = "M165 64 C120 64 90 100 88 148 C87 176 99 196 103 214 C107 232 101 246 84 258 C58 277 34 302 20 342 C12 366 9 384 8 414 L8 480 L372 480 L372 392 C372 348 344 318 305 304 C277 294 261 286 258 262 C256 250 257 242 262 234 C268 230 277 230 284 224 C289 220 287 216 291 211 C297 207 301 209 303 204 C305 200 301 197 303 193 C309 189 320 191 322 183 C323 177 314 175 308 173 C303 171 301 167 300 161 C299 155 305 153 306 147 C307 141 300 139 298 133 C297 125 300 114 296 104 C290 84 205 64 165 64 Z";
+
 // Synapse nodes that sit on the brain network and pulse
 const NODES = [
   { x: 74, y: 26 }, { x: 58, y: 95 }, { x: 50, y: 136 }, { x: 95, y: 86 },
@@ -173,50 +176,90 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         </button>
       )}
 
-      {/* ── HERO (dark) ──────────────────────────────────────── */}
+      {/* ── HERO (silhouette against the sun) ────────────────── */}
       <div style={{
         minHeight: '100vh',
         background: S.black,
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row',
         alignItems: 'center',
-        justifyContent: 'center',
-        padding: isMobile ? '88px 24px 72px' : '80px 8% 60px',
-        gap: isMobile ? 40 : 64,
+        padding: isMobile ? '120px 24px 90px' : '80px 8% 60px',
         position: 'relative',
         overflow: 'hidden',
       }}>
 
-        {/* Left: text + CTA */}
-        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 500, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 2 }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: '#777', marginBottom: 28 }}>
+        {/* SUN — radial amber glow */}
+        <div style={{
+          position: 'absolute', top: isMobile ? '16%' : '50%',
+          right: isMobile ? '50%' : '24%',
+          transform: isMobile ? 'translate(50%,-30%)' : 'translate(50%,-50%)',
+          width: isMobile ? 380 : 720, height: isMobile ? 380 : 720, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,206,138,0.60) 0%, rgba(255,158,72,0.34) 30%, rgba(255,120,44,0.12) 50%, rgba(255,100,40,0) 70%)',
+          zIndex: 1, pointerEvents: 'none',
+        }} />
+        {/* SUN bright core */}
+        <div style={{
+          position: 'absolute', top: isMobile ? '16%' : '50%',
+          right: isMobile ? '50%' : '24%',
+          transform: isMobile ? 'translate(50%,-30%)' : 'translate(50%,-50%)',
+          width: isMobile ? 150 : 300, height: isMobile ? 150 : 300, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,232,196,0.85) 0%, rgba(255,196,128,0.4) 45%, rgba(255,170,90,0) 75%)',
+          zIndex: 1, pointerEvents: 'none',
+        }} />
+
+        {/* SILHOUETTE — head & shoulders profile (desktop) */}
+        {!isMobile && (
+          <div style={{ position: 'absolute', top: '50%', right: '17%', transform: 'translateY(-26%)', zIndex: 2, pointerEvents: 'none' }}>
+            <svg width="440" height="566" viewBox="0 0 380 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d={HEAD_PATH} fill="#050403" />
+              {/* warm rim light — face side only */}
+              <path d={HEAD_PATH} fill="none" stroke="rgba(255,190,120,0.5)" strokeWidth="1.5" strokeDasharray="640 460" strokeDashoffset="20" />
+              {/* faint synapse glints inside the head */}
+              {[[150,150],[178,196],[132,170],[200,150],[164,224]].map(([x,y],i)=>(
+                <circle key={i} cx={x} cy={y} r="2.4" fill="rgba(255,210,150,0.5)" style={{ animation:`synapse 3.4s ease-in-out ${i*0.5}s infinite` }} />
+              ))}
+            </svg>
+          </div>
+        )}
+
+        {/* dark scrim for text legibility */}
+        <div style={{ position: 'absolute', inset: 0, background: isMobile ? 'linear-gradient(180deg, rgba(10,10,10,0.2) 0%, rgba(10,10,10,0.75) 60%, #0a0a0a 100%)' : 'linear-gradient(90deg, #0a0a0a 0%, rgba(10,10,10,0.85) 28%, rgba(10,10,10,0.1) 55%, rgba(10,10,10,0) 70%)', zIndex: 2, pointerEvents: 'none' }} />
+
+        {/* grain overlay */}
+        <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0.09, mixBlendMode: 'overlay', zIndex: 3, pointerEvents: 'none' }}>
+          <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" /></filter>
+          <rect width="100%" height="100%" filter="url(#grain)" />
+        </svg>
+
+        {/* Content */}
+        <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 560, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 4 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: '#999', marginBottom: 28 }}>
             BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
           </div>
-          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 116px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
+          <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(64px, 9vw, 120px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
             HOW ARE<br />YOU WIRED?
           </h1>
-          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 24px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 440 }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 25px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 460 }}>
             The instruction manual you were never handed for your own mind.
           </p>
-          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 40px', maxWidth: 400 }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 40px', maxWidth: 420 }}>
             Stop fighting how you work. See exactly where your energy goes, the environments that bring out your best, and how to build your life around your wiring instead of against it.
           </p>
 
           {resumeData ? (
-            <div style={{ maxWidth: 340 }}>
-              <div style={{ border: '1px solid #2a2a2a', padding: '20px 24px', marginBottom: 12 }}>
-                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: '#888', marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
+            <div style={{ maxWidth: 340, margin: isMobile ? '0 auto' : 0 }}>
+              <div style={{ border: '1px solid #2a2a2a', padding: '20px 24px', marginBottom: 12, background: 'rgba(10,10,10,0.6)' }}>
+                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: '#999', marginBottom: 10 }}>ASSESSMENT IN PROGRESS</div>
                 <div style={{ height: 2, background: '#2a2a2a', marginBottom: 10 }}>
                   <div style={{ height: '100%', background: S.white, width: `${pct}%` }} />
                 </div>
-                <div style={{ fontFamily: S.mono, fontSize: 10, color: '#888', marginBottom: 16 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', marginBottom: 16 }}>
                   QUESTION {resumeData.qIndex + 1} OF {total} — {pct}% COMPLETE
                 </div>
                 <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.white, color: S.black, border: 'none', padding: '14px', cursor: 'pointer' }}>
                   RESUME
                 </button>
               </div>
-              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#888', padding: '12px', cursor: 'pointer' }}>
+              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#999', padding: '12px', cursor: 'pointer' }}>
                 START OVER INSTEAD
               </button>
             </div>
@@ -230,38 +273,19 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               >
                 BEGIN ASSESSMENT
               </button>
-              <div style={{ fontFamily: S.mono, fontSize: 10, color: '#777', letterSpacing: '0.15em' }}>~8 MINUTES · FREE · NO SIGNUP TO START</div>
+              <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', letterSpacing: '0.15em' }}>~8 MINUTES · FREE · NO SIGNUP TO START</div>
             </div>
           )}
         </div>
 
-        {/* Right: glowing brain diagram */}
-        {!isMobile && (
-          <div style={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 36, position: 'relative', zIndex: 2 }}>
-            <BrainDiagram glow size={360} />
-            {/* 4-dimension mini legend */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 44px' }}>
-              {MODES.map(m => (
-                <div key={m} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 20, height: 1, background: '#3a3a3a', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: '#888' }}>{LABELS[m].toUpperCase()}</div>
-                    <div style={{ fontFamily: S.cormorant, fontSize: 12, fontStyle: 'italic', color: '#aaa' }}>{SAMPLE_NAMES[m]}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* Scroll indicator */}
         <button
           onClick={scrollToProfile}
-          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 3, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
+          style={{ position: 'absolute', bottom: 32, left: '50%', transform: 'translateX(-50%)', zIndex: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, opacity: scrolled ? 0 : 1, transition: 'opacity 0.4s' }}
         >
-          <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#777' }}>SEE WHAT YOU'LL DISCOVER</span>
-          <span style={{ display: 'block', width: 1, height: 32, background: '#2a2a2a', position: 'relative', overflow: 'hidden' }}>
-            <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: '#888', animation: 'scrollLine 1.6s ease-in-out infinite' }} />
+          <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#999' }}>SEE WHAT YOU'LL DISCOVER</span>
+          <span style={{ display: 'block', width: 1, height: 32, background: '#3a3a3a', position: 'relative', overflow: 'hidden' }}>
+            <span style={{ position: 'absolute', top: 0, left: 0, width: '100%', background: '#aaa', animation: 'scrollLine 1.6s ease-in-out infinite' }} />
           </span>
         </button>
       </div>
