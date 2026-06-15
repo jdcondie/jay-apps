@@ -63,6 +63,46 @@ async function saveResults(userId, results) {
   return !error;
 }
 
+// ── Test helpers ───────────────────────────────────────────────
+// Build a random results object. If forceDominant is a mode, that mode is
+// picked "most" on every question so it comes out dominant (for reviewing
+// each archetype's report); otherwise fully random.
+function randomResults(forceDominant) {
+  const testResponses = {};
+  QUESTIONS.forEach(q => {
+    const ids = q.options.map(o => o.id);
+    const domOpt = forceDominant ? q.options.find(o => o.mode === forceDominant) : null;
+    if (domOpt) {
+      const others = ids.filter(id => id !== domOpt.id).sort(() => Math.random() - 0.5);
+      testResponses[q.id] = { most: domOpt.id, least: others[0] };
+    } else {
+      const sh = [...ids].sort(() => Math.random() - 0.5);
+      testResponses[q.id] = { most: sh[0], least: sh[1] };
+    }
+  });
+  return scoreAssessment(testResponses);
+}
+
+function DevBar({ onReroll, dominant }) {
+  const modes = [['FF', 'Info'], ['FT', 'Org'], ['QS', 'Change'], ['IMP', 'Exec']];
+  const btn = { fontFamily: S.mono, fontSize: 10, letterSpacing: '0.06em', padding: '7px 10px', border: '1px solid #333', background: '#141414', color: '#cfcbc3', cursor: 'pointer', borderRadius: 4 };
+  return (
+    <div style={{ position: 'fixed', bottom: 14, right: 16, zIndex: 9999, display: 'flex', gap: 6, alignItems: 'center', background: 'rgba(10,10,10,0.94)', padding: '8px 10px', borderRadius: 9, border: '1px solid #2a2a2a', boxShadow: '0 8px 28px rgba(0,0,0,0.35)' }}>
+      <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.16em', color: '#666', marginRight: 2 }}>TEST</span>
+      <button style={btn} onClick={() => onReroll()} title="New fully random report">🎲 RE-ROLL</button>
+      <span style={{ width: 1, height: 20, background: '#2a2a2a', margin: '0 2px' }} />
+      {modes.map(([m, label]) => (
+        <button
+          key={m}
+          style={{ ...btn, background: dominant === m ? '#f5f3ef' : '#141414', color: dominant === m ? '#0a0a0a' : '#cfcbc3', borderColor: dominant === m ? '#f5f3ef' : '#333' }}
+          onClick={() => onReroll(m)}
+          title={`Generate a ${label}-dominant report`}
+        >{label}</button>
+      ))}
+    </div>
+  );
+}
+
 // ── App ────────────────────────────────────────────────────────
 export default function App() {
   // auth
@@ -73,6 +113,7 @@ export default function App() {
   const [phase, setPhase] = useState('intro');
   const [savedResults, setSavedResults] = useState(null); // from DB
   const [currentResults, setCurrentResults] = useState(null); // just scored
+  const [reportKey, setReportKey] = useState(0); // bump to remount the report on re-roll
 
   // quiz state
   const [qIndex, setQIndex] = useState(0);
@@ -191,6 +232,15 @@ export default function App() {
     setPhase('processing');
   };
 
+  // Test: instantly generate a fresh report (optionally forcing a dominant mode)
+  const handleReroll = (mode) => {
+    setCurrentResults(randomResults(mode));
+    setReportKey(k => k + 1);
+    setResumeData(null);
+    setPhase('results');
+    window.scrollTo(0, 0);
+  };
+
   // ── Loading splash ─────────────────────────────────────────
   if (authLoading) {
     return (
@@ -233,8 +283,9 @@ export default function App() {
         )}
         {phase === 'processing' && <ProcessingScreen onDone={handleProcessingDone} />}
         {phase === 'results' && currentResults && (
-          <ResultsManual results={currentResults} onBack={null} onTool={setPhase} />
+          <ResultsManual key={reportKey} results={currentResults} onBack={null} onTool={setPhase} />
         )}
+        {phase === 'results' && currentResults && <DevBar onReroll={handleReroll} dominant={currentResults.dominant} />}
       </>
     );
   }
@@ -283,10 +334,14 @@ export default function App() {
         {phase === 'processing' && <ProcessingScreen onDone={handleProcessingDone} />}
         {phase === 'results' && activeResults && (
           <ResultsManual
+            key={reportKey}
             results={activeResults}
             onBack={savedResults ? () => setPhase('dashboard') : null}
             onTool={setPhase}
           />
+        )}
+        {(phase === 'results' || phase === 'dashboard') && activeResults && (
+          <DevBar onReroll={handleReroll} dominant={activeResults.dominant} />
         )}
       </div>
     </>
