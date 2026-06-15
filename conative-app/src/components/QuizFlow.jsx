@@ -55,23 +55,34 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
     return 'none';
   };
 
-  // Unified tap: none → most → least → clear (per card), single most/least enforced
-  const tap = (optId) => {
-    const st = getState(optId);
-    if (st === 'most')  { onSelect(question.id, { most: null, least: optId }); return; }
-    if (st === 'least') { onSelect(question.id, { most, least: null }); return; }
+  // Row tap: progressive — first pick = most, next = least; re-tap clears
+  const handleRowClick = (optId) => {
+    const cur = getState(optId);
+    if (cur === 'most')  { onSelect(question.id, { most: null, least }); return; }
+    if (cur === 'least') { onSelect(question.id, { most, least: null }); return; }
     if (!most)  { onSelect(question.id, { most: optId, least }); return; }
     if (!least) { onSelect(question.id, { most, least: optId }); return; }
-    onSelect(question.id, { most: optId, least }); // both taken → re-pick most
   };
 
-  // Keyboard: 1-4 pick, Enter/→ advance, ←/Backspace back
+  // Dot tap: force-assign a specific role to this row
+  const handleMostDot = (e, optId) => {
+    e.stopPropagation();
+    if (most === optId) { onSelect(question.id, { most: null, least }); return; }
+    onSelect(question.id, { most: optId, least: least === optId ? null : least });
+  };
+  const handleLeastDot = (e, optId) => {
+    e.stopPropagation();
+    if (least === optId) { onSelect(question.id, { most, least: null }); return; }
+    onSelect(question.id, { most: most === optId ? null : most, least: optId });
+  };
+
+  // Keyboard: 1-4 progressive pick, Enter/→ advance, ←/Backspace back
   useEffect(() => {
     if (showBreak) return;
     const onKey = (e) => {
       if (e.key >= '1' && e.key <= '4') {
         const opt = question.options[Number(e.key) - 1];
-        if (opt) { e.preventDefault(); tap(opt.id); }
+        if (opt) { e.preventDefault(); handleRowClick(opt.id); }
       } else if (e.key === 'Enter' || e.key === 'ArrowRight') {
         if (canProceed) { e.preventDefault(); handleManualNext(); }
       } else if (e.key === 'ArrowLeft' || e.key === 'Backspace') {
@@ -151,40 +162,89 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
           fontWeight: 500, lineHeight: 1.35, color: S.black, margin: '0 0 10px',
         }}>{question.stem}</h2>
 
-        <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: S.mid, marginBottom: 22 }}>
-          Tap the one most like you, then the one least like you.
+        <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: S.mid, marginBottom: 20 }}>
+          Mark the one most like you, and the one least like you.
         </div>
 
-        {/* Option cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {question.options.map((opt, i) => {
-            const st = getState(opt.id);
-            const isMost = st === 'most', isLeast = st === 'least';
-            const bg     = isMost ? S.black : isLeast ? '#e8e4dc' : S.white;
-            const color  = isMost ? S.white : isLeast ? '#5a564e' : S.black;
-            const border = isMost ? S.black : isLeast ? '#d6cfc3' : S.rule;
+        {/* Column headers above M/L dots */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+          <div style={{ flex: 1 }} />
+          <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
+            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: most ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>MOST<br/>LIKELY</span>
+          </div>
+          <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
+            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: least ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>LEAST<br/>LIKELY</span>
+          </div>
+        </div>
+
+        {/* Options */}
+        <div style={{ border: `1px solid ${S.rule}` }}>
+          {question.options.map((opt) => {
+            const state = getState(opt.id);
+            const onBlack = state === 'most';
+            const rowBg   = state === 'most' ? S.black : state === 'least' ? '#e8e4dc' : 'transparent';
+            const rowColor = onBlack ? S.white : S.black;
+
+            const mSelected = state === 'most';
+            const mDotBg     = mSelected ? S.white : 'transparent';
+            const mDotBorder = mSelected ? S.white : onBlack ? 'rgba(255,255,255,0.25)' : '#ccc';
+            const mLetterCol = mSelected ? S.black : onBlack ? 'rgba(255,255,255,0.3)' : '#bbb';
+
+            const lSelected  = state === 'least';
+            const lDotBg     = lSelected ? '#444' : 'transparent';
+            const lDotBorder = lSelected ? '#444' : onBlack ? 'rgba(255,255,255,0.25)' : '#ccc';
+            const lLetterCol = lSelected ? S.white : onBlack ? 'rgba(255,255,255,0.3)' : '#bbb';
+
             return (
-              <button
+              <div
                 key={opt.id}
-                onClick={() => tap(opt.id)}
+                onClick={() => handleRowClick(opt.id)}
                 style={{
-                  position: 'relative', textAlign: 'left', cursor: 'pointer', width: '100%',
-                  background: bg, color, border: `1.5px solid ${border}`,
-                  padding: '17px 16px 17px 18px', minHeight: 62,
-                  display: 'flex', alignItems: 'center', gap: 14,
-                  transition: 'background 0.15s, border-color 0.15s, color 0.15s',
+                  display: 'flex', alignItems: 'center',
+                  background: rowBg, color: rowColor,
+                  borderBottom: `1px solid ${onBlack ? '#333' : S.rule}`,
+                  transition: 'all 0.15s', cursor: 'pointer',
                 }}
-                onMouseEnter={e => { if (st === 'none') e.currentTarget.style.borderColor = '#bbb'; }}
-                onMouseLeave={e => { if (st === 'none') e.currentTarget.style.borderColor = S.rule; }}
               >
-                <span style={{ fontFamily: S.mono, fontSize: 10, flexShrink: 0, width: 12, textAlign: 'center', color: isMost ? 'rgba(255,255,255,0.45)' : '#c2bdb3' }}>{i + 1}</span>
-                <span style={{ flex: 1, fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.4 }}>{opt.text}</span>
-                {(isMost || isLeast) && (
-                  <span style={{ flexShrink: 0, fontFamily: S.mono, fontSize: 7, letterSpacing: '0.12em', color: isMost ? 'rgba(255,255,255,0.65)' : '#8a8275' }}>
-                    {isMost ? 'MOST' : 'LEAST'}
-                  </span>
-                )}
-              </button>
+                <div style={{
+                  flex: 1, padding: '18px 16px 18px 20px',
+                  fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.4,
+                }}>
+                  {opt.text}
+                </div>
+
+                {/* M dot */}
+                <div
+                  onClick={(e) => handleMostDot(e, opt.id)}
+                  title="Most likely"
+                  style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, cursor: 'pointer' }}
+                >
+                  <div style={{
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: mDotBg, border: `1.5px solid ${mDotBorder}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.15s',
+                  }}>
+                    <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: 0, color: mLetterCol, lineHeight: 1 }}>M</span>
+                  </div>
+                </div>
+
+                {/* L dot */}
+                <div
+                  onClick={(e) => handleLeastDot(e, opt.id)}
+                  title="Least likely"
+                  style={{ width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginRight: 8, cursor: 'pointer' }}
+                >
+                  <div style={{
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: lDotBg, border: `1.5px solid ${lDotBorder}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'all 0.15s',
+                  }}>
+                    <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: 0, color: lLetterCol, lineHeight: 1 }}>L</span>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
