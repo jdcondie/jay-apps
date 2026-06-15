@@ -349,35 +349,35 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         </div>
       </div>
 
-      {/* ── THE SCIENCE (dark) ────────────────────────────────── */}
-      <div style={{ background: '#0f0f0f', padding: pad, borderTop: '1px solid #111' }}>
+      {/* ── THE SCIENCE (light) ───────────────────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           {/* Text */}
           <div style={{ marginBottom: isMobile ? 44 : 0 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 16 }}>THE SCIENCE</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 16 }}>THE SCIENCE</div>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
               THE SCIENCE OF<br />HOW YOU ACT.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: S.onDarkBody, lineHeight: 1.7, margin: '0 0 16px', maxWidth: 380 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#555', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 380 }}>
               Your mind works in three parts: what you know, how you feel, and how you instinctively take action. Most tools measure the first two. Personality types, IQ, strengths quizzes, they all describe how you think and feel.
             </p>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: S.onDarkBody, lineHeight: 1.7, margin: 0, maxWidth: 380 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#555', lineHeight: 1.7, margin: 0, maxWidth: 380 }}>
               This measures the third part, the doing. Conative psychology has been studied for more than 40 years. It maps how you naturally gather information, create order, handle risk, and turn ideas into something real, the part that predicts where you'll thrive, where you'll stall, and where you'll burn out.
             </p>
           </div>
           {/* Three parts of the mind */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: '#1e1e1e', border: '1px solid #1e1e1e' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: S.rule, border: `1px solid ${S.rule}` }}>
             {[
               { k: 'COGNITIVE', d: 'What you know. How you think.', on: false },
               { k: 'AFFECTIVE', d: 'How you feel. What you prefer.', on: false },
               { k: 'CONATIVE',  d: 'How you instinctively take action.', on: true },
             ].map(({ k, d, on }) => (
-              <div key={k} style={{ background: on ? '#181818' : '#111', padding: isMobile ? '20px 22px' : '24px 28px', borderLeft: on ? `2px solid ${S.white}` : '2px solid transparent', position: 'relative' }}>
+              <div key={k} style={{ background: on ? '#f0ede8' : S.white, padding: isMobile ? '20px 22px' : '24px 28px', borderLeft: on ? `2px solid ${S.black}` : '2px solid transparent', position: 'relative' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
-                  <span style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.04em', color: on ? S.white : '#555' }}>{k}</span>
-                  {on && <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.16em', color: '#888' }}>WHAT WE MEASURE</span>}
+                  <span style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.04em', color: on ? S.black : S.mid }}>{k}</span>
+                  {on && <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.16em', color: S.mid }}>WHAT WE MEASURE</span>}
                 </div>
-                <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: on ? S.onDarkBody : '#555', lineHeight: 1.4 }}>{d}</div>
+                <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: on ? '#444' : S.mid, lineHeight: 1.4 }}>{d}</div>
               </div>
             ))}
           </div>
