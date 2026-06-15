@@ -114,6 +114,73 @@ export const DOMINANT_NARRATIVES = {
   IMP: { how: "Your brain runs on the physical world. You think with your hands. Environments that are all talk and no making will drain you.", success: "Tangible output. Something you can point at and say 'I built that.' Physical evidence of your work.", reset: "Touch something physical. Cook. Build. Fix. Move your hands. Your brain reconnects through the physical world.", procrastination: "You're stuck because the task is too abstract. Build something, even a sketch. Your brain thinks through making." }
 };
 
+export const DAILY_RULES = {
+  FF: {
+    morning: [
+      "Feed your engine first. Ten minutes of reading or input before the noise starts.",
+      "Pick the one question that matters most today and answer it first.",
+      "Protect the first block for the work that needs your full focus.",
+    ],
+    during: [
+      "Batch the shallow tasks so they don't interrupt your deep thinking.",
+      "Stuck? You almost always have enough information already. Decide and move.",
+      "Write down what you learned. Capturing it clears the buffer.",
+    ],
+    end: [
+      "Note the one thing you understand better than you did this morning.",
+      "Flag what you still need to know tomorrow, then close the laptop.",
+    ],
+  },
+  FT: {
+    morning: [
+      "List the open loops. Pick the three you'll actually close today.",
+      "Set up your space and tools before you start. Order first.",
+      "Block the morning for the task that needs sequence and focus.",
+    ],
+    during: [
+      "Work in order. Finish one thing before you open the next.",
+      "Stuck? Define the very next step. That's the whole system right now.",
+      "Close a small loop when your energy dips. Completion refuels you.",
+    ],
+    end: [
+      "Review what got finished. Let the closed loops count.",
+      "Tee up tomorrow's first step so you start already in motion.",
+    ],
+  },
+  QS: {
+    morning: [
+      "Start something new before the routine sets in.",
+      "Pick one fresh problem to push on today.",
+      "Protect the first block for creative or strategic work.",
+    ],
+    during: [
+      "Work in short sprints. Switch tasks before boredom hits.",
+      "Stuck? Find what's interesting about it, or start from a different angle.",
+      "Capture the ideas that surface so your brain can move past them.",
+    ],
+    end: [
+      "Note what energized you. Do more of that tomorrow.",
+      "Park the half-finished ideas somewhere you trust.",
+    ],
+  },
+  IMP: {
+    morning: [
+      "Make or touch something real before screens take over.",
+      "Pick the one thing you'll have built by the end of the day.",
+      "Protect the first block for hands-on work.",
+    ],
+    during: [
+      "Work in focused blocks with a real break after each one.",
+      "Stuck? Build a rough version. Your brain thinks through making.",
+      "Move your body when your energy dips. It resets the chemistry.",
+    ],
+    end: [
+      "Point at what you made today. Tangible counts.",
+      "Set out the materials for tomorrow's first build.",
+    ],
+  },
+};
+
 export const RESISTANCE_NARRATIVES = {
   FF: "Deep research drains you. You can do it, but it costs more energy than it returns. Get the summary. Trust your pattern recognition.",
   FT: "Rigid process kills your momentum. Build your own structure, make it flexible, and don't let anyone shame you for having piles instead of files.",

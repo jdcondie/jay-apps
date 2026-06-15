@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE, LOOP_DESCRIPTION } from '../data/strengthData.js';
+import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE, LOOP_DESCRIPTION, DAILY_RULES } from '../data/strengthData.js';
 import SpectrumBar, { BEHAVIORAL_LINES } from './SpectrumBar.jsx';
 import { CAREER_ARCHETYPES } from '../data/careerData.js';
 import { scoreCareerFit } from '../scoring/careerScoring.js';
@@ -557,21 +557,19 @@ export default function ResultsManual({ results, onBack, onTool }) {
         </div>
       </>);
 
-      case 'daily': return W('Daily Rules', <>
-        {Eye('DAILY OPERATING RULES')}{H('BASELINE CONDITIONS')}
-        <P>Treat these like maintenance, not motivation.</P>
-        <Label>Morning</Label>
-        <Item>Move before you open the phone. Even 10 minutes.</Item>
-        <Item>One clear intention. Not a list. One thing.</Item>
-        <Item>First 2 hours: deep creative or strategic work only.</Item>
-        <Label>During the Day</Label>
-        <Item>45-90 minute timed blocks. Real break after.</Item>
-        <Item>Stuck? Move your body. Walk. Stretch. It resets the chemistry.</Item>
-        <Item>Create something. Even small. Creation is fuel.</Item>
-        <Label>End of Day</Label>
-        <Item>What gave you energy? Do more of that.</Item>
-        <Item>What drained you? Reduce or eliminate tomorrow.</Item>
-      </>);
+      case 'daily': {
+        const dr = DAILY_RULES[dominant];
+        return W('Daily Rules', <>
+          {Eye('DAILY OPERATING RULES')}{H('BASELINE CONDITIONS')}
+          <P>Treat these like maintenance, not motivation. They're tuned to your dominant mode.</P>
+          <Label>Morning</Label>
+          {dr.morning.map((s, i) => <Item key={i}>{s}</Item>)}
+          <Label>During the Day</Label>
+          {dr.during.map((s, i) => <Item key={i}>{s}</Item>)}
+          <Label>End of Day</Label>
+          {dr.end.map((s, i) => <Item key={i}>{s}</Item>)}
+        </>);
+      }
 
       case 'comms': return W('Communication', <>
         {Eye('COMMUNICATION GUIDE')}{H('WHAT OTHERS SHOULD KNOW ABOUT YOU')}
