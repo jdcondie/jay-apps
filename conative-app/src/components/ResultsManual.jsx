@@ -55,6 +55,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
   const [activeSection, setActiveSection] = useState(null);
   const [homeFilter, setHomeFilter] = useState(null);
   const [careerFilter, setCareerFilter] = useState('all');
+  const [expandedCareer, setExpandedCareer] = useState(null);
   const [stressSymptoms, setStressSymptoms] = useState([]);
   const [decisionAnswers, setDecisionAnswers] = useState({});
   const [partnerZones, setPartnerZones] = useState({ FF: null, FT: null, QS: null, IMP: null });
@@ -621,30 +622,50 @@ export default function ResultsManual({ results, onBack, onTool }) {
                   <button key={k} onClick={() => setCareerFilter(k)} style={{ padding: '6px 14px', borderRadius: 100, fontFamily: S.mono, fontSize: 12, fontWeight: 600, border: `1.5px solid ${careerFilter === k ? '#E8541A' : S.rule}`, background: careerFilter === k ? '#E8541A' : S.white, color: careerFilter === k ? '#fff' : '#3d3d3d', cursor: 'pointer', transition: 'all 0.15s' }}>{label}</button>
                 ))}
               </div>
-              {[{key:'t1',label:'Strong Fit Careers',items:filtered.filter(c=>c.fit===1)},{key:'t2',label:'Possible Fit Careers',items:filtered.filter(c=>c.fit===2)},{key:'t3',label:'Poor Fit / Caution',items:filtered.filter(c=>c.fit===3)}].filter(g=>g.items.length>0).map(group => (
-                <Collapsible key={group.key} sectionKey={`career-${group.key}`} label={`${group.label} (${group.items.length})`} defaultOpen={group.key === 't1'}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14, marginTop: 8 }}>
-                    {group.items.map(c => (
-                      <div key={c.id} style={{ background: S.white, border: `1.5px solid ${S.rule}`, borderRadius: 10, padding: 20, display: 'flex', flexDirection: 'column', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: 14, right: 14, fontSize: 9, fontFamily: S.mono, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: fitBg(c.fit), color: fitColor(c.fit) }}>{fitLabel(c.fit)}</div>
-                        <div style={{ fontSize: 20, marginBottom: 10 }}>{c.icon}</div>
-                        <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: S.mid, marginBottom: 3 }}>{c.category}</div>
-                        <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, lineHeight: 1.15, marginBottom: 3, paddingRight: 56 }}>{c.title}</div>
-                        <div style={{ fontFamily: S.cormorant, fontSize: 12, fontStyle: 'italic', color: S.mid, marginBottom: 10 }}>{c.subtitle}</div>
-                        <p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#3d3d3d', lineHeight: 1.65, marginBottom: 14, flex: 1, maxWidth: 'none' }}>{c.desc}</p>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 12 }}>
-                          <Metric label="Energy Fit" value={c.energyFit} /><Metric label="Strength Fit" value={c.strengthFit} />
-                          <Metric label="Freedom" value={c.freedom} /><Metric label="Income" value={c.income} />
+              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.1em', color: S.mid, marginBottom: 8, display: 'flex', justifyContent: 'space-between' }}>
+                <span>ROLE · RANKED BY FIT</span><span>{filtered.length} SHOWN</span>
+              </div>
+              <div style={{ borderTop: `1px solid ${S.rule}` }}>
+                {filtered.map((c, i) => {
+                  const open = expandedCareer === c.id;
+                  const pct = Math.round(c.alignment * 10);
+                  return (
+                    <div key={c.id} style={{ borderBottom: `1px solid ${S.rule}` }}>
+                      <button
+                        onClick={() => setExpandedCareer(open ? null : c.id)}
+                        style={{ width: '100%', background: open ? '#faf9f6' : 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: isMobile ? 10 : 14, padding: '13px 10px', textAlign: 'left' }}
+                      >
+                        <span style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, width: 24, flexShrink: 0, textAlign: 'right' }}>{i + 1}</span>
+                        <span style={{ fontSize: 17, flexShrink: 0, width: 22, textAlign: 'center' }}>{c.icon}</span>
+                        <span style={{ flexShrink: 0, width: isMobile ? 124 : 230, minWidth: 0 }}>
+                          <span style={{ display: 'block', fontFamily: S.bebas, fontSize: 16, color: S.black, letterSpacing: '0.02em', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.title}</span>
+                          {!isMobile && <span style={{ display: 'block', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.08em', textTransform: 'uppercase', color: S.mid, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.category}</span>}
+                        </span>
+                        <span style={{ flex: 1, minWidth: 30, height: 6, background: '#ececec', borderRadius: 3, overflow: 'hidden' }}>
+                          <span style={{ display: 'block', height: '100%', borderRadius: 3, background: fitColor(c.fit), width: `${pct}%` }} />
+                        </span>
+                        <span style={{ fontFamily: S.bebas, fontSize: 18, color: fitColor(c.fit), width: 44, textAlign: 'right', flexShrink: 0 }}>{pct}%</span>
+                        <span style={{ width: 14, flexShrink: 0, color: S.mid, fontFamily: S.mono, fontSize: 13, textAlign: 'center', transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>›</span>
+                      </button>
+                      {open && (
+                        <div style={{ padding: isMobile ? '2px 10px 20px 34px' : '2px 24px 22px 60px' }}>
+                          <div style={{ display: 'inline-block', fontSize: 9, fontFamily: S.mono, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: fitBg(c.fit), color: fitColor(c.fit), marginBottom: 10 }}>{fitLabel(c.fit)}</div>
+                          <div style={{ fontFamily: S.cormorant, fontSize: 13, fontStyle: 'italic', color: S.mid, marginBottom: 8 }}>{c.subtitle}</div>
+                          <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#3d3d3d', lineHeight: 1.65, margin: '0 0 14px', maxWidth: 560 }}>{c.desc}</p>
+                          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 8, maxWidth: 560 }}>
+                            <Metric label="Energy Fit" value={c.energyFit} />
+                            <Metric label="Strength Fit" value={c.strengthFit} />
+                            <Metric label="Freedom" value={c.freedom} />
+                            <Metric label="Income" value={c.income} />
+                          </div>
+                          {c.deadIf && <p style={{ fontFamily: S.cormorant, fontSize: 13, fontStyle: 'italic', color: '#dc2626', margin: '12px 0 0', maxWidth: 560 }}>Watch out: {c.deadIf}</p>}
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 10, borderTop: `1px solid ${S.rule}`, marginTop: 'auto' }}>
-                          <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid }}>Alignment</span>
-                          <span style={{ fontFamily: S.bebas, fontSize: 20, color: scoreColor(c.alignment) }}>{Math.round(c.alignment * 10)}%</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </Collapsible>
-              ))}
+                      )}
+                    </div>
+                  );
+                })}
+                {filtered.length === 0 && <p style={{ fontFamily: S.cormorant, fontStyle: 'italic', color: S.mid, padding: '24px 0' }}>No roles match that filter.</p>}
+              </div>
               {deadZones.length > 0 && (
                 <Collapsible sectionKey="dead-zones" label={`Careers to Avoid (${deadZones.length})`}>
                   {deadZones.map(c => (
