@@ -107,7 +107,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
           color: S.white, lineHeight: 0.88, letterSpacing: '0.01em', whiteSpace: 'pre-line',
           animation: 'qIn 0.4s ease both',
         }}>{msg.headline}</div>
-        <div style={{ fontFamily: S.mono, fontSize: 10, color: S.onDarkDim, letterSpacing: '0.25em', marginTop: 28 }}>
+        <div style={{ fontFamily: S.mono, fontSize: 11, color: S.onDarkDim, letterSpacing: '0.25em', marginTop: 28 }}>
           {msg.sub}
         </div>
         <style>{`@keyframes qIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }`}</style>
@@ -124,14 +124,14 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
       {/* Header */}
       <div style={{ padding: '14px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <button onClick={onBack} disabled={index === 0} style={{
-          fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em',
+          fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em',
           background: 'transparent', border: 'none', padding: 0,
           color: index === 0 ? 'transparent' : S.mid,
           cursor: index === 0 ? 'default' : 'pointer',
           pointerEvents: index === 0 ? 'none' : 'auto',
         }}>← BACK</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em', color: S.mid }}>
+          <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.15em', color: S.mid }}>
             {index + 1} OF {total}
           </div>
           {onPause && (
@@ -162,7 +162,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
           fontWeight: 500, lineHeight: 1.35, color: S.black, margin: '0 0 10px',
         }}>{question.stem}</h2>
 
-        <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: S.mid, marginBottom: 20 }}>
+        <div style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', color: S.mid, marginBottom: 20 }}>
           Mark the one most like you, and the one least like you.
         </div>
 
@@ -170,10 +170,10 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
           <div style={{ flex: 1 }} />
           <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
-            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: most ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>MOST<br/>LIKELY</span>
+            <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.04em', color: most ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>MOST<br/>LIKELY</span>
           </div>
           <div style={{ width: 48, textAlign: 'center', flexShrink: 0 }}>
-            <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.04em', color: least ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>LEAST<br/>LIKELY</span>
+            <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.04em', color: least ? S.black : '#bbb', lineHeight: 1.5, display: 'block', transition: 'color 0.15s' }}>LEAST<br/>LIKELY</span>
           </div>
         </div>
 
@@ -208,7 +208,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
               >
                 <div style={{
                   flex: 1, padding: '18px 16px 18px 20px',
-                  fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.4,
+                  fontFamily: S.cormorant, fontSize: 19, lineHeight: 1.4,
                 }}>
                   {opt.text}
                 </div>
@@ -225,7 +225,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.15s',
                   }}>
-                    <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: 0, color: mLetterCol, lineHeight: 1 }}>M</span>
+                    <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: 0, color: mLetterCol, lineHeight: 1 }}>M</span>
                   </div>
                 </div>
 
@@ -241,7 +241,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     transition: 'all 0.15s',
                   }}>
-                    <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: 0, color: lLetterCol, lineHeight: 1 }}>L</span>
+                    <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: 0, color: lLetterCol, lineHeight: 1 }}>L</span>
                   </div>
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
         {/* Continue — fades in when ready */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 20 }}>
           <button onClick={handleManualNext} disabled={!canProceed} style={{
-            fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em',
+            fontFamily: S.mono, fontSize: 11, letterSpacing: '0.15em',
             background: 'transparent', border: 'none', padding: '8px 0',
             color: canProceed ? S.black : 'transparent',
             cursor: canProceed ? 'pointer' : 'default',

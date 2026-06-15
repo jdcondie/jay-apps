@@ -148,9 +148,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
                 onMouseEnter={e => e.currentTarget.style.background = '#f0ede8'}
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               >
-                <div style={{ fontFamily: S.mono, fontSize: 8, color: S.mid, letterSpacing: '0.12em', marginBottom: 4 }}>{MODE_LABELS[m]}</div>
+                <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, letterSpacing: '0.12em', marginBottom: 4 }}>{MODE_LABELS[m]}</div>
                 <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black }}>{strengths[m].name}</div>
-                {zoneOverrides[m] && <div style={{ fontFamily: S.mono, fontSize: 8, color: '#16a34a', marginTop: 4 }}>RECALIBRATED</div>}
+                {zoneOverrides[m] && <div style={{ fontFamily: S.mono, fontSize: 9, color: '#16a34a', marginTop: 4 }}>RECALIBRATED</div>}
               </button>
             ))}
           </div>
@@ -173,12 +173,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <div style={{ fontFamily: S.bebas, fontSize: 26, color: S.black, marginBottom: 20 }}>4 QUESTIONS</div>
           {qs.map((q, qi) => (
             <div key={q.id} style={{ marginBottom: 20 }}>
-              <p style={{ fontFamily: S.cormorant, fontSize: 16, color: '#333', lineHeight: 1.55, marginBottom: 10, maxWidth: 'none' }}>{qi + 1}. {q.text}</p>
+              <p style={{ fontFamily: S.cormorant, fontSize: 17, color: '#333', lineHeight: 1.55, marginBottom: 10, maxWidth: 'none' }}>{qi + 1}. {q.text}</p>
               <div style={{ display: 'flex', gap: 4 }}>
                 {[{ v: 1, label: 'NOT ME' }, { v: 2, label: '2' }, { v: 3, label: '3' }, { v: 4, label: '4' }, { v: 5, label: 'VERY ME' }].map(({ v, label }) => (
                   <button key={v}
                     onClick={() => setFeedback(f => ({ ...f, answers: { ...f.answers, [q.id]: v } }))}
-                    style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.04em',
+                    style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 9, letterSpacing: '0.04em',
                       border: `1.5px solid ${feedback.answers[q.id] === v ? S.black : S.rule}`,
                       background: feedback.answers[q.id] === v ? S.black : 'transparent',
                       color: feedback.answers[q.id] === v ? S.white : S.mid,
@@ -197,7 +197,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
               }
               setFeedback(f => ({ ...f, step: 'done' }));
             }}
-            style={{ width: '100%', padding: 12, fontFamily: S.bebas, fontSize: 16, letterSpacing: '0.05em', marginBottom: 8,
+            style={{ width: '100%', padding: 12, fontFamily: S.bebas, fontSize: 17, letterSpacing: '0.05em', marginBottom: 8,
               background: allAnswered ? S.black : '#eee', color: allAnswered ? S.white : '#aaa',
               border: 'none', cursor: allAnswered ? 'pointer' : 'default' }}
           >
@@ -222,12 +222,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, marginBottom: 10 }}>
             {STRENGTH_DATA[feedback.mode][rawZones[feedback.mode]].name} → {STRENGTH_DATA[feedback.mode][appliedZone].name}
           </div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 16, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
             Your {MODE_LABELS[feedback.mode].toLowerCase()} dimension has been recalibrated. Content on this page now reflects your adjusted wiring.
           </p>
         </>) : (<>
           <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 6 }}>CONFIRMED</div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 16, color: '#555', lineHeight: 1.65, marginBottom: 16, maxWidth: 'none' }}>
             Your answers confirm the original result for {MODE_LABELS[feedback.mode]}. If something still doesn't feel right, the friction may be in a different dimension.
           </p>
         </>)}
@@ -240,7 +240,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
           </button>
           <button
             onClick={() => setFeedback({ open: false, step: 'select', mode: null, answers: {} })}
-            style={{ flex: 1, padding: '8px', fontFamily: S.bebas, fontSize: 14, background: S.black, color: S.white, border: 'none', cursor: 'pointer' }}
+            style={{ flex: 1, padding: '8px', fontFamily: S.bebas, fontSize: 15, background: S.black, color: S.white, border: 'none', cursor: 'pointer' }}
           >
             DONE
           </button>
@@ -259,16 +259,16 @@ export default function ResultsManual({ results, onBack, onTool }) {
   // ── Light-mode sub-components ────────────────────────────────────
 
   const P = ({ children, style: sx }) => (
-    <p style={{ fontFamily: S.cormorant, fontSize: 18, lineHeight: 1.75, color: '#333', marginBottom: 16, maxWidth: 540, ...sx }}>{children}</p>
+    <p style={{ fontFamily: S.cormorant, fontSize: 19, lineHeight: 1.75, color: '#333', marginBottom: 16, maxWidth: 540, ...sx }}>{children}</p>
   );
   const Pull = ({ children }) => (
     <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(20px, 3vw, 26px)', fontStyle: 'italic', fontWeight: 500, lineHeight: 1.35, color: S.black, borderLeft: `3px solid ${S.black}`, paddingLeft: 24, margin: '24px 0', maxWidth: 480 }}>{children}</div>
   );
   const Label = ({ children }) => (
-    <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: S.mid, margin: '28px 0 10px', paddingBottom: 8, borderBottom: `1px solid ${S.rule}` }}>{children}</div>
+    <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: S.mid, margin: '28px 0 10px', paddingBottom: 8, borderBottom: `1px solid ${S.rule}` }}>{children}</div>
   );
   const Item = ({ children }) => (
-    <div style={{ padding: '12px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#333', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+    <div style={{ padding: '12px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.65, color: '#333', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
       <span style={{ fontFamily: S.mono, fontSize: 12, color: S.mid, flexShrink: 0, marginTop: 2 }}>&mdash;</span>
       <span>{children}</span>
     </div>
@@ -279,7 +279,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
       <div style={{ borderBottom: `1px solid ${S.rule}` }}>
         <button onClick={() => toggleSection(sectionKey)} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', padding: '14px 0', background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em', fontWeight: 600, color: S.black, textAlign: 'left' }}>
           <span>{label}</span>
-          <span style={{ fontFamily: S.bebas, fontSize: 18, color: S.mid }}>{isOpen ? '−' : '+'}</span>
+          <span style={{ fontFamily: S.bebas, fontSize: 19, color: S.mid }}>{isOpen ? '−' : '+'}</span>
         </button>
         {isOpen && <div style={{ paddingBottom: 16 }}>{children}</div>}
       </div>
@@ -301,7 +301,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
       </button>
       {REPORT_GROUPS.map(group => (
         <div key={group.id}>
-          <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid, padding: '14px 20px 6px' }}>{group.label}</div>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: S.mid, padding: '14px 20px 6px' }}>{group.label}</div>
           {group.keys.map(key => {
             const card = REPORT_CARDS.find(c => c.key === key);
             if (!card) return null;
@@ -344,7 +344,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
               onClick={() => { setActiveSection(null); setHomeFilter(tab.id); window.scrollTo(0, 0); }}
               style={{ flex: 1, padding: '10px 4px 10px', background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}
             >
-              <span style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.08em', color: isActive ? S.black : S.mid, fontWeight: isActive ? 700 : 400 }}>{tab.label}</span>
+              <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.08em', color: isActive ? S.black : S.mid, fontWeight: isActive ? 700 : 400 }}>{tab.label}</span>
               <span style={{ width: 16, height: 2, background: isActive ? S.black : 'transparent', borderRadius: 1, display: 'block' }} />
             </button>
           );
@@ -359,14 +359,14 @@ export default function ResultsManual({ results, onBack, onTool }) {
     const idx = REPORT_CARDS.findIndex(c => c.key === sectionKey);
     const prev = idx > 0 ? REPORT_CARDS[idx - 1] : null;
     const next = idx < REPORT_CARDS.length - 1 ? REPORT_CARDS[idx + 1] : null;
-    const btnStyle = { fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer', whiteSpace: 'nowrap' };
+    const btnStyle = { fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer', whiteSpace: 'nowrap' };
     return (
       <div style={{ minHeight: '100vh', background: S.white, display: 'flex' }}>
         {!isMobile && <Sidebar sectionKey={sectionKey} />}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}`, position: 'sticky', top: 0, background: S.white, zIndex: 10, gap: 8 }}>
             <button onClick={goBack} style={btnStyle}>← REPORT</button>
-            <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
+            <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em', color: S.mid, textAlign: 'center', flex: 1 }}>{label.toUpperCase()}</div>
             <div style={{ display: 'flex', gap: 8 }}>
               {prev && <button onClick={() => { setActiveSection(prev.key); window.scrollTo(0,0); }} style={btnStyle}>← {isMobile ? prev.num : prev.label.toUpperCase()}</button>}
               {next && <button onClick={() => { setActiveSection(next.key); window.scrollTo(0,0); }} style={{ ...btnStyle, background: '#f0ede8' }}>{isMobile ? next.num : next.label.toUpperCase()} →</button>}
@@ -395,18 +395,18 @@ export default function ResultsManual({ results, onBack, onTool }) {
       </SectionPage>
     );
     const H = (text) => <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 5vw, 52px)', color: S.black, margin: '0 0 24px', lineHeight: 1 }}>{text}</h2>;
-    const Eye = (text) => <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: S.mid, marginBottom: 14 }}>{text}</div>;
+    const Eye = (text) => <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.3em', color: S.mid, marginBottom: 14 }}>{text}</div>;
 
     switch (key) {
 
       case 'explain': return W('What This Means', <>
         {Eye('IN PLAIN LANGUAGE')}{H('HOW YOU OPERATE')}
         <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.5vw, 24px)', lineHeight: 1.65, color: '#222', marginBottom: 20 }}>{domData.how}</p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your strongest instinct is <strong style={{ color: S.black }}>{MODE_LABELS[dominant]}</strong> ({strengths[dominant].name}). {strengths[dominant].superpower}</p>
-        <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your lowest-energy dimension is <strong style={{ color: S.black }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
+        <p style={{ fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your strongest instinct is <strong style={{ color: S.black }}>{MODE_LABELS[dominant]}</strong> ({strengths[dominant].name}). {strengths[dominant].superpower}</p>
+        <p style={{ fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.7, color: '#555', marginBottom: 20 }}>Your lowest-energy dimension is <strong style={{ color: S.black }}>{MODE_LABELS[resistance]}</strong>. {resData}</p>
         <div style={{ borderLeft: `3px solid ${S.rule}`, paddingLeft: 20, marginTop: 8 }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>YOUR GAME</div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#333', margin: 0 }}><strong>{GAME_TYPE[dominant][zones[dominant]].title}.</strong> {GAME_TYPE[dominant][zones[dominant]].wins}</p>
+          <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>YOUR GAME</div>
+          <p style={{ fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.7, color: '#333', margin: 0 }}><strong>{GAME_TYPE[dominant][zones[dominant]].title}.</strong> {GAME_TYPE[dominant][zones[dominant]].wins}</p>
         </div>
       </>);
 
@@ -415,16 +415,16 @@ export default function ResultsManual({ results, onBack, onTool }) {
         <P>Your wiring predisposes you to thrive in certain environments and grind against others. This isn't about what you can do. It's about where you're set up to win.</P>
         <Pull>{GAME_TYPE[dominant][zones[dominant]].wins}</Pull>
         <Label>Your Game Type</Label>
-        <P style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
+        <P style={{ fontSize: 16 }}>{GAME_TYPE[dominant][zones[dominant]].title}</P>
         <Label>Your Loop</Label>
-        <P style={{ fontSize: 15, fontFamily: S.mono, letterSpacing: '0.04em' }}>{LOOP_DESCRIPTION[dominant][zones[dominant]]}</P>
+        <P style={{ fontSize: 16, fontFamily: S.mono, letterSpacing: '0.04em' }}>{LOOP_DESCRIPTION[dominant][zones[dominant]]}</P>
         <Label>Fatal Game</Label>
-        <P style={{ fontSize: 15 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
+        <P style={{ fontSize: 16 }}>{GAME_TYPE[dominant][zones[dominant]].fatal}</P>
         <Label>All Four Dimensions</Label>
         {modes.map(m => (
           <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '12px 20px', margin: '10px 0' }}>
-            <div style={{ fontFamily: S.bebas, fontSize: 16, color: S.black, marginBottom: 4 }}>{MODE_LABELS[m]}: {GAME_TYPE[m][zones[m]].title}</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#666', margin: 0, lineHeight: 1.6 }}>{GAME_TYPE[m][zones[m]].wins}</p>
+            <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, marginBottom: 4 }}>{MODE_LABELS[m]}: {GAME_TYPE[m][zones[m]].title}</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#666', margin: 0, lineHeight: 1.6 }}>{GAME_TYPE[m][zones[m]].wins}</p>
           </div>
         ))}
       </>);
@@ -444,11 +444,11 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <div key={m} style={{ border: `1px solid ${S.rule}`, padding: 24, marginBottom: -1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
               <div>
-                <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid, marginBottom: 4 }}>{MODE_LABELS[m]} — {energy[m]}% energy</div>
+                <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em', color: S.mid, marginBottom: 4 }}>{MODE_LABELS[m]} — {energy[m]}% energy</div>
                 <div style={{ fontFamily: S.bebas, fontSize: 24 }}>{strengths[m].name}: {strengths[m].title}</div>
               </div>
             </div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#333', margin: '12px 0 0' }}>{strengths[m].desc}</p>
+            <p style={{ fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.7, color: '#333', margin: '12px 0 0' }}>{strengths[m].desc}</p>
           </div>
         ))}
       </>);
@@ -460,7 +460,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
             <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, marginBottom: 8 }}>{strengths[m].name}</div>
             <P>{strengths[m].superpower}</P>
             <Label>You at Your Best</Label>
-            <P style={{ fontSize: 15 }}>{strengths[m].atBest}</P>
+            <P style={{ fontSize: 16 }}>{strengths[m].atBest}</P>
           </div>
         ))}
       </>);
@@ -473,7 +473,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
         return W('Unique Ability', <>
           {Eye('YOUR UNIQUE ABILITY')}{H('NAME YOUR PROFESSIONAL SUPERPOWER')}
           <P>Your unique ability is the combination of wirings that produces results others can't easily replicate. The assessment surfaces the raw material. Your job is to compress it into one sentence.</P>
-          <P>Template: <span style={{ color: S.black, fontFamily: S.mono, fontSize: 13 }}>[Wiring 1] + [Wiring 2] applied to [your domain/audience]</span></P>
+          <P>Template: <span style={{ color: S.black, fontFamily: S.mono, fontSize: 14 }}>[Wiring 1] + [Wiring 2] applied to [your domain/audience]</span></P>
           <Label>Your Two Strongest Wirings</Label>
           <div style={{ display: 'flex', gap: 12, margin: '4px 0 24px' }}>
             {topTwo.map(name => (
@@ -483,19 +483,19 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <Label>All Four Wirings</Label>
           {modes.map(m => (
             <div key={m} style={{ padding: '8px 0', borderBottom: `1px solid ${S.rule}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, letterSpacing: '0.15em' }}>{MODE_LABELS[m]}</span>
-              <span style={{ fontFamily: S.bebas, fontSize: 18, color: energy[m] >= 50 ? S.black : S.mid, letterSpacing: '0.05em' }}>{STRENGTH_DATA[m][zones[m]].name}</span>
+              <span style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, letterSpacing: '0.15em' }}>{MODE_LABELS[m]}</span>
+              <span style={{ fontFamily: S.bebas, fontSize: 19, color: energy[m] >= 50 ? S.black : S.mid, letterSpacing: '0.05em' }}>{STRENGTH_DATA[m][zones[m]].name}</span>
             </div>
           ))}
           <Label>Your Domain / Audience</Label>
-          <P style={{ fontSize: 14, marginBottom: 8 }}>What field, industry, or type of person does your wiring run best in service of?</P>
+          <P style={{ fontSize: 15, marginBottom: 8 }}>What field, industry, or type of person does your wiring run best in service of?</P>
           <input
             value={abilityDomain}
             onChange={e => setAbilityDomain(e.target.value)}
             placeholder="e.g. early-stage founders, DTC brands, product teams..."
             style={{
               width: '100%', padding: '14px 16px', background: S.white, border: `1px solid ${S.rule}`,
-              color: S.black, fontFamily: S.cormorant, fontSize: 16, outline: 'none',
+              color: S.black, fontFamily: S.cormorant, fontSize: 17, outline: 'none',
               boxSizing: 'border-box', letterSpacing: '0.02em',
             }}
           />
@@ -503,7 +503,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
             <>
               <Label>Your Unique Ability</Label>
               <Pull>{assembled}</Pull>
-              <P style={{ fontSize: 13, color: S.mid }}>If it sounds generic, the domain is too broad. Sharpen the audience until the sentence has teeth.</P>
+              <P style={{ fontSize: 14, color: S.mid }}>If it sounds generic, the domain is too broad. Sharpen the audience until the sentence has teeth.</P>
             </>
           )}
         </>);
@@ -513,8 +513,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {Eye('WATCH FOR')}{H('WHERE YOUR WIRING CAN WORK AGAINST YOU')}
         {modes.map(m => (
           <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '14px 20px', margin: '12px 0' }}>
-            <div style={{ fontFamily: S.bebas, fontSize: 18, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 15, lineHeight: 1.65, color: '#444', margin: 0 }}>{strengths[m].shadow}</p>
+            <div style={{ fontFamily: S.bebas, fontSize: 19, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#444', margin: 0 }}>{strengths[m].shadow}</p>
           </div>
         ))}
       </>);
@@ -526,8 +526,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
           const isHigh = zones[m] === 'initiate';
           return (
             <div key={m} style={{ borderLeft: `4px solid ${S.rule}`, padding: '14px 20px', margin: '12px 0' }}>
-              <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#555', margin: 0, lineHeight: 1.65 }}>{isHigh ? DANGER_ZONES[m].high : DANGER_ZONES[m].low}</p>
+              <div style={{ fontFamily: S.bebas, fontSize: 19, color: S.black, marginBottom: 6 }}>{MODE_LABELS[m]}: {strengths[m].name}</div>
+              <p style={{ fontFamily: S.cormorant, fontSize: 16, color: '#555', margin: 0, lineHeight: 1.65 }}>{isHigh ? DANGER_ZONES[m].high : DANGER_ZONES[m].low}</p>
             </div>
           );
         })}
@@ -548,9 +548,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
       case 'reset': return W('Reset Protocol', <>
         {Eye('RESET PROTOCOL')}{H('HOW TO GET BACK ONLINE')}
         <div style={{ border: `1px solid ${S.rule}`, overflow: 'hidden', margin: '16px 0' }}>
-          <div style={{ background: S.black, color: S.white, padding: '12px 20px', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em' }}>60-SECOND RESET</div>
+          <div style={{ background: S.black, color: S.white, padding: '12px 20px', fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em' }}>60-SECOND RESET</div>
           {['Stop everything completely.', 'One slow breath. Nose in, mouth out.', 'Notice: body tight? Scattered? Heavy?', domData.reset, 'Do just that one thing.'].map((s, i) => (
-            <div key={i} style={{ display: 'flex', gap: 16, padding: '12px 20px', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 15, lineHeight: 1.65, alignItems: 'flex-start' }}>
+            <div key={i} style={{ display: 'flex', gap: 16, padding: '12px 20px', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, alignItems: 'flex-start' }}>
               <span style={{ fontFamily: S.bebas, fontSize: 20, color: S.mid, flexShrink: 0 }}>{i + 1}</span>
               <span>{s}</span>
             </div>
@@ -576,7 +576,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {Eye('COMMUNICATION GUIDE')}{H('WHAT OTHERS SHOULD KNOW ABOUT YOU')}
         {modes.map(m => (
           <div key={m} style={{ padding: '16px 0', borderBottom: `1px solid ${S.rule}` }}>
-            <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.15em', color: S.mid, marginBottom: 6 }}>{MODE_LABELS[m]} ({strengths[m].name})</div>
+            <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.15em', color: S.mid, marginBottom: 6 }}>{MODE_LABELS[m]} ({strengths[m].name})</div>
             <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', lineHeight: 1.6, color: '#333', margin: 0 }}>"{strengths[m].othersKnow}"</p>
           </div>
         ))}
@@ -588,7 +588,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {[...modes].sort((a, b) => energy[b] - energy[a]).slice(0, 2).map(m => (
           <div key={m} style={{ marginBottom: 20 }}>
             <Label>{MODE_LABELS[m]}: Under Stress</Label>
-            <P style={{ fontSize: 15 }}>{strengths[m].underStress}</P>
+            <P style={{ fontSize: 16 }}>{strengths[m].underStress}</P>
           </div>
         ))}
       </>);
@@ -638,27 +638,27 @@ export default function ResultsManual({ results, onBack, onTool }) {
                         <span style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, width: 24, flexShrink: 0, textAlign: 'right' }}>{i + 1}</span>
                         <span style={{ fontSize: 17, flexShrink: 0, width: 22, textAlign: 'center' }}>{c.icon}</span>
                         <span style={{ flexShrink: 0, width: isMobile ? 124 : 230, minWidth: 0 }}>
-                          <span style={{ display: 'block', fontFamily: S.bebas, fontSize: 16, color: S.black, letterSpacing: '0.02em', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.title}</span>
-                          {!isMobile && <span style={{ display: 'block', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.08em', textTransform: 'uppercase', color: S.mid, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.category}</span>}
+                          <span style={{ display: 'block', fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.02em', lineHeight: 1.1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.title}</span>
+                          {!isMobile && <span style={{ display: 'block', fontFamily: S.mono, fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: S.mid, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{c.category}</span>}
                         </span>
                         <span style={{ flex: 1, minWidth: 30, height: 6, background: '#ececec', borderRadius: 3, overflow: 'hidden' }}>
                           <span style={{ display: 'block', height: '100%', borderRadius: 3, background: fitColor(c.fit), width: `${pct}%` }} />
                         </span>
-                        <span style={{ fontFamily: S.bebas, fontSize: 18, color: fitColor(c.fit), width: 44, textAlign: 'right', flexShrink: 0 }}>{pct}%</span>
-                        <span style={{ width: 14, flexShrink: 0, color: S.mid, fontFamily: S.mono, fontSize: 13, textAlign: 'center', transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>›</span>
+                        <span style={{ fontFamily: S.bebas, fontSize: 19, color: fitColor(c.fit), width: 44, textAlign: 'right', flexShrink: 0 }}>{pct}%</span>
+                        <span style={{ width: 14, flexShrink: 0, color: S.mid, fontFamily: S.mono, fontSize: 14, textAlign: 'center', transform: open ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}>›</span>
                       </button>
                       {open && (
                         <div style={{ padding: isMobile ? '2px 10px 20px 34px' : '2px 24px 22px 60px' }}>
                           <div style={{ display: 'inline-block', fontSize: 9, fontFamily: S.mono, fontWeight: 700, padding: '2px 8px', borderRadius: 100, background: fitBg(c.fit), color: fitColor(c.fit), marginBottom: 10 }}>{fitLabel(c.fit)}</div>
-                          <div style={{ fontFamily: S.cormorant, fontSize: 13, fontStyle: 'italic', color: S.mid, marginBottom: 8 }}>{c.subtitle}</div>
-                          <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#3d3d3d', lineHeight: 1.65, margin: '0 0 14px', maxWidth: 560 }}>{c.desc}</p>
+                          <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: S.mid, marginBottom: 8 }}>{c.subtitle}</div>
+                          <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#3d3d3d', lineHeight: 1.65, margin: '0 0 14px', maxWidth: 560 }}>{c.desc}</p>
                           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: 8, maxWidth: 560 }}>
                             <Metric label="Energy Fit" value={c.energyFit} />
                             <Metric label="Strength Fit" value={c.strengthFit} />
                             <Metric label="Freedom" value={c.freedom} />
                             <Metric label="Income" value={c.income} />
                           </div>
-                          {c.deadIf && <p style={{ fontFamily: S.cormorant, fontSize: 13, fontStyle: 'italic', color: '#dc2626', margin: '12px 0 0', maxWidth: 560 }}>Watch out: {c.deadIf}</p>}
+                          {c.deadIf && <p style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#dc2626', margin: '12px 0 0', maxWidth: 560 }}>Watch out: {c.deadIf}</p>}
                         </div>
                       )}
                     </div>
@@ -671,7 +671,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
                   {deadZones.map(c => (
                     <div key={c.id} style={{ display: 'flex', gap: 16, padding: '12px 0', borderBottom: `1px solid ${S.rule}`, alignItems: 'flex-start' }}>
                       <span style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 4, background: '#fee2e2', color: '#dc2626', flexShrink: 0 }}>AVOID</span>
-                      <div><div style={{ fontFamily: S.mono, fontSize: 11, fontWeight: 600, color: S.black }}>{c.title}</div><p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#555', margin: '4px 0 0', maxWidth: 'none' }}>{c.deadIf}</p></div>
+                      <div><div style={{ fontFamily: S.mono, fontSize: 11, fontWeight: 600, color: S.black }}>{c.title}</div><p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#555', margin: '4px 0 0', maxWidth: 'none' }}>{c.deadIf}</p></div>
                     </div>
                   ))}
                 </Collapsible>
@@ -787,20 +787,20 @@ export default function ResultsManual({ results, onBack, onTool }) {
                   <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>{MODE_LABELS[m]} — {energy[m]}% energy</div>
                   <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black }}>{data.title}</div>
                 </div>
-                <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.7, color: '#333', marginBottom: 14, maxWidth: 'none' }}>{data.pattern}</p>
+                <p style={{ fontFamily: S.cormorant, fontSize: 17, lineHeight: 1.7, color: '#333', marginBottom: 14, maxWidth: 'none' }}>{data.pattern}</p>
                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10, marginBottom: 12 }}>
                   <div style={{ padding: '12px 14px', background: '#dcfce7', border: '1px solid #bbf7d0' }}>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: '#15803d', marginBottom: 4 }}>STRENGTH</div>
-                    <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#166534', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.strength}</p>
+                    <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: '#15803d', marginBottom: 4 }}>STRENGTH</div>
+                    <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#166534', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.strength}</p>
                   </div>
                   <div style={{ padding: '12px 14px', background: '#fee2e2', border: '1px solid #fecaca' }}>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: '#dc2626', marginBottom: 4 }}>WATCH FOR</div>
-                    <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#991b1b', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.watch}</p>
+                    <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: '#dc2626', marginBottom: 4 }}>WATCH FOR</div>
+                    <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#991b1b', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.watch}</p>
                   </div>
                 </div>
                 <div style={{ padding: '10px 14px', background: '#f0ede8', borderLeft: `3px solid ${S.black}` }}>
-                  <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>YOUR RULE</div>
-                  <p style={{ fontFamily: S.cormorant, fontSize: 14, color: S.black, lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.rule}</p>
+                  <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.15em', color: S.mid, marginBottom: 4 }}>YOUR RULE</div>
+                  <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.black, lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>{data.rule}</p>
                 </div>
               </div>
             );
@@ -837,7 +837,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <P>Select symptoms you're experiencing. The tool identifies which dimension is being violated.</P>
           <div style={{ marginTop: 12 }}>
             {symptomMap.map(s => (
-              <button key={s.id} onClick={() => setStressSymptoms(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])} style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '12px 14px', background: stressSymptoms.includes(s.id) ? '#fee2e2' : 'transparent', border: 'none', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', fontFamily: S.cormorant, fontSize: 15, color: S.black }}>
+              <button key={s.id} onClick={() => setStressSymptoms(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])} style={{ display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '12px 14px', background: stressSymptoms.includes(s.id) ? '#fee2e2' : 'transparent', border: 'none', borderBottom: `1px solid ${S.rule}`, cursor: 'pointer', textAlign: 'left', fontFamily: S.cormorant, fontSize: 16, color: S.black }}>
                 <span style={{ width: 18, height: 18, borderRadius: 3, border: `2px solid ${stressSymptoms.includes(s.id) ? '#dc2626' : S.rule}`, background: stressSymptoms.includes(s.id) ? '#dc2626' : 'transparent', color: '#fff', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{stressSymptoms.includes(s.id) ? '✓' : ''}</span>
                 {s.label}
               </button>
@@ -847,9 +847,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
             <div style={{ marginTop: 24, padding: 20, background: '#f0ede8', border: `1px solid ${S.rule}` }}>
               <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 8 }}>DIAGNOSIS</div>
               <div style={{ fontFamily: S.bebas, fontSize: 22, marginBottom: 10 }}>{MODE_LABELS[topViolated[0][0]]} Stress</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.65, marginBottom: 12, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].cause}</p>
+              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#333', lineHeight: 1.65, marginBottom: 12, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].cause}</p>
               <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>YOUR FIX</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.65, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].fix}</p>
+              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#333', lineHeight: 1.65, maxWidth: 'none' }}>{stressNarratives[topViolated[0][0]].fix}</p>
             </div>
           )}
         </>);
@@ -886,10 +886,10 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <P>Evaluating a job, project, or life change? Answer 6 questions to score it against your wiring.</P>
           {dqs.map(q => (
             <div key={q.id} style={{ marginTop: 16 }}>
-              <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 6 }}>{q.label}</div>
+              <div style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, marginBottom: 6 }}>{q.label}</div>
               <div style={{ display: 'flex', gap: 6 }}>
                 {q.options.map((opt, oi) => (
-                  <button key={oi} onClick={() => setDecisionAnswers(prev => ({ ...prev, [q.id]: oi }))} style={{ flex: 1, padding: '8px 6px', borderRadius: 6, fontFamily: S.cormorant, fontSize: 13, border: `1.5px solid ${decisionAnswers[q.id] === oi ? S.black : S.rule}`, background: decisionAnswers[q.id] === oi ? S.black : S.white, color: decisionAnswers[q.id] === oi ? S.white : S.black, cursor: 'pointer' }}>{opt}</button>
+                  <button key={oi} onClick={() => setDecisionAnswers(prev => ({ ...prev, [q.id]: oi }))} style={{ flex: 1, padding: '8px 6px', borderRadius: 6, fontFamily: S.cormorant, fontSize: 14, border: `1.5px solid ${decisionAnswers[q.id] === oi ? S.black : S.rule}`, background: decisionAnswers[q.id] === oi ? S.black : S.white, color: decisionAnswers[q.id] === oi ? S.white : S.black, cursor: 'pointer' }}>{opt}</button>
                 ))}
               </div>
             </div>
@@ -899,7 +899,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
             return (
               <div style={{ marginTop: 24, padding: 20, border: `2px solid ${cl}`, borderRadius: 10, textAlign: 'center' }}>
                 <div style={{ fontFamily: S.bebas, fontSize: 44, color: cl }}>{Math.round(sc * 10)}%</div>
-                <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#444', marginTop: 6, maxWidth: 'none' }}>{sc >= 7.5 ? 'Strong alignment with your wiring.' : sc >= 5 ? 'Partial fit. Some elements match, others will cost energy.' : 'Significant misalignment. Proceed with extreme caution.'}</p>
+                <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#444', marginTop: 6, maxWidth: 'none' }}>{sc >= 7.5 ? 'Strong alignment with your wiring.' : sc >= 5 ? 'Partial fit. Some elements match, others will cost energy.' : 'Significant misalignment. Proceed with extreme caution.'}</p>
               </div>
             );
           })()}
@@ -930,7 +930,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
           <div style={{ marginTop: 16 }}>
             {modes.map(m => (
               <div key={m} style={{ marginBottom: 20 }}>
-                <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginBottom: 8 }}>{MODE_LABELS[m]}</div>
+                <div style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, marginBottom: 8 }}>{MODE_LABELS[m]}</div>
                 <div style={{ display: 'flex', gap: 6 }}>
                   {(['counteract', 'accommodate', 'initiate']).map(zone => (
                     <button key={zone} onClick={() => setPartnerZones(prev => ({ ...prev, [m]: zone }))} style={{ flex: 1, padding: '10px 6px', borderRadius: 6, cursor: 'pointer', textAlign: 'center', border: `1.5px solid ${partnerZones[m] === zone ? S.black : S.rule}`, background: partnerZones[m] === zone ? S.black : S.white, color: partnerZones[m] === zone ? S.white : S.black }}>
@@ -943,13 +943,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
               </div>
             ))}
           </div>
-          <button onClick={runCompat} disabled={!allSelected} style={{ width: '100%', padding: 10, fontFamily: S.bebas, fontSize: 16, background: allSelected ? S.black : '#eee', color: allSelected ? S.white : '#aaa', border: 'none', borderRadius: 6, cursor: allSelected ? 'pointer' : 'default' }}>ANALYZE</button>
+          <button onClick={runCompat} disabled={!allSelected} style={{ width: '100%', padding: 10, fontFamily: S.bebas, fontSize: 17, background: allSelected ? S.black : '#eee', color: allSelected ? S.white : '#aaa', border: 'none', borderRadius: 6, cursor: allSelected ? 'pointer' : 'default' }}>ANALYZE</button>
           {compatResult && (
             <div style={{ marginTop: 20 }}>
               {modes.map(m => { const r = compatResult[m]; return (
                 <div key={m} style={{ padding: '12px 0', borderBottom: `1px solid ${S.rule}`, display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <span style={{ fontFamily: S.mono, fontSize: 8, fontWeight: 700, padding: '2px 6px', borderRadius: 3, background: typeBgs[r.type], color: typeColors[r.type], flexShrink: 0, marginTop: 2 }}>{typeLabels[r.type]}</span>
-                  <div><div style={{ fontFamily: S.mono, fontSize: 10, fontWeight: 600 }}>{MODE_LABELS[m]}</div><p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#444', margin: '2px 0 0', maxWidth: 'none' }}>{r.msg}</p></div>
+                  <span style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 3, background: typeBgs[r.type], color: typeColors[r.type], flexShrink: 0, marginTop: 2 }}>{typeLabels[r.type]}</span>
+                  <div><div style={{ fontFamily: S.mono, fontSize: 11, fontWeight: 600 }}>{MODE_LABELS[m]}</div><p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#444', margin: '2px 0 0', maxWidth: 'none' }}>{r.msg}</p></div>
                 </div>
               ); })}
             </div>
@@ -962,13 +962,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
         <div style={{ marginTop: 16, border: `2px solid ${S.black}`, borderRadius: 10, overflow: 'hidden' }}>
           <div style={{ background: S.black, padding: '20px', color: S.white }}>
             <div style={{ fontFamily: S.bebas, fontSize: 24 }}>HOW TO WORK WITH ME</div>
-            <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', marginTop: 4 }}>Profile: {mo}</div>
+            <div style={{ fontFamily: S.mono, fontSize: 11, color: '#999', marginTop: 4 }}>Profile: {mo}</div>
           </div>
           <div style={{ padding: 20 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 10 }}>MY STRENGTHS</div>
-            {modes.map(m => <div key={m} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 14 }}><span style={{ fontWeight: 500 }}>{MODE_LABELS[m]}</span><span style={{ color: S.mid }}>{strengths[m].name} · {energy[m]}%</span></div>)}
+            {modes.map(m => <div key={m} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 15 }}><span style={{ fontWeight: 500 }}>{MODE_LABELS[m]}</span><span style={{ color: S.mid }}>{strengths[m].name} · {energy[m]}%</span></div>)}
             <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginTop: 16, marginBottom: 10 }}>WHAT I NEED FROM YOU</div>
-            {modes.map(m => <div key={m} style={{ padding: '8px 0', borderBottom: `1px solid ${S.rule}` }}><p style={{ fontFamily: S.cormorant, fontSize: 13, fontStyle: 'italic', color: '#333', margin: 0, maxWidth: 'none' }}>"{strengths[m].othersKnow}"</p></div>)}
+            {modes.map(m => <div key={m} style={{ padding: '8px 0', borderBottom: `1px solid ${S.rule}` }}><p style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#333', margin: 0, maxWidth: 'none' }}>"{strengths[m].othersKnow}"</p></div>)}
           </div>
         </div>
       </>);
@@ -979,15 +979,15 @@ export default function ResultsManual({ results, onBack, onTool }) {
           {modes.map(m => (
             <div key={m} style={{ marginTop: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                <span style={{ fontFamily: S.mono, fontSize: 10, fontWeight: 600 }}>{MODE_LABELS[m]}: {strengths[m].name}</span>
+                <span style={{ fontFamily: S.mono, fontSize: 11, fontWeight: 600 }}>{MODE_LABELS[m]}: {strengths[m].name}</span>
                 <span style={{ fontFamily: S.bebas, fontSize: 20 }}>{weeklyRatings[m]}/5</span>
               </div>
               <div style={{ display: 'flex', gap: 6 }}>
-                {[1,2,3,4,5].map(v => <button key={v} onClick={() => setWeeklyRatings(prev => ({ ...prev, [m]: v }))} style={{ flex: 1, padding: '8px 0', borderRadius: 4, fontFamily: S.bebas, fontSize: 16, border: `1.5px solid ${weeklyRatings[m] === v ? S.black : S.rule}`, background: weeklyRatings[m] === v ? S.black : S.white, color: weeklyRatings[m] === v ? S.white : S.black, cursor: 'pointer' }}>{v}</button>)}
+                {[1,2,3,4,5].map(v => <button key={v} onClick={() => setWeeklyRatings(prev => ({ ...prev, [m]: v }))} style={{ flex: 1, padding: '8px 0', borderRadius: 4, fontFamily: S.bebas, fontSize: 17, border: `1.5px solid ${weeklyRatings[m] === v ? S.black : S.rule}`, background: weeklyRatings[m] === v ? S.black : S.white, color: weeklyRatings[m] === v ? S.white : S.black, cursor: 'pointer' }}>{v}</button>)}
               </div>
             </div>
           ))}
-          <button onClick={() => setWeeklySubmitted(true)} style={{ marginTop: 20, width: '100%', padding: 12, fontFamily: S.bebas, fontSize: 16, background: S.black, color: S.white, border: 'none', borderRadius: 6, cursor: 'pointer' }}>SUBMIT</button>
+          <button onClick={() => setWeeklySubmitted(true)} style={{ marginTop: 20, width: '100%', padding: 12, fontFamily: S.bebas, fontSize: 17, background: S.black, color: S.white, border: 'none', borderRadius: 6, cursor: 'pointer' }}>SUBMIT</button>
         </>) : (() => {
           const avg = Object.values(weeklyRatings).reduce((a, b) => a + b, 0) / 4;
           const lowest = Object.entries(weeklyRatings).sort((a, b) => a[1] - b[1])[0];
@@ -995,12 +995,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
           return (
             <div style={{ marginTop: 20, textAlign: 'center' }}>
               <div style={{ fontFamily: S.bebas, fontSize: 48, color: cl }}>{avg.toFixed(1)}/5</div>
-              <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#444', marginTop: 8, maxWidth: 'none' }}>{avg >= 4 ? 'Strong week. Protect what\'s working.' : avg >= 2.5 ? 'Mixed week. Look at what drained you.' : 'Rough week. Something needs to change.'}</p>
+              <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#444', marginTop: 8, maxWidth: 'none' }}>{avg >= 4 ? 'Strong week. Protect what\'s working.' : avg >= 2.5 ? 'Mixed week. Look at what drained you.' : 'Rough week. Something needs to change.'}</p>
               <div style={{ marginTop: 12, padding: 12, background: '#fff3ee', borderRadius: 6, textAlign: 'left' }}>
                 <div style={{ fontFamily: S.mono, fontSize: 9, color: '#E8541A' }}>BIGGEST GAP: {MODE_LABELS[lowest[0]]}</div>
-                <p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#444', margin: '4px 0 0', maxWidth: 'none' }}>{DOMINANT_NARRATIVES[lowest[0]].reset}</p>
+                <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#444', margin: '4px 0 0', maxWidth: 'none' }}>{DOMINANT_NARRATIVES[lowest[0]].reset}</p>
               </div>
-              <button onClick={() => { setWeeklySubmitted(false); setWeeklyRatings({ FF:3, FT:3, QS:3, IMP:3 }); }} style={{ marginTop: 12, padding: '6px 16px', fontFamily: S.mono, fontSize: 10, background: 'transparent', border: `1px solid ${S.rule}`, borderRadius: 4, cursor: 'pointer' }}>RESET</button>
+              <button onClick={() => { setWeeklySubmitted(false); setWeeklyRatings({ FF:3, FT:3, QS:3, IMP:3 }); }} style={{ marginTop: 12, padding: '6px 16px', fontFamily: S.mono, fontSize: 11, background: 'transparent', border: `1px solid ${S.rule}`, borderRadius: 4, cursor: 'pointer' }}>RESET</button>
             </div>
           );
         })()}
@@ -1014,12 +1014,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
             <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 3vw, 24px)', fontStyle: 'italic', color: S.black, lineHeight: 1.4, maxWidth: 380, margin: '0 auto' }}>
               {dominant === 'FF' ? "Your brain runs on information. What's one thing worth researching today?" : dominant === 'FT' ? "Your brain runs on order. What's one open loop you can close today?" : dominant === 'QS' ? "Your brain runs on novelty. What's one new thing you can start today?" : "Your brain runs on making. What's one thing you can build with your hands today?"}
             </div>
-            <button onClick={() => setDailyDismissed(true)} style={{ marginTop: 16, padding: '6px 20px', fontFamily: S.mono, fontSize: 10, background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, borderRadius: 4, cursor: 'pointer' }}>GOT IT</button>
+            <button onClick={() => setDailyDismissed(true)} style={{ marginTop: 16, padding: '6px 20px', fontFamily: S.mono, fontSize: 11, background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, borderRadius: 4, cursor: 'pointer' }}>GOT IT</button>
           </div>
         ) : (
           <div style={{ marginTop: 16, textAlign: 'center' }}>
-            <p style={{ fontFamily: S.cormorant, fontSize: 15, color: S.mid }}>Prompt acknowledged.</p>
-            <button onClick={() => setDailyDismissed(false)} style={{ marginTop: 8, padding: '6px 16px', fontFamily: S.mono, fontSize: 10, background: 'transparent', border: `1px solid ${S.rule}`, borderRadius: 4, cursor: 'pointer' }}>SHOW AGAIN</button>
+            <p style={{ fontFamily: S.cormorant, fontSize: 16, color: S.mid }}>Prompt acknowledged.</p>
+            <button onClick={() => setDailyDismissed(false)} style={{ marginTop: 8, padding: '6px 16px', fontFamily: S.mono, fontSize: 11, background: 'transparent', border: `1px solid ${S.rule}`, borderRadius: 4, cursor: 'pointer' }}>SHOW AGAIN</button>
           </div>
         )}
       </>);
@@ -1039,11 +1039,11 @@ export default function ResultsManual({ results, onBack, onTool }) {
                   <div style={{ fontFamily: S.bebas, fontSize: 24, color: '#16a34a' }}>{Math.round(c.alignment * 10)}%</div>
                 </div>
                 <div style={{ padding: 20 }}>
-                  <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.65, marginBottom: 14, maxWidth: 'none' }}>{c.desc}</p>
+                  <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#333', lineHeight: 1.65, marginBottom: 14, maxWidth: 'none' }}>{c.desc}</p>
                   {modeMatches.length > 0 && <><div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>STRENGTHS ACTIVATED</div><div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>{modeMatches.map(m => <span key={m} style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 3, background: '#dcfce7', color: '#16a34a' }}>{strengths[m].name}</span>)}</div></>}
                   {modeClashes.length > 0 && <><div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>WATCH FOR</div><div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 12 }}>{modeClashes.map(m => <span key={m} style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 3, background: '#fef9c3', color: '#ca8a04' }}>{MODE_LABELS[m]} friction</span>)}</div></>}
                   <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 4 }}>FIRST STEPS</div>
-                  <p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#444', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>
+                  <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#444', lineHeight: 1.6, margin: 0, maxWidth: 'none' }}>
                     {c.freedom >= 80 ? 'Start as a side project. Test demand before going full-time. ' : 'Research the field. Talk to 3 people already doing this. '}
                     {c.creation >= 80 ? 'Build a portfolio or sample project. ' : 'Focus on credentials or case studies. '}
                     {c.income >= 85 ? 'High income ceiling, but ramp may take 6-12 months.' : 'Stable income path. Focus on the first client or role.'}
@@ -1063,12 +1063,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
             <div style={{ fontFamily: S.bebas, fontSize: 40, marginTop: 6, letterSpacing: 3 }}>{mo}</div>
           </div>
           <div style={{ padding: 20 }}>
-            <div style={{ fontFamily: S.bebas, fontSize: 18, marginBottom: 6 }}>IN PLAIN LANGUAGE</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.7, marginBottom: 16, maxWidth: 'none' }}>This person has been assessed on how they instinctively take action. Not personality. Not intelligence. Their natural "doing" pattern when free to be themselves.</p>
+            <div style={{ fontFamily: S.bebas, fontSize: 19, marginBottom: 6 }}>IN PLAIN LANGUAGE</div>
+            <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#333', lineHeight: 1.7, marginBottom: 16, maxWidth: 'none' }}>This person has been assessed on how they instinctively take action. Not personality. Not intelligence. Their natural "doing" pattern when free to be themselves.</p>
             <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>HOW THEY OPERATE</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 14, color: '#333', lineHeight: 1.7, marginBottom: 16, maxWidth: 'none' }}>{domData.how}</p>
+            <p style={{ fontFamily: S.cormorant, fontSize: 15, color: '#333', lineHeight: 1.7, marginBottom: 16, maxWidth: 'none' }}>{domData.how}</p>
             <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 6 }}>THEIR STRENGTHS</div>
-            {modes.map(m => <div key={m} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 14 }}><span>{MODE_LABELS[m]}</span><span style={{ color: S.mid }}>{strengths[m].name} · {energy[m]}%</span></div>)}
+            {modes.map(m => <div key={m} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: `1px solid ${S.rule}`, fontFamily: S.cormorant, fontSize: 15 }}><span>{MODE_LABELS[m]}</span><span style={{ color: S.mid }}>{strengths[m].name} · {energy[m]}%</span></div>)}
           </div>
         </div>
       </>);
@@ -1127,7 +1127,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
                     <div style={{ fontFamily: S.bebas, fontSize: 20, color: S.black }}>{strengths[m].name}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontFamily: S.mono, fontSize: 8, color: S.mid, marginBottom: 2 }}>YOUR ENERGY</div>
+                    <div style={{ fontFamily: S.mono, fontSize: 9, color: S.mid, marginBottom: 2 }}>YOUR ENERGY</div>
                     <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black }}>{energy[m]}%</div>
                   </div>
                 </div>
@@ -1135,7 +1135,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
                 <div style={{ display: 'flex', gap: 4 }}>
                   {options.map((opt, oi) => (
                     <button key={oi} onClick={() => setRoleSliders(prev => ({ ...prev, [m]: oi }))}
-                      style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 8, letterSpacing: '0.04em',
+                      style={{ flex: 1, padding: '8px 4px', fontFamily: S.mono, fontSize: 9, letterSpacing: '0.04em',
                         border: `1.5px solid ${roleSliders[m] === oi ? S.black : S.rule}`,
                         background: roleSliders[m] === oi ? S.black : 'transparent',
                         color: roleSliders[m] === oi ? S.white : S.mid,
@@ -1145,8 +1145,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
                 </div>
                 {strainInfo && (
                   <div style={{ marginTop: 12, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                    <span style={{ fontFamily: S.mono, fontSize: 8, fontWeight: 700, padding: '3px 8px', background: strainInfo.bg, color: strainInfo.color, flexShrink: 0, whiteSpace: 'nowrap' }}>{strainInfo.label}</span>
-                    <span style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', color: '#555', lineHeight: 1.55 }}>{msg}</span>
+                    <span style={{ fontFamily: S.mono, fontSize: 9, fontWeight: 700, padding: '3px 8px', background: strainInfo.bg, color: strainInfo.color, flexShrink: 0, whiteSpace: 'nowrap' }}>{strainInfo.label}</span>
+                    <span style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: '#555', lineHeight: 1.55 }}>{msg}</span>
                   </div>
                 )}
               </div>
@@ -1165,7 +1165,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
               <div style={{ marginTop: 24, padding: '18px 20px', border: `2px solid ${overallColor}` }}>
                 <div style={{ fontFamily: S.mono, fontSize: 9, color: overallColor, marginBottom: 6 }}>OVERALL ASSESSMENT</div>
                 <div style={{ fontFamily: S.bebas, fontSize: 28, color: overallColor, marginBottom: 10 }}>{overallLabel}</div>
-                <p style={{ fontFamily: S.cormorant, fontSize: 15, lineHeight: 1.65, color: '#333', margin: 0, maxWidth: 'none' }}>{overallMsg}</p>
+                <p style={{ fontFamily: S.cormorant, fontSize: 16, lineHeight: 1.65, color: '#333', margin: 0, maxWidth: 'none' }}>{overallMsg}</p>
               </div>
             );
           })()}
@@ -1196,12 +1196,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
       onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
     >
       {card.num && (
-        <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, width: 28, textAlign: 'right', flexShrink: 0 }}>{card.num}</span>
+        <span style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, width: 28, textAlign: 'right', flexShrink: 0 }}>{card.num}</span>
       )}
       {!card.num && <span style={{ width: 28, flexShrink: 0 }} />}
       <div style={{ flex: 1 }}>
         <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.03em', lineHeight: 1.1, marginBottom: 2 }}>{card.label}</div>
-        <div style={{ fontFamily: S.cormorant, fontSize: 13, color: S.mid, fontStyle: 'italic' }}>{card.desc}</div>
+        <div style={{ fontFamily: S.cormorant, fontSize: 14, color: S.mid, fontStyle: 'italic' }}>{card.desc}</div>
       </div>
       <span style={{ fontFamily: S.mono, fontSize: 12, color: S.mid, flexShrink: 0 }}>{card.external ? '↗' : '→'}</span>
     </button>
@@ -1221,9 +1221,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
       {/* Nav */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderBottom: `1px solid ${S.rule}` }}>
         {onBack
-          ? <button onClick={onBack} style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>← DASHBOARD</button>
+          ? <button onClick={onBack} style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em', background: 'transparent', border: `1px solid ${S.rule}`, color: S.mid, padding: '10px 14px', cursor: 'pointer' }}>← DASHBOARD</button>
           : <div />}
-        <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.2em', color: S.mid }}>PERSONAL OPERATING MANUAL</div>
+        <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.2em', color: S.mid }}>PERSONAL OPERATING MANUAL</div>
         <div style={{ width: 80 }} />
       </div>
 
@@ -1237,13 +1237,13 @@ export default function ResultsManual({ results, onBack, onTool }) {
           {modes.map(m => (
             <div key={m} style={{ background: m === dominant ? '#f0ede8' : S.white, padding: isMobile ? '18px 16px' : '22px 24px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 10 }}>
-                <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.18em', color: S.mid }}>{MODE_LABELS[m].toUpperCase()}</div>
+                <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: S.mid }}>{MODE_LABELS[m].toUpperCase()}</div>
                 <div style={{ fontFamily: S.bebas, fontSize: 28, color: energy[m] >= 55 ? S.black : S.mid, lineHeight: 1 }}>{energy[m]}%</div>
               </div>
               <div style={{ fontFamily: S.bebas, fontSize: 17, color: S.black, letterSpacing: '0.03em', marginBottom: 6 }}>{strengths[m].name}</div>
-              <div style={{ fontFamily: S.cormorant, fontSize: 14, fontStyle: 'italic', lineHeight: 1.6, color: '#555' }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
-              {m === dominant && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>DOMINANT</div>}
-              {m === resistance && <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>LOWEST ENERGY</div>}
+              <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', lineHeight: 1.6, color: '#555' }}>{BEHAVIORAL_LINES[m][zones[m]]}</div>
+              {m === dominant && <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>DOMINANT</div>}
+              {m === resistance && <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.14em', color: S.mid, marginTop: 10 }}>LOWEST ENERGY</div>}
             </div>
           ))}
         </div>
