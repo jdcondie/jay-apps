@@ -593,7 +593,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
       </>);
 
       case 'careers': {
-        const scored = CAREER_ARCHETYPES.map(c => ({ ...c, ...scoreCareerFit(c, zones, energy, dominant) })).sort((a, b) => b.alignment - a.alignment);
+        const scored = CAREER_ARCHETYPES.map(c => ({ ...c, ...scoreCareerFit(c, zones, energy, dominant, resistance) })).sort((a, b) => b.alignment - a.alignment);
         const fit1 = scored.filter(c => c.fit === 1);
         const fit2 = scored.filter(c => c.fit === 2);
         const fit3 = scored.filter(c => c.fit === 3);
@@ -633,8 +633,8 @@ export default function ResultsManual({ results, onBack, onTool }) {
                         <div style={{ fontFamily: S.cormorant, fontSize: 12, fontStyle: 'italic', color: S.mid, marginBottom: 10 }}>{c.subtitle}</div>
                         <p style={{ fontFamily: S.cormorant, fontSize: 13, color: '#3d3d3d', lineHeight: 1.65, marginBottom: 14, flex: 1, maxWidth: 'none' }}>{c.desc}</p>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginBottom: 12 }}>
-                          <Metric label="Freedom" value={c.freedom} /><Metric label="Energy Fit" value={c.energyFit} />
-                          <Metric label="Creation" value={c.creation} /><Metric label="Income" value={c.income} />
+                          <Metric label="Energy Fit" value={c.energyFit} /><Metric label="Strength Fit" value={c.strengthFit} />
+                          <Metric label="Freedom" value={c.freedom} /><Metric label="Income" value={c.income} />
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 10, borderTop: `1px solid ${S.rule}`, marginTop: 'auto' }}>
                           <span style={{ fontFamily: S.mono, fontSize: 10, color: S.mid }}>Alignment</span>
@@ -1004,7 +1004,7 @@ export default function ResultsManual({ results, onBack, onTool }) {
       </>);
 
       case 'career-detail': {
-        const scored = CAREER_ARCHETYPES.map(c => ({ ...c, ...scoreCareerFit(c, zones, energy, dominant) })).sort((a, b) => b.alignment - a.alignment);
+        const scored = CAREER_ARCHETYPES.map(c => ({ ...c, ...scoreCareerFit(c, zones, energy, dominant, resistance) })).sort((a, b) => b.alignment - a.alignment);
         const top5 = scored.filter(c => !c.deadIf).slice(0, 5);
         return W('Career Deep-Dive', <>
           {Eye('CAREER DEEP-DIVE')}{H('YOUR TOP 5, EXPANDED')}

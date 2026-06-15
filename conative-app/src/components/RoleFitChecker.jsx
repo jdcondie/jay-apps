@@ -5,15 +5,15 @@ import { CAREER_ARCHETYPES } from '../data/careerData.js';
 import { scoreCareerFit } from '../scoring/careerScoring.js';
 
 export default function RoleFitChecker({ results, onBack }) {
-  const { zones, energy, dominant } = results;
+  const { zones, energy, dominant, resistance } = results;
   const isMobile = useIsMobile();
   const [query, setQuery] = useState('');
 
   const scored = useMemo(() => {
     return CAREER_ARCHETYPES
-      .map(c => ({ ...c, fit: scoreCareerFit(c, zones, energy, dominant) }))
-      .sort((a, b) => b.fit.energyFit - a.fit.energyFit);
-  }, [zones, energy, dominant]);
+      .map(c => ({ ...c, fit: scoreCareerFit(c, zones, energy, dominant, resistance) }))
+      .sort((a, b) => b.fit.alignment - a.fit.alignment);
+  }, [zones, energy, dominant, resistance]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return scored.slice(0, 24);
