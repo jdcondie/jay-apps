@@ -111,7 +111,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
     <div style={{ background: S.white, minHeight: '100vh' }}>
 
       {onSignIn && (
-        <button onClick={onSignIn} style={{ position: 'fixed', top: 20, right: 24, zIndex: 100, fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#888', padding: '10px 14px', cursor: 'pointer' }}>
+        <button onClick={onSignIn} style={{ position: 'fixed', top: 20, right: 24, zIndex: 100, fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#888', padding: '10px 14px', cursor: 'pointer' }}>
           SIGN IN
         </button>
       )}
@@ -148,7 +148,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
 
         {/* Content (headline + CTA) */}
         <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 460, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 3 }}>
-          <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.3em', color: '#999', marginBottom: 28 }}>
+          <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.3em', color: '#999', marginBottom: 28 }}>
             BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
           </div>
           <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(60px, 8.5vw, 112px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
@@ -168,14 +168,14 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                 <div style={{ height: 2, background: '#2a2a2a', marginBottom: 10 }}>
                   <div style={{ height: '100%', background: S.white, width: `${pct}%` }} />
                 </div>
-                <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', marginBottom: 16 }}>
+                <div style={{ fontFamily: S.mono, fontSize: 11, color: '#999', marginBottom: 16 }}>
                   QUESTION {resumeData.qIndex + 1} OF {total} · {pct}% COMPLETE
                 </div>
                 <button onClick={onResume} style={{ width: '100%', fontFamily: S.bebas, fontSize: 20, letterSpacing: '0.08em', background: S.white, color: S.black, border: 'none', padding: '14px', cursor: 'pointer' }}>
                   RESUME
                 </button>
               </div>
-              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 10, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#999', padding: '12px', cursor: 'pointer' }}>
+              <button onClick={onStartFresh} style={{ width: '100%', fontFamily: S.mono, fontSize: 11, letterSpacing: '0.1em', background: 'transparent', border: '1px solid #2a2a2a', color: '#999', padding: '12px', cursor: 'pointer' }}>
                 START OVER INSTEAD
               </button>
             </div>
@@ -189,7 +189,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               >
                 BEGIN ASSESSMENT
               </button>
-              <div style={{ fontFamily: S.mono, fontSize: 10, color: '#999', letterSpacing: '0.15em' }}>~8 MINUTES · FREE · NO SIGNUP TO START</div>
+              <div style={{ fontFamily: S.mono, fontSize: 11, color: '#999', letterSpacing: '0.15em' }}>~8 MINUTES · FREE · NO SIGNUP TO START</div>
             </div>
           )}
         </div>
@@ -205,7 +205,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.12em', color: S.white, marginBottom: 5 }}>{c.label}</div>
-                  <div style={{ fontFamily: S.cormorant, fontSize: 14, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
+                  <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
                 </div>
               </div>
             ))}
@@ -222,7 +222,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                 </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.12em', color: S.white, marginBottom: 4 }}>{c.label}</div>
-                  <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
+                  <div style={{ fontFamily: S.cormorant, fontSize: 16, color: '#b0aca4', lineHeight: 1.4 }}>{c.desc}</div>
                 </div>
               </div>
             ))}
@@ -279,12 +279,12 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               "I don't get why some things come easy for other people.",
             ].map((q, i) => (
               <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'baseline', padding: '18px 0', borderBottom: '1px solid #1a1a1a' }}>
-                <span style={{ fontFamily: S.mono, fontSize: 10, color: '#3a3a3a', flexShrink: 0 }}>0{i + 1}</span>
+                <span style={{ fontFamily: S.mono, fontSize: 11, color: '#3a3a3a', flexShrink: 0 }}>0{i + 1}</span>
                 <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 21px)', fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.5, margin: 0 }}>"{q}"</p>
               </div>
             ))}
           </div>
-          <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#999', lineHeight: 1.65, margin: '28px 0 0', textAlign: 'center' }}>
+          <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#999', lineHeight: 1.65, margin: '28px 0 0', textAlign: 'center' }}>
             Every one of these is a clue. The assessment surfaces the pattern underneath.
           </p>
         </div>
@@ -301,7 +301,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           ].map(({ num, label }) => (
             <div key={label} style={{ textAlign: 'center', padding: '4px 12px' }}>
               <div style={{ fontFamily: S.bebas, fontSize: isMobile ? 28 : 38, color: S.white, lineHeight: 1 }}>{num}</div>
-              <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.22em', color: '#555' }}>{label}</div>
+              <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.22em', color: '#555' }}>{label}</div>
             </div>
           ))}
         </div>
@@ -315,7 +315,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(34px, 4.6vw, 54px)', color: S.white, lineHeight: 0.95, margin: '0 0 20px' }}>
               WHY SOME THINGS<br />FEEL EFFORTLESS,<br />AND OTHERS NEVER DO.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
               Most advice assumes everyone works the same way. Your results are built on four behavioral dimensions that show how your mind operates under pressure, uncertainty, structure, and change. Together they explain why some environments light you up and others wear you down.
             </p>
           </div>
@@ -327,7 +327,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 10 }}>
                       <span style={{ fontFamily: S.bebas, fontSize: 17, color: isDom ? S.white : S.onDarkDim, letterSpacing: '0.04em' }}>{LABELS[m]}</span>
-                      {isDom && <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.16em', color: '#555' }}>DOMINANT</span>}
+                      {isDom && <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.16em', color: '#555' }}>DOMINANT</span>}
                     </div>
                     <span style={{ fontFamily: S.bebas, fontSize: 26, color: isDom ? S.white : '#555', lineHeight: 1 }}>{displayEnergy[m]}%</span>
                   </div>
@@ -342,7 +342,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                 </div>
               );
             })}
-            <div style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.2em', color: '#333', marginTop: 20, borderTop: '1px solid #1a1a1a', paddingTop: 14 }}>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: '#333', marginTop: 20, borderTop: '1px solid #1a1a1a', paddingTop: 14 }}>
               SAMPLE PROFILE · QUICK START DOMINANT
             </div>
           </div>
@@ -358,10 +358,10 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
               THE SCIENCE OF<br />HOW YOU ACT.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#555', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 380 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#555', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 380 }}>
               Your mind works in three parts: what you know, how you feel, and how you instinctively take action. Most tools measure the first two. Personality types, IQ, strengths quizzes, they all describe how you think and feel.
             </p>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, color: '#555', lineHeight: 1.7, margin: 0, maxWidth: 380 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#555', lineHeight: 1.7, margin: 0, maxWidth: 380 }}>
               This measures the third part, the doing. Conative psychology has been studied for more than 40 years. It maps how you naturally gather information, create order, handle risk, and turn ideas into something real, the part that predicts where you'll thrive, where you'll stall, and where you'll burn out.
             </p>
           </div>
@@ -375,9 +375,9 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               <div key={k} style={{ background: on ? '#f0ede8' : S.white, padding: isMobile ? '20px 22px' : '24px 28px', borderLeft: on ? `2px solid ${S.black}` : '2px solid transparent', position: 'relative' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
                   <span style={{ fontFamily: S.bebas, fontSize: 22, letterSpacing: '0.04em', color: on ? S.black : S.mid }}>{k}</span>
-                  {on && <span style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.16em', color: S.mid }}>WHAT WE MEASURE</span>}
+                  {on && <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.16em', color: S.mid }}>WHAT WE MEASURE</span>}
                 </div>
-                <div style={{ fontFamily: S.cormorant, fontSize: 15, fontStyle: 'italic', color: on ? '#444' : S.mid, lineHeight: 1.4 }}>{d}</div>
+                <div style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', color: on ? '#444' : S.mid, lineHeight: 1.4 }}>{d}</div>
               </div>
             ))}
           </div>
@@ -389,15 +389,15 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           {/* Mock report card */}
           <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>01 · WHAT THIS MEANS</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>01 · WHAT THIS MEANS</div>
             <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
             <div style={{ fontFamily: S.bebas, fontSize: 22, color: S.black, letterSpacing: '0.03em', marginBottom: 14, lineHeight: 1.05 }}>QUICK START · DOMINANT</div>
-            <p style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', color: '#444', lineHeight: 1.75, margin: '0 0 18px' }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', color: '#444', lineHeight: 1.75, margin: '0 0 18px' }}>
               "Your brain runs on novelty. Starting things is where your energy lives. You don't stall because you're lazy. You stall because your brain already moved to the next problem."
             </p>
             <div style={{ borderTop: `1px solid ${S.rule}`, paddingTop: 14, display: 'flex', gap: 16 }}>
               {['QS · Innovate', 'FF · Explain'].map(tag => (
-                <div key={tag} style={{ fontFamily: S.mono, fontSize: 7, letterSpacing: '0.14em', color: S.mid, background: '#f0ede8', padding: '5px 9px' }}>{tag}</div>
+                <div key={tag} style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.14em', color: S.mid, background: '#f0ede8', padding: '5px 9px' }}>{tag}</div>
               ))}
             </div>
           </div>
@@ -407,7 +407,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
               FINALLY, AN<br />EXPLANATION<br />THAT FITS.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
               You've called yourself lazy. Inconsistent. Undisciplined. Maybe you were just operating outside the conditions your brain was built for. The point is simple: understand who you already are, then work with it.
             </p>
           </div>
@@ -423,13 +423,13 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(32px, 4vw, 50px)', color: S.white, lineHeight: 0.92, margin: '0 0 20px' }}>
               FIND WORK THAT<br />FEELS LIKE<br />CHEATING.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
               Skills tell you what you can do. Wiring tells you what you'll actually enjoy doing. Every role is scored against your behavioral profile, so you can see which careers fit how you operate and which ones cost you energy just to stay engaged.
             </p>
           </div>
           {/* Mock career card */}
           <div style={{ border: '1px solid #1e1e1e', padding: isMobile ? '24px 20px' : '32px 36px', background: '#111' }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: '#444', marginBottom: 6 }}>15 · CAREER MAP</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: '#444', marginBottom: 6 }}>15 · CAREER MAP</div>
             <div style={{ height: 1, background: '#1e1e1e', marginBottom: 20 }} />
             {[
               { role: 'Startup Founder', pct: 94, hot: true },
@@ -441,7 +441,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             ].map(({ role, pct: p, hot }) => (
               <div key={role} style={{ marginBottom: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                  <span style={{ fontFamily: S.bebas, fontSize: 15, color: hot ? S.white : '#555', letterSpacing: '0.04em' }}>{role}</span>
+                  <span style={{ fontFamily: S.bebas, fontSize: 16, color: hot ? S.white : '#555', letterSpacing: '0.04em' }}>{role}</span>
                   <span style={{ fontFamily: S.mono, fontSize: 9, color: hot ? S.onDarkBody : '#333' }}>{p}%</span>
                 </div>
                 <div style={{ height: 2, background: '#1e1e1e' }}>
@@ -458,9 +458,9 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: isMobile ? 'block' : 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
           {/* Mock protocol card */}
           <div style={{ border: `1px solid ${S.rule}`, padding: isMobile ? '24px 20px' : '32px 36px', marginBottom: isMobile ? 40 : 0 }}>
-            <div style={{ fontFamily: S.mono, fontSize: 8, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>11 · RESET PROTOCOL</div>
+            <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.2em', color: S.mid, marginBottom: 6 }}>11 · RESET PROTOCOL</div>
             <div style={{ height: 1, background: S.rule, marginBottom: 20 }} />
-            <div style={{ fontFamily: S.bebas, fontSize: 18, color: S.black, marginBottom: 18, lineHeight: 1.1 }}>WHEN YOU'RE STUCK, DO THIS.</div>
+            <div style={{ fontFamily: S.bebas, fontSize: 19, color: S.black, marginBottom: 18, lineHeight: 1.1 }}>WHEN YOU'RE STUCK, DO THIS.</div>
             {[
               'Stop adding inputs. You have enough information.',
               'Pick one decision. Not the biggest, just the next.',
@@ -470,7 +470,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             ].map((step, i) => (
               <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 13, alignItems: 'flex-start' }}>
                 <div style={{ fontFamily: S.mono, fontSize: 9, color: S.rule, flexShrink: 0, paddingTop: 1, minWidth: 16 }}>0{i + 1}</div>
-                <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#444', lineHeight: 1.55 }}>{step}</div>
+                <div style={{ fontFamily: S.cormorant, fontSize: 16, color: '#444', lineHeight: 1.55 }}>{step}</div>
               </div>
             ))}
           </div>
@@ -480,7 +480,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 3.8vw, 46px)', color: S.black, lineHeight: 0.92, margin: '0 0 20px' }}>
               WHEN YOUR BRAIN<br />STALLS, THIS IS<br />THE WAY OUT.
             </h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
+            <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
               Your report includes a reset protocol built around your dominant mode, made for how your brain actually restarts. A specific sequence that gets you moving when you're stuck.
             </p>
           </div>
@@ -502,7 +502,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             return (
               <div key={group} style={{ marginBottom: 30 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-                  <span style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.22em', color: '#9a958c', whiteSpace: 'nowrap' }}>{groupLabel}</span>
+                  <span style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.22em', color: '#9a958c', whiteSpace: 'nowrap' }}>{groupLabel}</span>
                   <span style={{ flex: 1, height: 1, background: '#1c1c1c' }} />
                   <span style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.18em', color: '#444', whiteSpace: 'nowrap' }}>{groupSections.length} SECTIONS</span>
                 </div>
@@ -526,7 +526,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
                         <span style={{ position: 'absolute', top: 6, right: 12, fontFamily: S.bebas, fontSize: 46, lineHeight: 1, color: '#171717', pointerEvents: 'none' }}>{section.num}</span>
                         <div style={{ position: 'relative' }}>
                           <div style={{ fontFamily: S.bebas, fontSize: 19, color: S.white, letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.05 }}>{section.label}</div>
-                          <div style={{ fontFamily: S.cormorant, fontSize: 15, color: '#9b968d', lineHeight: 1.5 }}>{section.reveals}</div>
+                          <div style={{ fontFamily: S.cormorant, fontSize: 16, color: '#9b968d', lineHeight: 1.5 }}>{section.reveals}</div>
                         </div>
                       </div>
                     );
@@ -557,7 +557,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <h3 style={{ fontFamily: S.bebas, fontSize: 'clamp(38px, 5.5vw, 64px)', color: S.black, margin: '0 0 20px', lineHeight: 0.92 }}>
           DISCOVER HOW YOUR<br />MIND ACTUALLY WORKS
         </h3>
-        <p style={{ fontFamily: S.cormorant, fontSize: 18, fontStyle: 'italic', color: '#555', maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65 }}>
+        <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65 }}>
           Eight minutes. Thirty-six questions. One complete behavioral fingerprint, and the operating manual that comes with it.
         </p>
         <button
@@ -568,7 +568,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         >
           BEGIN ASSESSMENT
         </button>
-        <div style={{ fontFamily: S.mono, fontSize: 10, color: S.mid, marginTop: 16, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
+        <div style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, marginTop: 16, letterSpacing: '0.15em' }}>~8 MINUTES · FREE</div>
       </div>
 
       <style>{`

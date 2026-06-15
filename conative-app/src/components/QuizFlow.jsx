@@ -100,14 +100,14 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
       <div style={{
         minHeight: '100vh', display: 'flex', flexDirection: 'column',
         alignItems: 'center', justifyContent: 'center',
-        background: S.black, textAlign: 'center', padding: 24,
+        background: S.white, textAlign: 'center', padding: 24,
       }}>
         <div style={{
           fontFamily: S.bebas, fontSize: 'clamp(60px, 14vw, 120px)',
-          color: S.white, lineHeight: 0.88, letterSpacing: '0.01em', whiteSpace: 'pre-line',
+          color: S.black, lineHeight: 0.88, letterSpacing: '0.01em', whiteSpace: 'pre-line',
           animation: 'qIn 0.4s ease both',
         }}>{msg.headline}</div>
-        <div style={{ fontFamily: S.mono, fontSize: 11, color: S.onDarkDim, letterSpacing: '0.25em', marginTop: 28 }}>
+        <div style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, letterSpacing: '0.25em', marginTop: 28 }}>
           {msg.sub}
         </div>
         <style>{`@keyframes qIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }`}</style>
