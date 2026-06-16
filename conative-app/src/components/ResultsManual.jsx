@@ -1,7 +1,24 @@
 import { useState } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile.js';
-import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE, LOOP_DESCRIPTION, DAILY_RULES } from '../data/strengthData.js';
-import SpectrumBar, { BEHAVIORAL_LINES } from './SpectrumBar.jsx';
+import { STRENGTH_DATA, MODE_LABELS, DOMINANT_NARRATIVES, RESISTANCE_NARRATIVES, DANGER_ZONES, GAME_TYPE, LOOP_DESCRIPTION, DAILY_RULES, scorePercentile } from '../data/strengthData.js';
+import SpectrumBar, { BEHAVIORAL_LINES, SPECTRUM_PAIRS } from './SpectrumBar.jsx';
+
+// "More X than Y% of people" — non-judgmental, leans toward whichever pole they sit on
+function percentileLine(mode, score) {
+  const pct = scorePercentile(score); // 0-100 toward the high pole
+  const pair = SPECTRUM_PAIRS[mode];
+  if (pct >= 55) return `More ${pair.high.toLowerCase()}-driven than ${Math.min(99, pct)}% of people`;
+  if (pct <= 45) return `More ${pair.low.toLowerCase()}-driven than ${Math.min(99, 100 - pct)}% of people`;
+  return 'More balanced here than most people';
+}
+
+// Personalized intro line based on why they took the assessment (soft-start intent)
+const INTENT_INTROS = {
+  career: 'You came here about work. Your Career Map below is scored to this exact wiring.',
+  self: 'You came here to understand yourself. Start with What This Means, then how you operate.',
+  relationship: "You came here about working with others. Don't skip Communication and Under Stress.",
+  curious: 'You came here curious. Fair warning: this tends to explain more than people expect.',
+};
 import { CAREER_ARCHETYPES } from '../data/careerData.js';
 import { scoreCareerFit } from '../scoring/careerScoring.js';
 import { S } from '../styles/theme.js';
@@ -48,7 +65,7 @@ const REPORT_GROUPS = [
 ];
 
 export default function ResultsManual({ results, onBack, onTool }) {
-  const { scores, energy: rawEnergy, zones: rawZones, mo } = results;
+  const { scores, energy: rawEnergy, zones: rawZones, mo, intent } = results;
   const modes = ['FF', 'FT', 'QS', 'IMP'];
   const isMobile = useIsMobile();
 
@@ -433,7 +450,12 @@ export default function ResultsManual({ results, onBack, onTool }) {
         {Eye('YOUR SCORES')}{H('FOUR DIMENSIONS OF ACTION')}
         <P>These four dimensions describe how you instinctively approach information, organization, change, and physical work. Position matters more than direction.</P>
         <div style={{ marginTop: 8 }}>
-          {modes.map(m => <SpectrumBar key={m} mode={m} score={scores[m]} energy={energy[m]} name={strengths[m].name} />)}
+          {modes.map(m => (
+            <div key={m}>
+              <SpectrumBar mode={m} score={scores[m]} energy={energy[m]} name={strengths[m].name} />
+              <div style={{ fontFamily: S.mono, fontSize: 10, letterSpacing: '0.08em', color: S.mid, marginTop: -14, marginBottom: 28 }}>{percentileLine(m, scores[m])}</div>
+            </div>
+          ))}
         </div>
         <Pull>When someone forces you into a pattern that violates your wiring, the friction you feel isn't you being difficult. It's real stress caused by working against your instincts.</Pull>
       </>);
@@ -1232,6 +1254,9 @@ export default function ResultsManual({ results, onBack, onTool }) {
         <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.3em', color: S.mid, marginBottom: 16 }}>YOUR BRAIN RUNS ON</div>
         <div style={{ fontFamily: S.bebas, fontSize: 'clamp(44px, 9vw, 80px)', color: S.black, lineHeight: 0.9, marginBottom: 24 }}>{MODE_LABELS[dominant].toUpperCase()}</div>
         <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 2vw, 19px)', lineHeight: 1.7, color: '#333', maxWidth: 520, marginBottom: 0 }}>{domData.how}</p>
+        {intent && INTENT_INTROS[intent] && (
+          <p style={{ fontFamily: S.cormorant, fontSize: 16, fontStyle: 'italic', lineHeight: 1.6, color: S.mid, maxWidth: 520, margin: '16px 0 0' }}>{INTENT_INTROS[intent]}</p>
+        )}
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, background: S.rule, border: `1px solid ${S.rule}`, marginTop: 40 }}>
           {modes.map(m => (

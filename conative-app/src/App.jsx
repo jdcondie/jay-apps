@@ -6,6 +6,7 @@ import { supabase } from './lib/supabase.js';
 import AuthScreen from './components/AuthScreen.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import IntroScreen from './components/IntroScreen.jsx';
+import IntentScreen from './components/IntentScreen.jsx';
 import QuizFlow from './components/QuizFlow.jsx';
 import ProcessingScreen from './components/ProcessingScreen.jsx';
 import ResultsManual from './components/ResultsManual.jsx';
@@ -118,6 +119,7 @@ export default function App() {
   // quiz state
   const [qIndex, setQIndex] = useState(0);
   const [responses, setResponses] = useState({});
+  const [intent, setIntent] = useState(null); // why they took it (soft-start)
   const [resumeData, setResumeData] = useState(null); // { qIndex } if in-progress session found
 
   // ── Auth listener ──────────────────────────────────────────
@@ -182,14 +184,19 @@ export default function App() {
     if (qIndex > 0) setQIndex(i => i - 1);
   }, [qIndex]);
 
+  const handleIntentPick = (id) => {
+    setIntent(id);
+    setPhase('quiz');
+  };
+
   const handleProcessingDone = useCallback(async () => {
-    const r = scoreAssessment(responses);
+    const r = { ...scoreAssessment(responses), intent };
     setCurrentResults(r);
     setPhase('results');
     clearSession();
     setResumeData(null);
     if (user) await saveResults(user.id, r);
-  }, [responses, user]);
+  }, [responses, user, intent]);
 
   const handleRetake = () => {
     setResponses({});
@@ -261,7 +268,7 @@ export default function App() {
         {phase === 'auth' && <AuthScreen />}
         {phase === 'intro' && (
           <IntroScreen
-            onStart={() => setPhase('quiz')}
+            onStart={() => setPhase('intent')}
             onSignIn={() => setPhase('auth')}
             resumeData={resumeData}
             onResume={handleResume}
@@ -269,6 +276,7 @@ export default function App() {
             onTestFill={handleTestFill}
           />
         )}
+        {phase === 'intent' && <IntentScreen onPick={handleIntentPick} onBack={() => setPhase('intro')} />}
         {phase === 'quiz' && (
           <QuizFlow
             question={QUESTIONS[qIndex]}
@@ -312,13 +320,14 @@ export default function App() {
         {phase === 'chat' && activeResults && <MoChat results={activeResults} onBack={() => setPhase('dashboard')} />}
         {phase === 'intro' && (
           <IntroScreen
-            onStart={() => setPhase('quiz')}
+            onStart={() => setPhase('intent')}
             resumeData={resumeData}
             onResume={handleResume}
             onStartFresh={handleStartFresh}
             onTestFill={handleTestFill}
           />
         )}
+        {phase === 'intent' && <IntentScreen onPick={handleIntentPick} onBack={() => setPhase('intro')} />}
         {phase === 'quiz' && (
           <QuizFlow
             question={QUESTIONS[qIndex]}

@@ -3,7 +3,7 @@ import { S } from '../styles/theme.js';
 
 const BREAK_MESSAGES = {
   8:  { headline: 'NICE WORK.\nKEEP GOING.', sub: 'A QUARTER DOWN' },
-  17: { headline: 'HALFWAY\nTHERE.', sub: 'EIGHTEEN TO GO' },
+  17: { headline: 'HALFWAY.', sub: 'EIGHTEEN TO GO', insight: "Most people can't actually name how their own mind works. That's exactly the gap this closes." },
   26: { headline: 'ALMOST\nTHERE.', sub: 'NINE LEFT' },
 };
 
@@ -34,7 +34,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
       advancedRef.current = true;
       if (BREAK_MESSAGES[index]) {
         setShowBreak(true);
-        breakRef.current = setTimeout(() => { setShowBreak(false); onNext(); }, 1300);
+        breakRef.current = setTimeout(() => { setShowBreak(false); onNext(); }, BREAK_MESSAGES[index].insight ? 2800 : 1300);
       } else {
         onNext();
       }
@@ -110,6 +110,11 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
         <div style={{ fontFamily: S.mono, fontSize: 11, color: S.mid, letterSpacing: '0.25em', marginTop: 28 }}>
           {msg.sub}
         </div>
+        {msg.insight && (
+          <div style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2.4vw, 21px)', fontStyle: 'italic', color: '#555', lineHeight: 1.55, maxWidth: 440, marginTop: 24, animation: 'qIn 0.5s ease 0.15s both' }}>
+            {msg.insight}
+          </div>
+        )}
         <style>{`@keyframes qIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }`}</style>
       </div>
     );
@@ -117,6 +122,7 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
 
   // ── Quiz screen ─────────────────────────────────────────────────────────
   const progress = Math.round((index / total) * 100);
+  const minLeft = Math.max(1, Math.round(((total - index) * 13) / 60)); // ~13s per question
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: S.white }}>
@@ -144,11 +150,12 @@ export default function QuizFlow({ question, index, total, response, onSelect, o
         </div>
       </div>
 
-      {/* Single continuous progress bar */}
+      {/* Single continuous progress bar + time-left */}
       <div style={{ padding: '10px 20px 0' }}>
         <div style={{ height: 2, background: S.rule }}>
           <div style={{ height: '100%', background: S.black, width: `${progress}%`, transition: 'width 0.4s ease' }} />
         </div>
+        <div style={{ textAlign: 'right', fontFamily: S.mono, fontSize: 9, letterSpacing: '0.12em', color: '#b0aca4', marginTop: 6 }}>~{minLeft} MIN LEFT</div>
       </div>
 
       {/* Question (re-mounts per question for the enter animation) */}
