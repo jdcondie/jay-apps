@@ -31,9 +31,9 @@ const SECTIONS = [
 // Hero benefit callouts (point to the brain)
 const CALLOUTS = [
   { label: 'WHAT DRAINS YOU',       icon: 'drain',  desc: 'The situations that quietly burn your energy.' },
-  { label: 'WHAT UNLOCKS YOU',      icon: 'key',    desc: 'The conditions where focus and momentum come naturally.' },
+  { label: 'WHAT FUELS YOU',        icon: 'key',    desc: 'The conditions where focus shows up on its own.' },
   { label: "WHAT YOU'RE BUILT FOR", icon: 'target', desc: "The work and roles that fit how you're wired." },
-  { label: 'WHY YOU GET STUCK',     icon: 'alert',  desc: 'The patterns behind procrastination and overwhelm.' },
+  { label: 'WHY YOU GET STUCK',     icon: 'alert',  desc: 'The pattern under the procrastination.' },
 ];
 
 function CalloutIcon({ name, size = 18, color = '#f5f3ef' }) {
@@ -149,16 +149,16 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         {/* Content (headline + CTA) */}
         <div style={{ flex: '0 0 auto', maxWidth: isMobile ? '100%' : 460, textAlign: isMobile ? 'center' : 'left', position: 'relative', zIndex: 3 }}>
           <div style={{ fontFamily: S.mono, fontSize: 11, letterSpacing: '0.3em', color: '#999', marginBottom: 28 }}>
-            BEHAVIORAL ASSESSMENT / PERSONAL OPERATING MANUAL
+            BEHAVIORAL ASSESSMENT · YOUR OPERATING MANUAL
           </div>
           <h1 style={{ fontFamily: S.bebas, fontSize: 'clamp(60px, 8.5vw, 112px)', lineHeight: 0.86, color: S.white, letterSpacing: -1, margin: '0 0 24px' }}>
             YOUR MIND,<br />DECODED.
           </h1>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(19px, 2.2vw, 24px)', fontStyle: 'italic', color: S.white, lineHeight: 1.5, margin: '0 0 16px', maxWidth: 420 }}>
-            The instruction manual you were never handed for your own mind.
+            The operating manual nobody handed you for your own mind.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: S.onDarkBody, lineHeight: 1.65, margin: '0 0 36px', maxWidth: 400 }}>
-            See where your energy comes from, the conditions that make you sharp, and the work you're built to win at. Then build your life around how you actually operate.
+            Most advice assumes everyone runs the same way. You don't. This shows where your energy actually comes from, the conditions that make you sharp, and the work you're built for. Then you stop fighting your wiring and start building around it.
           </p>
 
           {resumeData ? (
@@ -248,16 +248,16 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 680, margin: '0 auto' }}>
           <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 24 }}>WHY THE USUAL ADVICE FAILS</div>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(20px, 2.4vw, 26px)', color: '#2a2a2a', lineHeight: 1.55, margin: '0 0 24px' }}>
-            Most people spend years trying to improve themselves. They read the productivity books, download the new systems, try to white-knuckle their way to more discipline.
+            Most people spend years trying to fix themselves. New planner. New morning routine. More discipline. More willpower.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 2vw, 21px)', color: '#555', lineHeight: 1.7, margin: '0 0 28px' }}>
-            The same patterns keep showing up anyway. You procrastinate on the things you care about. You're sharp in some environments and flat in others. Some work feels effortless, some feels impossible, and you can't always say why.
+            And the same patterns show back up by Wednesday. You stall on the work you care about. You're sharp in one room and flat in the next. Some tasks feel easy and some feel impossible, and you can't always say why.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(22px, 2.8vw, 32px)', fontStyle: 'italic', color: S.black, lineHeight: 1.4, margin: '0 0 28px' }}>
-            Maybe the problem was never effort. Maybe you've been following instructions written for someone else's brain.
+            The problem was never effort. You've been running instructions written for someone else's brain.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.8vw, 18px)', color: '#555', lineHeight: 1.7, margin: 0 }}>
-            This assessment shows how your mind actually creates energy, handles change, processes information, and performs at its best. So you can stop fighting your wiring and start building around it.
+            This shows how yours actually works. How you make energy, handle change, take in information, and do your best work. So you can build around it instead of against it.
           </p>
         </div>
       </div>
@@ -267,16 +267,16 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 48 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 14 }}>SOUND FAMILIAR?</div>
-            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>YOU'VE PROBABLY SAID THESE THINGS</h2>
+            <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>YOU'VE PROBABLY SAID ONE OF THESE</h2>
           </div>
           <div>
             {[
-              "I know exactly what I need to do. I just can't make myself do it.",
-              "I do incredible work when I'm interested, and struggle when I'm not.",
-              "I start a lot of things and lose momentum.",
-              "I've tried every productivity system.",
-              "I feel like I'm capable of more.",
-              "I don't get why some things come easy for other people.",
+              "I know exactly what to do. I just can't make myself do it.",
+              "I do my best work when I care. When I don't, I'm useless.",
+              "I start a lot of things. I finish fewer.",
+              "I've tried every productivity system there is.",
+              "I know I'm capable of more than this.",
+              "I don't get why this comes easy for everyone else.",
             ].map((q, i) => (
               <div key={i} style={{ display: 'flex', gap: 16, alignItems: 'baseline', padding: '18px 0', borderBottom: '1px solid #1a1a1a' }}>
                 <span style={{ fontFamily: S.mono, fontSize: 11, color: '#3a3a3a', flexShrink: 0 }}>0{i + 1}</span>
@@ -285,7 +285,33 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
             ))}
           </div>
           <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#999', lineHeight: 1.65, margin: '28px 0 0', textAlign: 'center' }}>
-            Every one of these is a clue. The assessment surfaces the pattern underneath.
+            Every one of these is a clue. The assessment reads the pattern underneath.
+          </p>
+        </div>
+      </div>
+
+      {/* ── PERSONAL STORY (light) ────────────────────────────── */}
+      <div style={{ background: S.white, padding: pad, borderTop: `1px solid ${S.rule}` }}>
+        <div style={{ maxWidth: 600, margin: '0 auto' }}>
+          <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: S.mid, marginBottom: 28 }}>WHY I BUILT THIS</div>
+          {[
+            "Sometimes I get lost for nine hours in a random task I care about and can't tell whether it's Tuesday or Friday.",
+            "I can also let a text sit for a week. A ten-second reply, and I'd do anything but send it.",
+            "When it's the night before a deadline, I get this uncontrollable urge to deep clean my office. I hate cleaning. The books get alphabetized anyway. Sticky notes sorted by color.",
+            "I'll get everything done except the one thing that mattered.",
+            "I always saw that as proof that I was lazy. Or that I was broken in some quiet way I couldn't name.",
+            "But then I found out my brain just runs its own unique way. It runs on novelty and new problems, and routine tasks quietly drain the tank.",
+          ].map((line, i) => (
+            <p key={i} style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 20px)', color: '#333', lineHeight: 1.65, margin: '0 0 18px' }}>{line}</p>
+          ))}
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(18px, 2.2vw, 22px)', fontStyle: 'italic', color: S.black, lineHeight: 1.5, margin: '0 0 28px' }}>
+            Something in my chest could finally let go.
+          </p>
+          <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(17px, 2vw, 20px)', color: '#333', lineHeight: 1.65, margin: '0 0 28px' }}>
+            Willpower was never the issue. I'm just wired differently than the people around me.
+          </p>
+          <p style={{ fontFamily: S.bebas, fontSize: 'clamp(30px, 5vw, 46px)', color: S.black, lineHeight: 1, letterSpacing: '0.01em', margin: 0 }}>
+            AND SO ARE YOU.
           </p>
         </div>
       </div>
@@ -295,7 +321,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 900, margin: '0 auto', display: 'flex', justifyContent: isMobile ? 'space-between' : 'space-around', gap: 0, flexWrap: 'wrap' }}>
           {[
             { num: '36', label: 'QUESTIONS' },
-            { num: '16', label: 'REPORT SECTIONS' },
+            { num: '16', label: 'SECTIONS' },
             { num: '4', label: 'DIMENSIONS' },
             { num: '~8', label: 'MINUTES' },
           ].map(({ num, label }) => (
@@ -316,7 +342,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               WHY SOME THINGS<br />FEEL EFFORTLESS,<br />AND OTHERS NEVER DO.
             </h2>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
-              Most advice assumes everyone works the same way. Your results are built on four behavioral dimensions that show how your mind operates under pressure, uncertainty, structure, and change. Together they explain why some environments light you up and others wear you down.
+              Your results run on four behavioral dimensions: how your mind moves under pressure, uncertainty, structure, and change. Together they explain why certain rooms light you up and others drain you by lunch.
             </p>
           </div>
           <div>
@@ -359,10 +385,10 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               THE SCIENCE OF<br />HOW YOU ACT.
             </h2>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#555', lineHeight: 1.7, margin: '0 0 16px', maxWidth: 380 }}>
-              Your mind works in three parts: what you know, how you feel, and how you instinctively take action. Most tools measure the first two. Personality types, IQ, strengths quizzes, they all describe how you think and feel.
+              Your mind works in three parts. What you know. How you feel. And how you instinctively take action. Most tools stop at the first two. Personality types, IQ, strengths quizzes. They describe how you think and how you feel.
             </p>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, color: '#555', lineHeight: 1.7, margin: 0, maxWidth: 380 }}>
-              This measures the third part, the doing. Conative psychology has been studied for more than 40 years. It maps how you naturally gather information, create order, handle risk, and turn ideas into something real, the part that predicts where you'll thrive, where you'll stall, and where you'll burn out.
+              This measures the third part. The doing. Conative psychology has studied it for more than 40 years: how you gather information, build order, handle risk, and turn ideas into something real. That's the part that predicts where you'll thrive, where you'll stall, and where you'll burn out.
             </p>
           </div>
           {/* Three parts of the mind */}
@@ -408,7 +434,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               FINALLY, AN<br />EXPLANATION<br />THAT FITS.
             </h2>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
-              You've called yourself lazy. Inconsistent. Undisciplined. Maybe you were just operating outside the conditions your brain was built for. The point is simple: understand who you already are, then work with it.
+              You've called yourself lazy. Inconsistent. Undisciplined. You probably weren't any of those. You were just working outside the conditions your brain was built for. The point is simple. See how you already work, then stop arguing with it.
             </p>
           </div>
         </div>
@@ -424,7 +450,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               FIND WORK THAT<br />FEELS LIKE<br />CHEATING.
             </h2>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: S.onDarkBody, lineHeight: 1.65, maxWidth: 360 }}>
-              Skills tell you what you can do. Wiring tells you what you'll actually enjoy doing. Every role is scored against your behavioral profile, so you can see which careers fit how you operate and which ones cost you energy just to stay engaged.
+              Skills tell you what you can do. Wiring tells you what you'll actually enjoy doing. Every role gets scored against your profile, so you can see which careers fit how you operate and which ones cost you energy just to show up.
             </p>
           </div>
           {/* Mock career card */}
@@ -481,7 +507,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
               WHEN YOUR BRAIN<br />STALLS, THIS IS<br />THE WAY OUT.
             </h2>
             <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', lineHeight: 1.65, maxWidth: 360 }}>
-              Your report includes a reset protocol built around your dominant mode, made for how your brain actually restarts. A specific sequence that gets you moving when you're stuck.
+              Your report includes a reset built for your dominant mode, the way your brain actually restarts. Not another morning routine. A specific sequence that gets you moving when you're stuck.
             </p>
           </div>
         </div>
@@ -493,7 +519,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           <div style={{ textAlign: 'center', marginBottom: isMobile ? 48 : 64 }}>
             <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 14 }}>THE COMPLETE REPORT</div>
             <h2 style={{ fontFamily: S.bebas, fontSize: 'clamp(28px, 5vw, 52px)', color: S.white, lineHeight: 1, margin: 0 }}>YOUR PERSONAL OPERATING MANUAL</h2>
-            <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', color: '#888', lineHeight: 1.6, margin: '14px auto 0', maxWidth: 440 }}>16 sections. All personalized. Every one generated from your profile and built to use today.</p>
+            <p style={{ fontFamily: S.cormorant, fontSize: 17, fontStyle: 'italic', color: '#888', lineHeight: 1.6, margin: '14px auto 0', maxWidth: 440 }}>16 sections, all built from your profile. Every line is yours, and every one is built to use today.</p>
           </div>
 
           {['WIRING', 'OPERATE', 'CAREER'].map(group => {
@@ -543,10 +569,10 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
         <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
           <div style={{ fontFamily: S.mono, fontSize: 9, letterSpacing: '0.25em', color: '#444', marginBottom: 20 }}>THE REAL GOAL</div>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(24px, 3vw, 34px)', fontStyle: 'italic', color: S.white, lineHeight: 1.4, margin: '0 0 24px' }}>
-            Self-awareness is just the start. Alignment is the point.
+            Self-awareness is the start. Alignment is the point.
           </p>
           <p style={{ fontFamily: S.cormorant, fontSize: 'clamp(16px, 1.9vw, 19px)', color: S.onDarkBody, lineHeight: 1.7, margin: 0 }}>
-            Understanding why you've felt on fire in some seasons and burned out in others. Why certain jobs fit and others grind. Why a system that works for your friend never worked for you. And what changes when you stop fighting your wiring and start building around it.
+            Why you were on fire in some seasons and flat in others. Why one job fit and the next one ground you down. Why a system your friend swears by never did a thing for you. And what happens when you stop fighting your wiring and start building around it.
           </p>
         </div>
       </div>
@@ -558,7 +584,7 @@ export default function IntroScreen({ onStart, onSignIn, resumeData, onResume, o
           DISCOVER HOW YOUR<br />MIND ACTUALLY WORKS
         </h3>
         <p style={{ fontFamily: S.cormorant, fontSize: 19, fontStyle: 'italic', color: '#555', maxWidth: 420, margin: '0 auto 40px', lineHeight: 1.65 }}>
-          Eight minutes. Thirty-six questions. One complete behavioral fingerprint, and the operating manual that comes with it.
+          Eight minutes. 36 questions. One behavioral fingerprint, and the operating manual that comes with it.
         </p>
         <button
           onClick={onStart}
